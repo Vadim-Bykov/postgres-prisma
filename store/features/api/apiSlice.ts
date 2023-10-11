@@ -1,8 +1,9 @@
 import { users } from "@prisma/client";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { env } from "process";
 
-const IS_DEV = process.env.VERCEL_ENV === "development";
-const url = !IS_DEV ? "http://localhost:3000" : process.env.POSTGRES_HOST;
+const IS_DEV = env.NODE_ENV === "development";
+const url = !IS_DEV ? "http://localhost:3000" : env.VERCEL_URL;
 
 export interface Post {
   id: string;
