@@ -1,9 +1,7 @@
 import { users } from "@prisma/client";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { env } from "process";
 
-const IS_DEV = env.NODE_ENV === "development";
-const url = !IS_DEV ? "http://localhost:3000" : env.VERCEL_URL;
+const url = process.env.VERCEL_URL;
 
 export interface Post {
   id: string;
@@ -16,7 +14,7 @@ export const appApi = createApi({
   reducerPath: "api",
   tagTypes: ["Posts"],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${url}/api/`,
+    baseUrl: `${String(url).replace("undefined", "")}/api/`,
   }),
   endpoints: (builder) => ({
     getUsers: builder.query<users[], void>({
