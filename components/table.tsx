@@ -2,12 +2,16 @@ import prisma from "@/lib/prisma";
 import { timeAgo } from "@/lib/utils";
 import Image from "next/image";
 import RefreshButton from "./refresh-button";
+import { useGetUsersQuery } from "@/store/features/api/apiSlice";
 
-export default async function Table() {
+export default function Table() {
   const startTime = Date.now();
-  const users = await prisma.users.findMany();
+  // const users = await prisma.users.findMany();
+  // const users = await nUsers.json();
   const duration = Date.now() - startTime;
 
+  const { data: users } = useGetUsersQuery();
+  if (!users) return null;
   return (
     <div className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full">
       <div className="flex justify-between items-center mb-4">
