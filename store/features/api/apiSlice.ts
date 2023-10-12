@@ -12,16 +12,24 @@ export interface Post {
 
 export const appApi = createApi({
   reducerPath: "api",
-  tagTypes: ["Posts"],
+  tagTypes: ["Users"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${String(url).replace("undefined", "")}/api/`,
   }),
   endpoints: (builder) => ({
     getUsers: builder.query<users[], void>({
       query: () => "users",
-      providesTags: ["Posts"],
+      providesTags: ["Users"],
+    }),
+    createUser: builder.mutation<users, Omit<users, "createdAt">>({
+      query: (userData) => ({
+        url: "users",
+        method: "POST",
+        body: userData,
+      }),
+      invalidatesTags: ["Users"],
     }),
   }),
 });
 
-export const { useGetUsersQuery } = appApi;
+export const { useGetUsersQuery, useCreateUserMutation } = appApi;
