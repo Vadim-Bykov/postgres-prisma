@@ -4,6 +4,7 @@ import { useCreateUserMutation } from "@/store/features/api/apiSlice";
 import { useForm } from "react-hook-form";
 import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
+import Button from "../atoms/common/Button";
 
 type FormValues = {
   email: string;
@@ -24,15 +25,10 @@ export function UserRegistrationForm() {
     await createUser({
       email,
       name: firstName,
-      id: 1,
-      image: "",
-      role: "USER",
-    });
+    }).then((user) => console.log(user));
 
     reset();
   });
-
-  console.log({ errors });
 
   return (
     <section className="mb-10 flex justify-center">
@@ -45,7 +41,7 @@ export function UserRegistrationForm() {
           error={errors.firstName?.message}
         />
         <br />
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
     </section>
   );

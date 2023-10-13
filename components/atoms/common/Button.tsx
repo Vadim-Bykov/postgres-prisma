@@ -11,7 +11,12 @@ export type Props = PropsWithChildren<
     HTMLButtonElement
   > & {
     size?: "large" | "medium";
-    variant?: "primary" | "secondary" | "primary-white" | "secondary-white";
+    variant?:
+      | "primary"
+      | "secondary"
+      | "primary-white"
+      | "secondary-white"
+      | "warning";
     loading?: boolean;
   }
 >;
@@ -49,6 +54,12 @@ export default function Button({
           "text-white border-white hover:bg-white hover:text-purple",
         variant === "primary-white" &&
           "text-purple border-white bg-white hover:bg-white/80 active:bg-white/40",
+        variant === "warning" && [
+          "bg-red-400",
+          "text-white",
+          "border-red",
+          !disabled && ["hover:bg-red", "active:bg-red-700"],
+        ],
         className
       )}
       {...props}

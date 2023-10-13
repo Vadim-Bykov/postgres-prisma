@@ -16,7 +16,7 @@ enum Role {
   ADMIN
 }
 
-model users {
+model Users {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique

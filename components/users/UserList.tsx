@@ -1,14 +1,19 @@
 import Avatar from "@/public/icons/avatar.svg";
-import { useGetUsersQuery } from "@/store/features/api/apiSlice";
+import {
+  useGetUsersQuery,
+  useRemoveUserMutation,
+} from "@/store/features/api/apiSlice";
 import { timeAgo } from "@/utils/formatiing";
 import Image from "next/image";
-import { RefreshButton } from "../common/RefreshButton";
+import Button from "../atoms/common/Button";
 
-export default function Table() {
+export function UserList() {
   const startTime = Date.now();
   const duration = Date.now() - startTime;
 
   const { data: users } = useGetUsersQuery();
+  const [removeUser, { isLoading: isRemoving }] = useRemoveUserMutation();
+
   if (!users) return null;
 
   return (
@@ -20,14 +25,10 @@ export default function Table() {
             Fetched {users.length} users in {duration}ms
           </p>
         </div>
-        <RefreshButton />
       </div>
       <div className="divide-y divide-gray-900/5">
         {users.map((user) => (
-          <div
-            key={user.name}
-            className="flex items-center justify-between py-3"
-          >
+          <div key={user.id} className="flex items-center justify-between py-3">
             <div className="flex items-center space-x-4">
               <Image
                 src={user.image || Avatar}
@@ -42,6 +43,16 @@ export default function Table() {
               </div>
             </div>
             <p className="text-sm text-gray-500">{timeAgo(user.createdAt)}</p>
+            <Button
+              variant="warning"
+              disabled={isRemoving}
+              loading={isRemoving}
+              onClick={() => {
+                removeUser({ userId: user.id });
+              }}
+            >
+              Delete
+            </Button>
           </div>
         ))}
       </div>
