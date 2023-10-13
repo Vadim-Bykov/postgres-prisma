@@ -4,6 +4,7 @@ import {
   DetailedHTMLProps,
   HTMLAttributes,
   InputHTMLAttributes,
+  OptionHTMLAttributes,
   forwardRef,
   useRef,
 } from "react";
@@ -14,11 +15,12 @@ import { InputLabel } from "./InputLabel";
 
 export interface Props
   extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
+    InputHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
   > {
+  options: OptionHTMLAttributes<HTMLOptionElement>[];
   containerClassName?: HTMLAttributes<HTMLDivElement>["className"];
-  inputClassName?: HTMLAttributes<HTMLInputElement>["className"];
+  inputClassName?: HTMLAttributes<HTMLSelectElement>["className"];
   labelClassName?: HTMLAttributes<HTMLLabelElement>["className"];
   error?: string;
   label: string;
@@ -26,7 +28,7 @@ export interface Props
   renderLeft?: React.FC;
 }
 
-export const InputSelect = forwardRef<HTMLInputElement, Props>(function Input(
+export const InputSelect = forwardRef<HTMLSelectElement, Props>(function Input(
   {
     containerClassName,
     inputClassName,
@@ -35,6 +37,7 @@ export const InputSelect = forwardRef<HTMLInputElement, Props>(function Input(
     label,
     renderRight,
     renderLeft,
+    options,
     ...props
   },
   ref
@@ -60,8 +63,8 @@ export const InputSelect = forwardRef<HTMLInputElement, Props>(function Input(
           )}
           {...props}
         >
-          {props.options.map((item) => (
-            <option key={item.value} value={item.value}>
+          {options.map((item) => (
+            <option key={item.value as string | number} value={item.value}>
               {item.label}
             </option>
           ))}
