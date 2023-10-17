@@ -1,4 +1,5 @@
 // import { IconButton } from "@/constants/atoms/common/IconButton";
+import { IconButton } from "@/components/atoms/common/IconButton";
 import { Input, Props as InputProps } from "@/components/atoms/common/Input";
 import messages from "@/constants/messages.json";
 import { useState } from "react";
@@ -27,18 +28,17 @@ export function PasswordInput({
     <Input
       type={passwordHidden ? "password" : "text"}
       label={label ?? "Password"}
-      placeholder="******"
-      // renderRight={() => (
-      //   <IconButton
-      //     buttonProps={{
-      //       className: "absolute right-0 bottom-1/2 translate-y-1/2 p-4",
-      //       onClick: togglePasswordVisability,
-      //     }}
-      //     iconProps={{
-      //       name: passwordHidden ? "eye-open.svg" : "eye-closed.svg",
-      //     }}
-      //   />
-      // )}
+      renderRight={() => (
+        <IconButton
+          buttonProps={{
+            className: "absolute right-0 bottom-1/2 translate-y-1/2 p-4",
+            onClick: togglePasswordVisability,
+          }}
+          iconProps={{
+            name: passwordHidden ? "eye-open.svg" : "eye-closed.svg",
+          }}
+        />
+      )}
       {...props}
       {...register(name ?? "password", {
         required: messages.validation.required,

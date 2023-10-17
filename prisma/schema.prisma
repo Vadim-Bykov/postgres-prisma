@@ -17,10 +17,18 @@ enum Role {
 }
 
 model Users {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @unique @default(autoincrement())
   name      String
   email     String   @unique
+  password  String   
   role      Role     @default(USER)
   image     String?
   createdAt DateTime @default(now())
+  Token     Token[]
+}
+
+model Token {
+  refreshToken String @id @unique
+  userId       Int
+  Users        Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import styles from "./icon.module.css";
 import { CSSProperties } from "react";
+import open from "@/public/icons/eye-open.svg";
+import Image from "next/image";
 
 export type ColorVariant =
   | "purple-dark"
@@ -27,7 +29,7 @@ const colorVariants: Record<ColorVariant, string> = {
 
 export type Props = {
   name: string;
-  size?: string | number; // TODO: proper types
+  size?: number; // TODO: proper types
   color?: ColorVariant;
   inline?: boolean;
   className?: string;
@@ -43,22 +45,28 @@ export default function Icon({
   className,
   style = {},
 }: Props) {
-  const iconPath = `/renters/images/icons/${name}`;
+  const iconPath = "@/public/icons/" + name;
+  // console.log({ "colorVariants[color]": colorVariants[color] });
 
   return (
-    <i
-      style={{
-        width: size,
-        height: size,
-        WebkitMaskImage: `url(${iconPath})`,
-        maskImage: `url(${iconPath})`,
-        ...style,
-      }}
+    <Image
+      src={require("@/public/icons/" + name)}
+      width={size}
+      height={size}
+      alt="icon"
+      // style={{
+      //   width: size,
+      //   height: size,
+      //   WebkitMaskImage: `url(${"@/public/icons/" + name})`,
+      //   maskImage: `url(${"@/public/icons/" + name})`,
+      //   ...style,
+      // }}
       className={clsx(
         styles.icon,
         !inline && "block",
         inline && "inline-block",
-        colorVariants[color],
+        // colorVariants[color],
+        // color,
         className
       )}
     />
