@@ -1,6 +1,9 @@
-import { Input, Props as InputProps } from "@/components/atoms/common/Input";
-import messages from "@/constants/messages.json";
-import { EMAIL_REGEX } from "@/constants/validation";
+import {
+  Input,
+  Props as InputProps,
+} from "@/app/components/atoms/common/Input";
+import messages from "@/app/constants/messages.json";
+import { EMAIL_REGEX } from "@/app/constants/validation";
 import { UseFormRegister } from "react-hook-form";
 
 interface Props extends Omit<InputProps, "label"> {

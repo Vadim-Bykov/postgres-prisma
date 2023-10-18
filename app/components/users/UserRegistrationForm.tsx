@@ -6,7 +6,7 @@ import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
 import Button from "../atoms/common/Button";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
-import { PASSWORD_MIN_LENGTH } from "@/constants/validation";
+import { PASSWORD_MIN_LENGTH } from "@/app/constants/validation";
 import {
   validateNumberOrSymbolInclusion,
   validatePassword,
@@ -14,7 +14,7 @@ import {
   validateUpperAndLowerCaseInclusion,
 } from "@/utils/validation";
 import { HTMLAttributes, useState } from "react";
-import messages from "@/constants/messages.json";
+import messages from "@/app/constants/messages.json";
 import Icon from "../atoms/common/Icon/Icon";
 import clsx from "clsx";
 

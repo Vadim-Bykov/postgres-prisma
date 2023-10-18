@@ -1,4 +1,6 @@
-import Button, { Props as ButtonProps } from "@/components/atoms/common/Button";
+import Button, {
+  Props as ButtonProps,
+} from "@/app/components/atoms/common/Button";
 import { useAppDispatch } from "@/store/store";
 // import { toggleEmailVerificationModal } from "@/components/services/authentication";
 import { MouseEventHandler } from "react";

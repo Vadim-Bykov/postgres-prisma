@@ -1,4 +1,4 @@
-import ContextProvider from "@/components/ContextProvider";
+import ContextProvider from "@/app/components/ContextProvider";
 import "./globals.css";
 import { Inter } from "next/font/google";
 

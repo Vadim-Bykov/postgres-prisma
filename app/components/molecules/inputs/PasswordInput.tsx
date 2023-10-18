@@ -1,7 +1,10 @@
 // import { IconButton } from "@/constants/atoms/common/IconButton";
-import { IconButton } from "@/components/atoms/common/IconButton";
-import { Input, Props as InputProps } from "@/components/atoms/common/Input";
-import messages from "@/constants/messages.json";
+import { IconButton } from "@/app/components/atoms/common/IconButton";
+import {
+  Input,
+  Props as InputProps,
+} from "@/app/components/atoms/common/Input";
+import messages from "@/app/constants/messages.json";
 import { useState } from "react";
 import { RegisterOptions, UseFormRegister } from "react-hook-form";
 

@@ -1,12 +1,12 @@
 // import { ApiError } from './../errors/ApiError';
 import jwt from "jsonwebtoken";
-import { IUserDto } from "../dtos/userDto";
+import { UserDto } from "../dtos/userDto";
 import prisma from "@/lib/prisma";
 
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
-export const generateToken = (payload: IUserDto) => {
+export const generateToken = (payload: UserDto) => {
   const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET as string, {
     expiresIn: "5h",
   });
@@ -43,7 +43,7 @@ export const validateRefreshToken = (refreshToken: string) => {
   try {
     const userData = jwt.verify(refreshToken, JWT_REFRESH_SECRET as string);
 
-    return userData as IUserDto;
+    return userData as UserDto;
   } catch (error) {
     return null;
   }
@@ -53,7 +53,7 @@ export const validateAccessToken = (accessToken: string) => {
   try {
     const userData = jwt.verify(accessToken, JWT_ACCESS_SECRET as string);
 
-    return userData as IUserDto;
+    return userData as UserDto;
   } catch (error) {
     return null;
   }

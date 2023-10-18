@@ -1,7 +1,7 @@
 "use client";
 
-import { UserRegistrationForm } from "@/components/users/UserRegistrationForm";
-import { UserList } from "@/components/users/UserList";
+import { UserRegistrationForm } from "@/app/components/users/UserRegistrationForm";
+import { UserList } from "@/app/components/users/UserList";
 
 export const dynamic = "force-dynamic";
 

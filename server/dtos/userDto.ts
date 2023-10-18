@@ -1,7 +1,7 @@
 import { User } from "@/models/users";
 import { Role } from "@prisma/client";
 
-export interface IUserDto {
+export interface UserDto {
   id: User["id"];
   email: string;
   picture?: string;
@@ -9,7 +9,7 @@ export interface IUserDto {
   name?: string;
 }
 
-type GetUserDto = (userData: User) => IUserDto;
+type GetUserDto = (userData: User) => UserDto;
 
 export const getUserDto: GetUserDto = ({ id, email, role = "USER", name }) => {
   return {

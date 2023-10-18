@@ -4,6 +4,7 @@ import * as userService from "@/server/services/userService";
 import { cookies } from "next/headers";
 
 const REFRESH_TOKEN_COOKIE = "refreshToken";
+const ACCESS_TOKEN_COOKIE = "accessToken";
 
 export async function GET() {
   const users = await prisma.users.findMany();
@@ -21,11 +22,20 @@ export async function POST(request: Request) {
     const cookieStore = cookies();
     cookieStore.set(REFRESH_TOKEN_COOKIE, userDto.refreshToken, {
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+    cookieStore.set(ACCESS_TOKEN_COOKIE, userDto.accessToken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     return new Response(JSON.stringify(userDto), {
       status: 200,
-      // headers: { [REFRESH_TOKEN_COOKIE]: `token=${userDto.refreshToken}` },
+      // headers: { Authorization: `token=${userDto.accessToken}` },
     });
   } catch (error) {
     Promise.reject(error);

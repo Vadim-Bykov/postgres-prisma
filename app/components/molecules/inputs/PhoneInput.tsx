@@ -1,5 +1,8 @@
-import { Input, Props as InputProps } from "@/components/atoms/common/Input";
-import messages from "@/constants/messages.json";
+import {
+  Input,
+  Props as InputProps,
+} from "@/app/components/atoms/common/Input";
+import messages from "@/app/constants/messages.json";
 import { leaveOnlyNumbers } from "@/utils/formatiing";
 // import InputMask from "@mona-health/react-input-mask";
 import UsaFlagImage from "@public/images/flag-us.png";

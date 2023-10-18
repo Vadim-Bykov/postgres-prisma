@@ -1,9 +1,9 @@
-import messages from "@/constants/messages.json";
+import messages from "@/app/constants/messages.json";
 import {
   HAS_BOTH_UPPER_AND_LOWER_CASE_REGEX,
   HAS_NUMBER_OR_SYMBOL,
   PASSWORD_MIN_LENGTH,
-} from "@/constants/validation";
+} from "@/app/constants/validation";
 
 export const validateSimpleAddress = (data: any) =>
   !!data?.address || messages.validation.required;

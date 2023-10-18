@@ -1,5 +1,5 @@
-import { Input } from "@/components/atoms/common/Input";
-import messages from "@/constants/messages.json";
+import { Input } from "@/app/components/atoms/common/Input";
+import messages from "@/app/constants/messages.json";
 import clsx from "clsx";
 import { useRef } from "react";
 import { Control, Controller } from "react-hook-form";
