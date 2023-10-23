@@ -18,10 +18,10 @@ export const registration = async ({
   password,
   picture,
 }: IRegistrationBody) => {
-  const candidate = await prisma.users.findUnique({ where: { email } });
+  const candidate = await prisma.users.findFirst({ where: { email } });
 
   if (candidate) {
-    //   throw ApiError.badRequest(`User with email ${email} already exists`);
+    throw new Error(`User with email ${email} already exists`);
   }
 
   //   const activationLink = v4();
