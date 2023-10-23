@@ -14,9 +14,10 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const userData: UserCreationBody = await request.json();
-    // const { email, name } = userData;
+    const { email, name, password } = userData;
+    const user = await prisma.users.create({ data: { email, name, password } });
 
-    const userDto = await userService.registration(userData);
+    // const userDto = await userService.registration(userData);
 
     // const cookieStore = cookies();
     // cookieStore.delete(REFRESH_TOKEN_COOKIE);
@@ -35,11 +36,31 @@ export async function POST(request: Request) {
 
     // return Response.json(userDto);
 
-    return new Response(JSON.stringify(userDto), {
-      status: 200,
-      headers: { Authorization: `Token ${userDto.accessToken}` },
-    });
+    return new Response(
+      JSON.stringify({
+        user,
+        accessToken: "accessToken",
+        refreshToken: "refreshToken",
+      }),
+      {
+        status: 200,
+        headers: { Authorization: `Token ${"accessToken"}` },
+      }
+    );
   } catch (error) {
     Promise.reject(error);
   }
 }
+
+// export async function POST(request: Request) {
+//   try {
+//     const userData: UserCreationBody = await request.json();
+//     const { email, name } = userData;
+
+//     const user = await prisma.users.create({ data: { email, name } });
+
+//     return Response.json(user);
+//   } catch (error) {
+//     Promise.reject(error);
+//   }
+// }
