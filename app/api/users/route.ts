@@ -19,19 +19,19 @@ export async function POST(request: Request) {
 
     const userDto = await userService.registration(userData);
 
-    const cookieStore = cookies();
-    cookieStore.set(REFRESH_TOKEN_COOKIE, userDto.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
-    cookieStore.set(ACCESS_TOKEN_COOKIE, userDto.accessToken, {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      sameSite: "none",
-      secure: true,
-    });
+    // const cookieStore = cookies();
+    // cookieStore.set(REFRESH_TOKEN_COOKIE, userDto.refreshToken, {
+    //   maxAge: 30 * 24 * 60 * 60 * 1000,
+    //   httpOnly: true,
+    //   sameSite: "none",
+    //   secure: true,
+    // });
+    // cookieStore.set(ACCESS_TOKEN_COOKIE, userDto.accessToken, {
+    //   maxAge: 30 * 24 * 60 * 60 * 1000,
+    //   httpOnly: true,
+    //   sameSite: "none",
+    //   secure: true,
+    // });
 
     return new Response(JSON.stringify(userDto), {
       status: 200,
