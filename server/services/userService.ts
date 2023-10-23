@@ -18,20 +18,20 @@ export const registration = async ({
   password,
   picture,
 }: IRegistrationBody) => {
-  const candidate = await prisma.users.findFirst({ where: { email } });
+  // const candidate = await prisma.users.findFirst({ where: { email } });
 
-  if (candidate) {
-    throw new Error(`User with email ${email} already exists`);
-  }
+  // if (candidate) {
+  //   throw new Error(`User with email ${email} already exists`);
+  // }
 
-  //   const activationLink = v4();
-  const hashPassword = await bcrypt.hash(password, 3);
-  //   const fileName = saveFile(picture);
+  // //   const activationLink = v4();
+  // const hashPassword = await bcrypt.hash(password, 3);
+  // //   const fileName = saveFile(picture);
 
   const user = await prisma.users.create({
     data: {
       email,
-      password: hashPassword,
+      password: password,
       //  activationLink,
       //  picture: fileName,
       name,
