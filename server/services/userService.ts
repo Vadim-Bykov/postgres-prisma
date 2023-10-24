@@ -18,20 +18,20 @@ export const registration = async ({
   password,
   picture,
 }: IRegistrationBody) => {
-  // const candidate = await prisma.users.findFirst({ where: { email } });
+  const candidate = await prisma.users.findFirst({ where: { email } });
 
-  // if (candidate) {
-  //   throw new Error(`User with email ${email} already exists`);
-  // }
+  if (candidate) {
+    throw new Error(`User with email ${email} already exists`);
+  }
 
-  // //   const activationLink = v4();
-  // const hashPassword = await bcrypt.hash(password, 3);
-  // //   const fileName = saveFile(picture);
+  //   const activationLink = v4();
+  const hashPassword = await bcrypt.hash(password, 3);
+  //   const fileName = saveFile(picture);
 
   const user = await prisma.users.create({
     data: {
       email,
-      password: password,
+      password: hashPassword,
       //  activationLink,
       //  picture: fileName,
       name,
@@ -40,7 +40,7 @@ export const registration = async ({
 
   const userDto = getUserDto(user);
   const { accessToken, refreshToken } = tokenService.generateToken(userDto);
-  // await tokenService.saveRefreshToken(userDto.id, refreshToken);
+  await tokenService.saveRefreshToken(userDto.id, refreshToken);
 
   return { user: userDto, accessToken, refreshToken };
 };
