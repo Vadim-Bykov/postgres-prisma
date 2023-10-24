@@ -40,7 +40,6 @@ export const registration = async ({
 
   const userDto = getUserDto(user);
   const { accessToken, refreshToken } = tokenService.generateToken(userDto);
-
   // await tokenService.saveRefreshToken(userDto.id, refreshToken);
 
   return { user: userDto, accessToken, refreshToken };
