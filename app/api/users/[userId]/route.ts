@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { User } from "@/models/users";
+import { removeTokensFromCookies } from "@/server/services/cookieService";
 
 export async function GET(
   request: Request,
@@ -19,6 +19,8 @@ export async function DELETE(
   const { userId } = params;
 
   const users = await prisma.users.delete({ where: { id: +userId } });
+
+  removeTokensFromCookies();
 
   return Response.json(users);
 }
