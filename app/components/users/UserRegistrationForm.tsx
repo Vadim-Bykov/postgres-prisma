@@ -50,8 +50,6 @@ export function UserRegistrationForm() {
     reset();
   });
 
-  console.log({ errors });
-
   return (
     <section className="mb-10 flex justify-center">
       <form onSubmit={onSubmit}>

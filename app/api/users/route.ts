@@ -4,7 +4,7 @@ import { setTokensToCookies } from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
 
 export async function GET() {
-  const users = await prisma.users.findMany();
+  const users = await userService.getAllUsers();
 
   return Response.json(users);
 }
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const userDto = await userService.registration(userData);
     const { accessToken, refreshToken } = userDto;
 
-    setTokensToCookies({ accessToken, refreshToken });
+    setTokensToCookies({ refreshToken });
 
     return Response.json(userDto);
 

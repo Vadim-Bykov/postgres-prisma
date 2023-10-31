@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import { getUserDto } from "../dtos/userDto";
 import * as tokenService from "./tokenService";
+import { ApiError } from "next/dist/server/api-utils";
 
 interface IRegistrationBody {
   name: string;
@@ -39,8 +40,18 @@ export const registration = async ({
   });
 
   const userDto = getUserDto(user);
-  const { accessToken, refreshToken } = tokenService.generateToken(userDto);
+  const { refreshToken } = await tokenService.generateToken(userDto);
   await tokenService.saveRefreshToken(userDto.id, refreshToken);
 
-  return { user: userDto, accessToken, refreshToken };
+  return { user: userDto, accessToken: undefined, refreshToken };
+};
+
+export const getAllUsers = async () => {
+  try {
+    const users = await prisma.users.findMany();
+
+    return users;
+  } catch (error) {
+    throw new ApiError(400, "Bad request");
+  }
 };
