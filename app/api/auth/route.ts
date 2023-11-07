@@ -5,10 +5,15 @@ import { setTokensToCookies } from "@/server/services/cookieService";
 import * as tokenService from "@/server/services/tokenService";
 import { NextRequest, NextResponse } from "next/server";
 
+// export const revalidate = false;
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
     if (!refreshToken) return NextResponse.json({ auth: false });
+
+    request.headers.set("Cache-Control", "no-cache");
 
     const tokenPayload = await tokenService.validateRefreshToken(refreshToken);
 
