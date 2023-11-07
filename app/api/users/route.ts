@@ -2,11 +2,16 @@ import prisma from "@/lib/prisma";
 import { UserCreationBody } from "@/models/users";
 import { setTokensToCookies } from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
+import { NextResponse } from "next/server";
 
 export async function GET() {
-  const users = await userService.getAllUsers();
+  try {
+    const users = await userService.getAllUsers();
 
-  return Response.json(users);
+    return NextResponse.json(users);
+  } catch (error) {
+    Promise.reject(error);
+  }
 }
 
 export async function POST(request: Request) {
@@ -18,12 +23,7 @@ export async function POST(request: Request) {
 
     setTokensToCookies({ refreshToken });
 
-    return Response.json(userDto);
-
-    // return new Response(JSON.stringify(userDto), {
-    //   status: 200,
-    //   headers: { Authorization: `Token ${userDto.accessToken}` },
-    // });
+    return NextResponse.json(userDto);
   } catch (error) {
     Promise.reject(error);
   }

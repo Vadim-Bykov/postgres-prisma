@@ -14,24 +14,10 @@ const JWT_ACCESS_SECRET = getJwtAccessSecretKey();
 const JWT_REFRESH_SECRET = getJwtRefreshSecretKey();
 
 export const generateToken = async (payload: UserDto) => {
-  // const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET as string, {
-  //   expiresIn: "5h",
-  // });
-  // const accessToken = await new SignJWT({})
-  //   .setProtectedHeader({ alg: "HS256" })
-  //   .setJti(nanoid())
-  //   .setIssuedAt()
-  //   .setIssuer(payload.email)
-  //   .setExpirationTime("5h")
-  //   .sign(new TextEncoder().encode(JWT_ACCESS_SECRET));
-
-  // const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET as string, {
-  //   expiresIn: "30d",
-  // });
   const refreshToken = await new SignJWT({})
     .setProtectedHeader({ alg: "HS256" })
     .setJti(nanoid())
-    .setIssuer(payload.email)
+    .setIssuer(JSON.stringify(payload))
     .setIssuedAt()
     .setExpirationTime("30d")
     .sign(new TextEncoder().encode(JWT_REFRESH_SECRET));
@@ -39,27 +25,36 @@ export const generateToken = async (payload: UserDto) => {
   return { refreshToken };
 };
 
-export const saveRefreshToken = async (
-  userId: number,
-  refreshToken: string
-) => {
-  const tokenData = await findRefreshTokenByUserId(userId);
-  if (tokenData) {
+export const saveRefreshToken = async ({
+  userId,
+  refreshToken,
+  updatedRefreshToken,
+}: {
+  userId: number;
+  refreshToken: string;
+  updatedRefreshToken?: string;
+}) => {
+  const tokenData = await findRefreshToken(refreshToken);
+
+  if (tokenData && updatedRefreshToken) {
     const updatedTokenData = await prisma.token.update({
-      where: { refreshToken: tokenData.refreshToken },
-      data: { refreshToken },
+      where: { refreshToken },
+      data: { refreshToken: updatedRefreshToken },
     });
 
     return updatedTokenData;
+  } else {
+    const createdTokenData = await prisma.token.create({
+      data: { refreshToken, userId },
+    });
+    return createdTokenData;
   }
-
-  await prisma.token.create({ data: { refreshToken, userId } });
 };
 
-export const findRefreshTokenByUserId = async (userId: number) => {
-  const tokenData = await prisma.token.findFirst({ where: { userId } });
-  return tokenData;
-};
+// export const findRefreshToken = async (refreshToken: string) => {
+//   const tokenData = await prisma.token.findUnique({ where: { refreshToken } });
+//   return tokenData;
+// };
 
 export const validateRefreshToken = async (refreshToken: string) => {
   try {
@@ -67,31 +62,17 @@ export const validateRefreshToken = async (refreshToken: string) => {
       refreshToken,
       new TextEncoder().encode(JWT_REFRESH_SECRET)
     );
-    console.log({ validateRefreshToken: payload });
 
-    return payload;
-  } catch (error) {
-    return ApiError.badRequest("Your token has expired.");
+    const userDto: UserDto = payload.iss && JSON.parse(payload.iss);
+
+    return userDto;
+  } catch (error: any) {
+    if (error.code === "ERR_JWT_EXPIRED") {
+      removeRefreshToken(refreshToken);
+    }
+    return ApiError.badRequest("Your token has expired.", error);
   }
 };
-
-// export const validateAccessToken = async (accessToken: string) => {
-//   try {
-//     // const userData = jwt.verify(accessToken, JWT_ACCESS_SECRET as string);
-//     // console.log({ validateAccessToken: userData });
-//     const { payload } = await jwtVerify(
-//       accessToken,
-//       new TextEncoder().encode(JWT_ACCESS_SECRET)
-//     );
-//     console.log({ validateAccessToken: payload });
-
-//     return payload;
-
-//     // return userData as UserDto;
-//   } catch (error: any) {
-//     return ApiError.badRequest("Your token has expired.");
-//   }
-// };
 
 export const removeRefreshToken = async (refreshToken: string) => {
   try {
@@ -103,7 +84,7 @@ export const removeRefreshToken = async (refreshToken: string) => {
 
     return tokenData;
   } catch (error: any) {
-    throw ApiError.badRequest(error?.message);
+    throw ApiError.badRequest(error?.message, error);
   }
 };
 
@@ -115,6 +96,6 @@ export const findRefreshToken = async (refreshToken: string) => {
 
     return tokenData;
   } catch (error: any) {
-    throw ApiError.badRequest(error?.message);
+    throw ApiError.badRequest(error?.message, error);
   }
 };

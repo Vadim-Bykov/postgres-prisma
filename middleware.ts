@@ -6,11 +6,10 @@ import { ApiError } from "./server/error/ApiError";
 export async function middleware(request: NextRequest) {
   try {
     if (
-      request.nextUrl.pathname.includes("/users") &&
+      request.nextUrl.pathname.includes("/users/") &&
       request.method === "GET"
     ) {
       const response = await authMiddleware(request);
-      console.log({ response });
 
       return response;
     }

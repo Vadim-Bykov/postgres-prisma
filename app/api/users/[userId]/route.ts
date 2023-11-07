@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { removeTokensFromCookies } from "@/server/services/cookieService";
+import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -20,7 +21,8 @@ export async function DELETE(
 
   const users = await prisma.users.delete({ where: { id: +userId } });
 
-  removeTokensFromCookies();
+  // TODO: uncomment after implementing close account feature
+  // removeTokensFromCookies();
 
-  return Response.json(users);
+  return NextResponse.json(users);
 }

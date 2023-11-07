@@ -3,6 +3,7 @@
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
 import Button from "./atoms/common/Button";
+import { Navbar } from "./organisms/Navbar";
 
 export default function ContextProvider({
   children,
@@ -11,9 +12,7 @@ export default function ContextProvider({
 }) {
   return (
     <Provider store={store}>
-      <div className="flex flex-grow justify-center bg-blue-400 h-10">
-        <Button>User</Button>
-      </div>
+      <Navbar />
       {children}
     </Provider>
   );

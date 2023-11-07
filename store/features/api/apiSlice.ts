@@ -12,7 +12,7 @@ export interface Post {
 
 export const appApi = createApi({
   reducerPath: "api",
-  tagTypes: ["Users"],
+  tagTypes: ["Users", "Auth"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${String(url).replace("undefined", "")}/api/`,
   }),
@@ -30,14 +30,18 @@ export const appApi = createApi({
         method: "POST",
         body: userData,
       }),
-      invalidatesTags: ["Users"],
+      invalidatesTags: ["Users", "Auth"],
     }),
     removeUser: builder.mutation<User, { userId: number }>({
       query: ({ userId }) => ({
         url: `users/${userId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Users"],
+      invalidatesTags: ["Users", "Auth"],
+    }),
+    authentication: builder.query<{ isAuth: boolean }, void>({
+      query: () => "auth",
+      providesTags: ["Auth"],
     }),
   }),
 });
@@ -47,4 +51,5 @@ export const {
   useCreateUserMutation,
   useGetUserQuery,
   useRemoveUserMutation,
+  useAuthenticationQuery,
 } = appApi;

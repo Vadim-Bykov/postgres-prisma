@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 export class ApiError extends Error {
   status;
   error;
@@ -10,12 +12,15 @@ export class ApiError extends Error {
   }
 
   static badRequest(message: string, error?: any) {
-    return Response.json({ success: false, message, error }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message, error },
+      { status: 400 }
+    );
     // return new ApiError(400, message, error);
   }
 
   static internal(message = "Some internal error occurred", error?: any) {
-    return Response.json(
+    return NextResponse.json(
       { success: false, message, error: { ...error, message: error?.message } },
       { status: 500 }
     );
@@ -23,12 +28,12 @@ export class ApiError extends Error {
   }
 
   static forbidden(message: string) {
-    return Response.json({ success: false, message }, { status: 403 });
+    return NextResponse.json({ success: false, message }, { status: 403 });
     // return new ApiError(403, message);
   }
 
   static unauthorized() {
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "User is unauthorized" },
       { status: 401 }
     );

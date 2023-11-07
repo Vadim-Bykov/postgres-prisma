@@ -41,7 +41,7 @@ export const registration = async ({
 
   const userDto = getUserDto(user);
   const { refreshToken } = await tokenService.generateToken(userDto);
-  await tokenService.saveRefreshToken(userDto.id, refreshToken);
+  await tokenService.saveRefreshToken({ userId: userDto.id, refreshToken });
 
   return { user: userDto, accessToken: undefined, refreshToken };
 };
