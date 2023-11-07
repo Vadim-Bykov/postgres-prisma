@@ -4,6 +4,8 @@ import { setTokensToCookies } from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const users = await userService.getAllUsers();
@@ -19,7 +21,7 @@ export async function POST(request: Request) {
     const userData: UserCreationBody = await request.json();
 
     const userDto = await userService.registration(userData);
-    const { accessToken, refreshToken } = userDto;
+    const { refreshToken } = userDto;
 
     setTokensToCookies({ refreshToken });
 

@@ -1,6 +1,9 @@
 import prisma from "@/lib/prisma";
 import { removeTokensFromCookies } from "@/server/services/cookieService";
+import * as userService from "@/server/services/userService";
 import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(
   request: Request,
@@ -8,9 +11,9 @@ export async function GET(
 ) {
   const { userId } = params;
 
-  const users = await prisma.users.findUnique({ where: { id: +userId } });
+  const user = await userService.getUser(+userId);
 
-  return Response.json(users);
+  return NextResponse.json(user);
 }
 
 export async function DELETE(
@@ -22,7 +25,7 @@ export async function DELETE(
   const users = await prisma.users.delete({ where: { id: +userId } });
 
   // TODO: uncomment after implementing close account feature
-  // removeTokensFromCookies();
+  removeTokensFromCookies();
 
   return NextResponse.json(users);
 }

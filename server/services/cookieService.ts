@@ -5,10 +5,8 @@ import {
 import { cookies } from "next/headers";
 
 export const setTokensToCookies = ({
-  // accessToken,
   refreshToken,
 }: {
-  // accessToken: string;
   refreshToken: string;
 }) => {
   const cookieStore = cookies();
@@ -18,12 +16,6 @@ export const setTokensToCookies = ({
     sameSite: "none",
     secure: true,
   });
-  // cookieStore.set(ACCESS_TOKEN_COOKIE, accessToken, {
-  //   maxAge: 30 * 24 * 60 * 60 * 1000,
-  //   httpOnly: true,
-  //   sameSite: "none",
-  //   secure: true,
-  // });
 };
 
 export const removeTokensFromCookies = () => {

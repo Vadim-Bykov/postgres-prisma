@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
-import type { NextRequest, NextMiddleware, NextFetchEvent } from "next/server";
-import { authMiddleware } from "./server/middlewares/auth";
+import type { NextRequest } from "next/server";
 import { ApiError } from "./server/error/ApiError";
+import { authMiddleware } from "./server/middlewares/auth";
 
 export async function middleware(request: NextRequest) {
   try {

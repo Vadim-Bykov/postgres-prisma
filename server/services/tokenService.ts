@@ -1,5 +1,3 @@
-// import { ApiError } from './../errors/ApiError';
-import jwt from "jsonwebtoken";
 import { UserDto } from "../dtos/userDto";
 import prisma from "@/lib/prisma";
 import { ApiError } from "../error/ApiError";
