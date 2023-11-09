@@ -8,3 +8,8 @@ export interface UserCreationBody {
   password: User["password"];
   imageFormData?: FormData;
 }
+
+export interface UserLoginBody {
+  email: User["email"];
+  password: User["password"];
+}

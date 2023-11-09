@@ -23,3 +23,9 @@ export const removeTokensFromCookies = () => {
   cookieStore.delete(REFRESH_TOKEN_COOKIE);
   // cookieStore.delete(ACCESS_TOKEN_COOKIE);
 };
+
+export const getTokensFromCookies = () => {
+  const cookieStore = cookies();
+  const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE)?.value;
+  return refreshToken;
+};

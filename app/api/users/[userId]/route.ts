@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { ApiError } from "@/server/error/ApiError";
 import { removeTokensFromCookies } from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
 import { NextResponse } from "next/server";
@@ -9,23 +10,39 @@ export async function GET(
   request: Request,
   { params }: { params: { userId: string } }
 ) {
-  const { userId } = params;
+  try {
+    const { userId } = params;
 
-  const user = await userService.getUser(+userId);
+    const user = await userService.getUser(+userId);
 
-  return NextResponse.json(user);
+    return NextResponse.json(user);
+  } catch (error) {
+    if (error instanceof NextResponse) {
+      return error;
+    } else {
+      throw ApiError.badRequest("Get user data error", error);
+    }
+  }
 }
 
 export async function DELETE(
   request: Request,
   { params }: { params: { userId: string } }
 ) {
-  const { userId } = params;
+  try {
+    const { userId } = params;
 
-  const users = await prisma.users.delete({ where: { id: +userId } });
+    const users = userService.deleteUser(+userId);
 
-  // TODO: uncomment after implementing close account feature
-  removeTokensFromCookies();
+    // TODO: uncomment after implementing close account feature
+    removeTokensFromCookies();
 
-  return NextResponse.json(users);
+    return NextResponse.json(users);
+  } catch (error) {
+    if (error instanceof NextResponse) {
+      return error;
+    } else {
+      throw ApiError.badRequest("Delete user error", error);
+    }
+  }
 }

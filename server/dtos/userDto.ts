@@ -7,15 +7,23 @@ export interface UserDto {
   picture?: string;
   roles?: Role;
   name?: string;
+  createdAt: User["createdAt"];
 }
 
 type GetUserDto = (userData: User) => UserDto;
 
-export const getUserDto: GetUserDto = ({ id, email, role = "USER", name }) => {
+export const getUserDto: GetUserDto = ({
+  id,
+  email,
+  createdAt,
+  role = "USER",
+  name,
+}) => {
   return {
     id,
     email,
     role,
     name,
+    createdAt,
   };
 };

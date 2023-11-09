@@ -2,7 +2,7 @@ import Avatar from "@/public/icons/avatar.svg";
 import {
   useGetUsersQuery,
   useRemoveUserMutation,
-} from "@/store/features/api/apiSlice";
+} from "@/store/features/api/appApi";
 import { timeAgo } from "@/utils/formatiing";
 import Image from "next/image";
 import Button from "../atoms/common/Button";
@@ -31,8 +31,8 @@ export function UserList() {
           <div key={user.id} className="flex items-center justify-between py-3">
             <div className="flex items-center space-x-4">
               <Image
-                src={user.image || Avatar}
-                alt={user.name}
+                src={user.picture || Avatar}
+                alt="Avatar"
                 width={48}
                 height={48}
                 className="rounded-full ring-1 ring-gray-900/5"
