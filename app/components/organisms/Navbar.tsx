@@ -1,16 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "../atoms/common/Button";
-import { useAppSelector } from "@/store/store";
 import {
   useAuthenticationQuery,
   useLoginMutation,
   useLogoutMutation,
-} from "@/store/features/api/appApi";
+} from "@/store/features/api/subApi/userApi";
+import { useGetLocationQuery } from "@/store/features/api/appApi";
 
 export function Navbar() {
   const { data, isLoading } = useAuthenticationQuery();
   const [login, { isLoading: isAuthorizing }] = useLoginMutation();
   const [logout, { isLoading: isLogouting }] = useLogoutMutation();
+  const { data: location } = useGetLocationQuery();
 
   const sendUserData = () => {
     login({ email: "bvntaev@gmail.com", password: "Password!" });
@@ -35,7 +36,12 @@ export function Navbar() {
           Login
         </Button>
       )}
-      {data?.user && <p className="font-medium">User: {data?.user.email}</p>}
+      {data?.user && <p className="font-medium">User: {data?.user.email} </p>}
+      {location && (
+        <p className="font-medium">
+          location: {location.country} {location.country_name}
+        </p>
+      )}
     </div>
   );
 }

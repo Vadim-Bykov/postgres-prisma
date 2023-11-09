@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreateUserMutation } from "@/store/features/api/appApi";
+import { useCreateUserMutation } from "@/store/features/api/subApi/userApi";
 import { useForm } from "react-hook-form";
 import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";

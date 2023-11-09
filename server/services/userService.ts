@@ -102,7 +102,7 @@ export const getAllUsers = async () => {
   try {
     const users = await prisma.users.findMany();
 
-    return users;
+    return users.map((user) => getUserDto(user));
   } catch (error) {
     throw ApiError.badRequest("getAllUsers error", error);
   }

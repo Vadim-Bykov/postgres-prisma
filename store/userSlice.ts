@@ -1,10 +1,13 @@
 import { UserDto } from "@/server/dtos/userDto";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { userApi } from "./features/api/subApi/userApi";
 import { appApi } from "./features/api/appApi";
+import { Location } from "@/models/location";
 
 interface UserState {
   userData?: UserDto;
   isAuthorized: boolean;
+  location?: Location;
 }
 
 const initialState: UserState = {
@@ -25,10 +28,13 @@ export const userSlice = createSlice({
     // ) => {
     //   state.isAuthorized = action.payload;
     // },
+    setLocation: (state, action: PayloadAction<Location>) => {
+      state.location = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      appApi.endpoints.authentication.matchFulfilled,
+      userApi.endpoints.authentication.matchFulfilled,
       (state, { payload }) => {
         state.isAuthorized = payload.auth;
         state.userData = payload.user;
@@ -36,7 +42,7 @@ export const userSlice = createSlice({
     );
 
     builder.addMatcher(
-      appApi.endpoints.createUser.matchFulfilled,
+      userApi.endpoints.createUser.matchFulfilled,
       (state, { payload }) => {
         state.userData = payload;
         state.isAuthorized = true;
@@ -44,17 +50,24 @@ export const userSlice = createSlice({
     );
 
     builder.addMatcher(
-      appApi.endpoints.login.matchFulfilled,
+      userApi.endpoints.login.matchFulfilled,
       (state, { payload }) => {
         state.userData = payload;
         state.isAuthorized = true;
       }
     );
 
-    builder.addMatcher(appApi.endpoints.logout.matchFulfilled, (state) => {
+    builder.addMatcher(userApi.endpoints.logout.matchFulfilled, (state) => {
       state.userData = undefined;
       state.isAuthorized = false;
     });
+
+    builder.addMatcher(
+      appApi.endpoints.getLocation.matchFulfilled,
+      (state, { payload }) => {
+        state.location = payload;
+      }
+    );
   },
 });
 
