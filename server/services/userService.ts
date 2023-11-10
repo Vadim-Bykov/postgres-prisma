@@ -77,7 +77,10 @@ export const login = async ({ email, password }: UserLoginBody) => {
       throw ApiError.badRequest("Password is invalid");
     }
 
-    const userDto = getUserDto(user);
+    const location = await prisma.location.findUnique({
+      where: { userId: user.id },
+    });
+    const userDto = getUserDto({ ...user, location });
 
     const { refreshToken } = await tokenService.generateToken(userDto);
     await tokenService.saveRefreshToken({ userId: userDto.id, refreshToken });
@@ -129,8 +132,9 @@ export const getUser = async (userId: number) => {
 export const deleteUser = async (userId: number) => {
   try {
     const user = await prisma.users.delete({ where: { id: +userId } });
+    const userDto = getUserDto(user);
 
-    return user;
+    return userDto;
   } catch (error) {
     throw ApiError.badRequest("Remove User error", error);
   }

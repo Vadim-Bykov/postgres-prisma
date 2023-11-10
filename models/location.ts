@@ -29,7 +29,7 @@ export interface ApiLocationResponse {
 }
 
 export interface UserLocation {
-  country?: ApiLocationResponse["country"];
-  city?: ApiLocationResponse["city"];
-  country_name?: ApiLocationResponse["country_name"];
+  country?: ApiLocationResponse["country"] | null;
+  city?: ApiLocationResponse["city"] | null;
+  country_name?: ApiLocationResponse["country_name"] | null;
 }

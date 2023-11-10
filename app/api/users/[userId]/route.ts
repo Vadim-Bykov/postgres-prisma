@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { getUserDto } from "@/server/dtos/userDto";
 import { ApiError } from "@/server/error/ApiError";
 import { removeTokensFromCookies } from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
@@ -33,8 +32,7 @@ export async function DELETE(
   try {
     const { userId } = params;
 
-    const user = await userService.deleteUser(+userId);
-    const userDto = getUserDto(user);
+    const userDto = await userService.deleteUser(+userId);
 
     // TODO: uncomment after implementing close account feature
     removeTokensFromCookies();

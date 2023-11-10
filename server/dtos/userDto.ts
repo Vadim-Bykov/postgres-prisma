@@ -13,7 +13,7 @@ export interface UserDto {
 }
 
 interface UserDtoSource extends User {
-  location?: UserLocation;
+  location?: UserLocation | null;
 }
 
 type GetUserDto = (userData: UserDtoSource) => UserDto;
@@ -32,10 +32,12 @@ export const getUserDto: GetUserDto = ({
     role,
     name,
     createdAt,
-    location: location && {
-      city: location.city,
-      country: location.country,
-      country_name: location.country_name,
-    },
+    location: location
+      ? {
+          city: location.city,
+          country: location.country,
+          country_name: location.country_name,
+        }
+      : undefined,
   };
 };
