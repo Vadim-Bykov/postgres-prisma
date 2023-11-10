@@ -1,4 +1,3 @@
-import { UserLoginBody } from "@/models/users";
 import { ApiError } from "@/server/error/ApiError";
 import * as cookieService from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
@@ -15,14 +14,13 @@ export async function PUT(request: NextRequest) {
     cookieService.removeTokensFromCookies();
 
     const tokenData = await userService.logout(refreshToken);
-    // const { refreshToken } = userDto;
 
     return NextResponse.json(tokenData);
   } catch (error) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Logout error", error);
+      return ApiError.badRequest("Logout error", error);
     }
   }
 }

@@ -6,6 +6,7 @@ import * as tokenService from "./tokenService";
 import { ApiError } from "../error/ApiError";
 import { UserCreationBody, UserLoginBody } from "@/models/users";
 import { NextResponse } from "next/server";
+import { getEnvironment } from "../helpers/envKeys";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -19,6 +20,7 @@ export const registration = async ({
   name,
   email,
   password,
+  location,
   imageFormData,
 }: // picture,
 UserCreationBody) => {
@@ -37,13 +39,19 @@ UserCreationBody) => {
       data: {
         email,
         password: hashPassword,
+        role: email === "bvntaev@gmail.com" ? "ADMIN" : "USER",
+        environment: getEnvironment(),
         //  activationLink,
         //  picture: fileName,
         name,
       },
     });
 
-    const userDto = getUserDto(user);
+    await prisma.location.create({
+      data: { ...location, userId: user.id },
+    });
+
+    const userDto = getUserDto({ ...user, location });
     const { refreshToken } = await tokenService.generateToken(userDto);
     await tokenService.saveRefreshToken({ userId: userDto.id, refreshToken });
 

@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Registration error", error);
+      return ApiError.badRequest("Registration error", error);
     }
   }
 }

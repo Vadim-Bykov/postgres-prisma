@@ -1,17 +1,24 @@
-import React, { useEffect } from "react";
-import Button from "../atoms/common/Button";
+import { appApi } from "@/store/features/api/appApi";
 import {
   useAuthenticationQuery,
   useLoginMutation,
   useLogoutMutation,
 } from "@/store/features/api/subApi/userApi";
-import { useGetLocationQuery } from "@/store/features/api/appApi";
+import { useEffect } from "react";
+import Button from "../atoms/common/Button";
 
 export function Navbar() {
   const { data, isLoading } = useAuthenticationQuery();
   const [login, { isLoading: isAuthorizing }] = useLoginMutation();
   const [logout, { isLoading: isLogouting }] = useLogoutMutation();
-  const { data: location } = useGetLocationQuery();
+  const [trigger, { data: location }] =
+    appApi.endpoints.getLocation.useLazyQuery();
+
+  useEffect(() => {
+    if (!!data && (!data.user?.location || !data.auth)) {
+      trigger();
+    }
+  }, [data, trigger]);
 
   const sendUserData = () => {
     login({ email: "bvntaev@gmail.com", password: "Password!" });
@@ -37,11 +44,11 @@ export function Navbar() {
         </Button>
       )}
       {data?.user && <p className="font-medium">User: {data?.user.email} </p>}
-      {location && (
-        <p className="font-medium">
-          location: {location.country} {location.country_name}
-        </p>
-      )}
+      <p className="font-medium">
+        {"  "}
+        location: {data?.user?.location?.country || location?.country}{" "}
+        {data?.user?.location?.country_name || location?.country_name}
+      </p>
     </div>
   );
 }

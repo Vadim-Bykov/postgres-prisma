@@ -2,12 +2,12 @@ import { UserDto } from "@/server/dtos/userDto";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { userApi } from "./features/api/subApi/userApi";
 import { appApi } from "./features/api/appApi";
-import { Location } from "@/models/location";
+import { UserLocation } from "@/models/location";
 
 interface UserState {
   userData?: UserDto;
   isAuthorized: boolean;
-  location?: Location;
+  location?: UserLocation;
 }
 
 const initialState: UserState = {
@@ -28,7 +28,7 @@ export const userSlice = createSlice({
     // ) => {
     //   state.isAuthorized = action.payload;
     // },
-    setLocation: (state, action: PayloadAction<Location>) => {
+    setLocation: (state, action: PayloadAction<UserLocation>) => {
       state.location = action.payload;
     },
   },

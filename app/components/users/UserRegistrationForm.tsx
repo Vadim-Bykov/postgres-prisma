@@ -17,6 +17,7 @@ import { HTMLAttributes, useState } from "react";
 import messages from "@/app/constants/messages.json";
 import Icon from "../atoms/common/Icon/Icon";
 import clsx from "clsx";
+import { useAppSelector } from "@/store/store";
 
 type FormValues = {
   firstName: string;
@@ -39,13 +40,15 @@ export function UserRegistrationForm() {
   const [showPasswordConfirmationError, setShowPasswordConfirmationError] =
     useState(false);
   const password = watch("password");
+  const { location } = useAppSelector((state) => state.user);
 
   const onSubmit = handleSubmit(async ({ email, firstName, password }) => {
     await createUser({
       email,
       name: firstName,
       password,
-    }).then((user) => console.log(user));
+      location,
+    });
 
     reset();
   });

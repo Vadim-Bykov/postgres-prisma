@@ -1,3 +1,4 @@
+import { UserLocation } from "@/models/location";
 import { User } from "@/models/users";
 import { Role } from "@prisma/client";
 
@@ -8,9 +9,14 @@ export interface UserDto {
   roles?: Role;
   name?: string;
   createdAt: User["createdAt"];
+  location?: UserLocation;
 }
 
-type GetUserDto = (userData: User) => UserDto;
+interface UserDtoSource extends User {
+  location?: UserLocation;
+}
+
+type GetUserDto = (userData: UserDtoSource) => UserDto;
 
 export const getUserDto: GetUserDto = ({
   id,
@@ -18,6 +24,7 @@ export const getUserDto: GetUserDto = ({
   createdAt,
   role = "USER",
   name,
+  location,
 }) => {
   return {
     id,
@@ -25,5 +32,10 @@ export const getUserDto: GetUserDto = ({
     role,
     name,
     createdAt,
+    location: location && {
+      city: location.city,
+      country: location.country,
+      country_name: location.country_name,
+    },
   };
 };

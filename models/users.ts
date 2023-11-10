@@ -1,4 +1,5 @@
 import { Users } from "@prisma/client";
+import { UserLocation } from "./location";
 
 export interface User extends Users {}
 
@@ -7,6 +8,7 @@ export interface UserCreationBody {
   email: User["email"];
   password: User["password"];
   imageFormData?: FormData;
+  location?: UserLocation;
 }
 
 export interface UserLoginBody {

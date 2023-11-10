@@ -43,7 +43,7 @@ export const userApi = appApi.injectEndpoints({
     }),
     authentication: builder.query<
       {
-        user: UserDto;
+        user?: UserDto;
         auth: boolean;
       },
       void

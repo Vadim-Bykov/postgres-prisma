@@ -16,6 +16,17 @@ enum Role {
   ADMIN
 }
 
+enum Environment {
+  production
+  development
+  preview
+} 
+
+enum Project {
+  IT_SCHOOL
+  ASTRO
+}
+
 model Users {
   id        Int      @id @unique @default(autoincrement())
   name      String
@@ -25,10 +36,22 @@ model Users {
   image     String?
   createdAt DateTime @default(now())
   Token     Token[]
+  environment Environment @default(production)
+  project   Project @default(IT_SCHOOL)
+  location  Location?
 }
 
 model Token {
   refreshToken String @id @unique
   userId       Int
   Users        Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Location {
+  country               String?
+  city                  String?
+  country_name          String?
+
+  userId                Int @unique
+  Users                 Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
