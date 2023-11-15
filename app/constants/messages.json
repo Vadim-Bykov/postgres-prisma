@@ -1,0 +1,22 @@
+{
+  "validation": {
+    "required": "This field is required.",
+    "email": "Please enter a valid email address.",
+    "firstName": "First name has invalid characters. Please try again.",
+    "lastName": "Last name has invalid characters. Please try again.",
+    "phoneNumber": "Please enter a valid phone number.",
+    "passwordConfirmation": "The passwords entered do not match."
+  },
+  "registration": {
+    "wrongLoginCredentials": "The email address and/or password entered are incorrect.",
+    "wrongVerificationCode": "This code is incorrect. Try again or re-send the code.",
+    "emailNeverUsed": "Sorry, you can't access Piñata from our website. Try downloading the app to continue!",
+    "emailBlacklisted": "The email you're using is not valid. This could be because you deleted your account, asked us to remove you from our lists, or marked our emails as spam. Email us at contact@pinata.ai if you have any questions."
+  },
+  "rewardPurchase": {
+    "notEnoughPoints": "Not enough Piñata Points. You need ${0} more.",
+    "purchasedButNotRedeemed": "You have already purchased this reward, but have not marked it as redeemed. Please go to the unused tab in your reward history and mark it as redeemed before you purchase another.",
+    "singleUseRedeemedAlready": "This reward can only be purchased once.",
+    "wasSoldOutWhileBuying": "Oops, it’s gone! Due to popular demand this reward was swooped up in a flash. Stay tuned for the next drop."
+  }
+}

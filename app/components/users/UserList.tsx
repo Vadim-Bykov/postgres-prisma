@@ -1,12 +1,20 @@
-import prisma from "@/lib/prisma";
-import { timeAgo } from "@/lib/utils";
+import Avatar from "@/public/icons/avatar.svg";
+import {
+  useGetUsersQuery,
+  useRemoveUserMutation,
+} from "@/store/features/api/subApi/userApi";
+import { timeAgo } from "@/utils/formatiing";
 import Image from "next/image";
-import RefreshButton from "./refresh-button";
+import Button from "../atoms/common/Button";
 
-export default async function Table() {
+export function UserList() {
   const startTime = Date.now();
-  const users = await prisma.users.findMany();
   const duration = Date.now() - startTime;
+
+  const { data: users } = useGetUsersQuery();
+  const [removeUser, { isLoading: isRemoving }] = useRemoveUserMutation();
+
+  if (!users) return null;
 
   return (
     <div className="bg-white/30 p-12 shadow-xl ring-1 ring-gray-900/5 rounded-lg backdrop-blur-lg max-w-xl mx-auto w-full">
@@ -17,18 +25,14 @@ export default async function Table() {
             Fetched {users.length} users in {duration}ms
           </p>
         </div>
-        <RefreshButton />
       </div>
       <div className="divide-y divide-gray-900/5">
         {users.map((user) => (
-          <div
-            key={user.name}
-            className="flex items-center justify-between py-3"
-          >
+          <div key={user.id} className="flex items-center justify-between py-3">
             <div className="flex items-center space-x-4">
               <Image
-                src={user.image}
-                alt={user.name}
+                src={user.picture || Avatar}
+                alt="Avatar"
                 width={48}
                 height={48}
                 className="rounded-full ring-1 ring-gray-900/5"
@@ -39,6 +43,16 @@ export default async function Table() {
               </div>
             </div>
             <p className="text-sm text-gray-500">{timeAgo(user.createdAt)}</p>
+            <Button
+              variant="warning"
+              disabled={isRemoving}
+              loading={isRemoving}
+              onClick={() => {
+                removeUser({ userId: user.id });
+              }}
+            >
+              Delete
+            </Button>
           </div>
         ))}
       </div>
