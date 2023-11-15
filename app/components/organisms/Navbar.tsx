@@ -8,17 +8,17 @@ import { useEffect } from "react";
 import Button from "../atoms/common/Button";
 
 export function Navbar() {
-  const { data, isLoading } = useAuthenticationQuery();
+  const { data: userData, isLoading } = useAuthenticationQuery();
   const [login, { isLoading: isAuthorizing }] = useLoginMutation();
   const [logout, { isLoading: isLogouting }] = useLogoutMutation();
   const [trigger, { data: location }] =
     appApi.endpoints.getLocation.useLazyQuery();
 
   useEffect(() => {
-    if (!!data && (!data.user?.location || !data.auth)) {
+    if (!!userData && (!userData.user?.location || !userData.auth)) {
       trigger();
     }
-  }, [data, trigger]);
+  }, [userData, trigger]);
 
   const sendUserData = () => {
     login({ email: "bvntaev@gmail.com", password: "Password!" });
@@ -26,7 +26,7 @@ export function Navbar() {
 
   return (
     <div className="flex flex-grow justify-center bg-blue-400 h-10">
-      {data?.auth ? (
+      {userData?.auth ? (
         <Button
           loading={isLogouting}
           disabled={isLoading}
@@ -43,11 +43,13 @@ export function Navbar() {
           Login
         </Button>
       )}
-      {data?.user && <p className="font-medium">User: {data?.user.email} </p>}
+      {userData?.user && (
+        <p className="font-medium">User: {userData?.user.email} </p>
+      )}
       <p className="font-medium">
         {"  "}
-        location: {data?.user?.location?.country || location?.country}{" "}
-        {data?.user?.location?.country_name || location?.country_name}
+        location: {userData?.user?.location?.country || location?.country}{" "}
+        {userData?.user?.location?.country_name || location?.country_name}
       </p>
     </div>
   );
