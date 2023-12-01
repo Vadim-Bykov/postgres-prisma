@@ -31,10 +31,12 @@ module.exports = {
           DEFAULT: "#EE3A78",
         },
         yellow: {
-          DEFAULT: "#FBE74E",
+          DEFAULT: "#ffdd00",
+          hover: "#ffce29",
         },
         red: {
           DEFAULT: "#FF3B30",
+          hover: "#D52027",
         },
       },
     },

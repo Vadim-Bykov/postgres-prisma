@@ -1,4 +1,4 @@
-import ContextProvider from "@/app/components/ContextProvider";
+import Wrapper from "@/app/components/Wrapper";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <ContextProvider>{children}</ContextProvider>
+        <Wrapper>{children}</Wrapper>
       </body>
     </html>
   );

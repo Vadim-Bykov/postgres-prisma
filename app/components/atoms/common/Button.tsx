@@ -37,28 +37,28 @@ export default function Button({
       disabled={disabled}
       className={clsx(
         "flex justify-center items-center",
-        "rounded-xl font-medium text-sm border",
+        "rounded-sm font-medium text-sm border",
         "transition-colors duration-200 ease-in-out",
         "focus:outline-none focus:ring-1 focus:ring-pink",
         disabled && "opacity-50",
         size === "medium" ? "py-2 px-5" : "py-4 px-6",
         variant === "primary" && [
-          "bg-purple",
-          "text-white",
-          "border-purple",
-          !disabled && ["hover:bg-purple-hover", "active:bg-purple-active"],
-        ],
-        variant === "secondary" &&
-          "text-purple border-purple hover:bg-purple hover:text-white",
-        variant === "secondary-white" &&
-          "text-white border-white hover:bg-white hover:text-purple",
-        variant === "primary-white" &&
-          "text-purple border-white bg-white hover:bg-white/80 active:bg-white/40",
-        variant === "warning" && [
-          "bg-red-400",
+          "bg-red",
           "text-white",
           "border-red",
-          !disabled && ["hover:bg-red", "active:bg-red-700"],
+          !disabled && ["hover:bg-red-hover", "active:bg-red-active"],
+        ],
+        variant === "secondary" &&
+          "text-red border-red hover:bg-red hover:text-white",
+        variant === "secondary-white" &&
+          "text-white border-white hover:bg-white hover:text-red",
+        variant === "primary-white" &&
+          "text-red border-white bg-white hover:bg-white/80 active:bg-white/40",
+        variant === "warning" && [
+          "bg-yellow-400",
+          "text-white",
+          "border-yellow",
+          !disabled && ["hover:bg-yellow", "active:bg-yellow-700"],
         ],
         className
       )}
@@ -69,7 +69,7 @@ export default function Button({
         <svg
           aria-hidden="true"
           className={clsx(
-            "h-5 text-purple/0 animate-spin fill-white",
+            "h-5 text-red/0 animate-spin fill-white",
             "transition-width duration-500 ease-in-out",
             loading ? "w-5" : "w-0"
           )}

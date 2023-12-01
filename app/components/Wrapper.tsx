@@ -3,15 +3,12 @@
 import { store } from "@/store/store";
 import { Provider } from "react-redux";
 import { Navbar } from "./organisms/Navbar";
+import { Header } from "./organisms/Header";
 
-export default function ContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <Navbar />
+      <Header />
       {children}
     </Provider>
   );
