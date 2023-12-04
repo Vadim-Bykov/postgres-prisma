@@ -1,5 +1,8 @@
 import { UserLoginBody } from "@/models/users";
-import { toggleLoginModal } from "@/store/authentication";
+import {
+  toggleLoginModal,
+  toggleRegistrationModal,
+} from "@/store/authentication";
 import { useLoginMutation } from "@/store/features/api/subApi/userApi";
 import { useAppDispatch } from "@/store/store";
 import clsx from "clsx";
@@ -38,7 +41,6 @@ export function LoginModal({
 
   const [formError, setFormError] = useState("");
   const [showFormError, setShowFormError] = useState(false);
-  const [loggingIn, setLoggingIn] = useState(false);
 
   const [login, { isLoading: isAuthorizing }] = useLoginMutation();
 
@@ -46,29 +48,28 @@ export function LoginModal({
     const trimmedEmail = email.trim();
 
     try {
-      setLoggingIn(true);
-
       await login({
         email: trimmedEmail,
         password,
       }).unwrap();
 
       handleSuccessfulLogin?.();
-      // TODO: figure out how to type errors thrown by mutations
     } catch (error: any) {
-    } finally {
-      setLoggingIn(false);
+      if (typeof error?.data?.message === "string") {
+        setFormError(error?.data?.message);
+        setShowFormError(true);
+      }
     }
   });
 
   const handleForgetPasswordClick = () => {
-    dispatch(toggleLoginModal(false));
+    // dispatch(toggleLoginModal(false));
     // dispatch(toggleResetPasswordModal(true));
   };
 
   const handleSignUpClick = () => {
     dispatch(toggleLoginModal(false));
-    // dispatch(toggleEmailVerificationModal(true));
+    dispatch(toggleRegistrationModal(true));
   };
 
   useEffect(() => {
@@ -81,7 +82,7 @@ export function LoginModal({
     <ModalHalfImage {...props}>
       <>
         <Form
-          preventSubmission={loggingIn}
+          preventSubmission={isAuthorizing}
           className="flex flex-col mb-5 md:mb-0"
           onChange={() => setShowFormError(false)}
           onSubmit={onSubmit}
@@ -114,8 +115,8 @@ export function LoginModal({
             type="submit"
             size="large"
             className="mb-6"
-            disabled={loggingIn}
-            loading={loggingIn}
+            disabled={isAuthorizing}
+            loading={isAuthorizing}
           >
             Login
           </Button>

@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { User } from "@/models/users";
 import { LoginModal } from "./LoginModal";
 import { LogoutModal } from "./LogoutModal";
+import { RegistrationModal } from "./RegistrationModal";
 
 export function AuthenticationFlow() {
   const dispatch = useAppDispatch();
@@ -23,15 +24,8 @@ export function AuthenticationFlow() {
     (state) => state.authentication.logoutModalOpen
   );
 
-  const openRegistrationModal = () => {
-    dispatch(toggleRegistrationModal(true));
-  };
   const closeRegistrationModal = () => {
     dispatch(toggleRegistrationModal(false));
-  };
-
-  const openLoginModal = () => {
-    dispatch(toggleLoginModal(true));
   };
   const closeLoginModal = () => {
     dispatch(toggleLoginModal(false));
@@ -50,7 +44,6 @@ export function AuthenticationFlow() {
     <>
       <LoginModal
         open={loginModalOpen}
-        email={userEmail}
         onSuccess={closeLoginModal}
         onRequestClose={closeLoginModal}
       />
@@ -59,12 +52,11 @@ export function AuthenticationFlow() {
         onSuccess={closeLogoutModal}
         onRequestClose={closeLogoutModal}
       />
-      {/* <RegistrationModal
-        email={userEmail}
+      <RegistrationModal
         open={registrationModalOpen}
         onSuccess={closeRegistrationModal}
         onRequestClose={closeRegistrationModal}
-      /> */}
+      />
       {/* <ResetPasswordModal
         email={userEmail}
         open={resetPasswordModalOpen}
