@@ -60,6 +60,8 @@ export const userSlice = createSlice({
     builder.addMatcher(userApi.endpoints.logout.matchFulfilled, (state) => {
       state.userData = undefined;
       state.isAuthorized = false;
+
+      appApi.util.resetApiState();
     });
 
     builder.addMatcher(

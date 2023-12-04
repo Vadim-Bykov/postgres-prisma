@@ -36,10 +36,11 @@ export default function Button({
       type={type}
       disabled={disabled}
       className={clsx(
-        "flex justify-center items-center",
+        "flex justify-center items-center scale-100",
         "rounded-sm font-medium text-sm border",
-        "transition-colors duration-200 ease-in-out",
+        "transition-all duration-200 ease-in-out",
         "focus:outline-none focus:ring-1 focus:ring-pink",
+        "active:scale-95",
         disabled && "opacity-50",
         size === "medium" ? "py-2 px-5" : "py-4 px-6",
         variant === "primary" && [

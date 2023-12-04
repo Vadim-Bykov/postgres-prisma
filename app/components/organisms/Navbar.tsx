@@ -8,6 +8,7 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { UserBadge } from "../molecules/header/UserBadge";
 
 interface NavbarItem {
   route: string;
@@ -86,6 +87,8 @@ export function Navbar({ className }: { className?: string }) {
           />
         ))}
       </nav>
+
+      <UserBadge />
     </div>
   );
 }
