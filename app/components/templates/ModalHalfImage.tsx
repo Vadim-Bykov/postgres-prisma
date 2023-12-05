@@ -10,7 +10,9 @@ export function ModalHalfImage({
 }: PropsWithChildren<ModalProps>) {
   return (
     <Modal
-      className={{ base: clsx("overflow-hidden", "w-[90%]", "lg:w-[920px]") }}
+      className={{
+        base: clsx("overflow-hidden", "w-[90%] max-h-[95%]", "lg:w-[920px]"),
+      }}
       withCloseIcon
       {...props}
     >
@@ -23,7 +25,7 @@ export function ModalHalfImage({
       </div>
       <div
         className={clsx(
-          "w-full py-8 px-5",
+          "w-full p-5",
           "md:w-[55%] md:py-14 md:px-10",
           "lg:py-28 lg:px-20"
         )}

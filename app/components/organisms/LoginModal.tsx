@@ -87,7 +87,9 @@ export function LoginModal({
           onChange={() => setShowFormError(false)}
           onSubmit={onSubmit}
         >
-          <h1 className="text-3xl font-semibold mb-6">Login to Piñata</h1>
+          <h1 className="text-3xl font-semibold mb-6">
+            Login to PRO IT SCHOOL
+          </h1>
           <fieldset className="flex flex-col gap-2 mb-6">
             <EmailInput register={register} error={errors.email?.message} />
             <PasswordInput
@@ -123,6 +125,7 @@ export function LoginModal({
           <span>
             Don’t have an account?{" "}
             <button
+              type="reset"
               className="text-purple font-medium"
               onClick={handleSignUpClick}
             >
