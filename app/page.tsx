@@ -1,7 +1,6 @@
 "use client";
 
 import { UserList } from "@/app/components/users/UserList";
-import { UserRegistrationForm } from "@/app/components/molecules/authenticationFlow/UserRegistrationForm";
 
 export const dynamic = "force-dynamic";
 
