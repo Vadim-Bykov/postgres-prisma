@@ -19,6 +19,7 @@
   "dependencies": {
     "@mona-health/react-input-mask": "^3.0.1",
     "@prisma/client": "^5.4.1",
+    "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/ms": "^0.7.32",
     "@types/node": "20.8.3",

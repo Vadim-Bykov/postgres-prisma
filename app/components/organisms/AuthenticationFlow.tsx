@@ -2,7 +2,7 @@ import {
   toggleLoginModal,
   toggleLogoutModal,
   toggleRegistrationModal,
-  // toggleResetPasswordModal,
+  toggleResetPasswordModal,
 } from "@/store/authentication";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -10,6 +10,7 @@ import { User } from "@/models/users";
 import { LoginModal } from "./LoginModal";
 import { LogoutModal } from "./LogoutModal";
 import { RegistrationModal } from "./RegistrationModal";
+import { ResetPasswordModal } from "./ResetPassword/ResetPasswordModal";
 
 export function AuthenticationFlow() {
   const dispatch = useAppDispatch();
@@ -23,6 +24,9 @@ export function AuthenticationFlow() {
   const logoutModalOpen = useAppSelector(
     (state) => state.authentication.logoutModalOpen
   );
+  const resetPasswordModalOpen = useAppSelector(
+    (state) => state.authentication.resetPasswordModalOpen
+  );
 
   const closeRegistrationModal = () => {
     dispatch(toggleRegistrationModal(false));
@@ -34,11 +38,13 @@ export function AuthenticationFlow() {
   const closeLogoutModal = () => {
     dispatch(toggleLogoutModal(false));
   };
-  // const closeResetPasswordModal = () => {
-  //   dispatch(toggleResetPasswordModal(false));
-  // };
+  const closeResetPasswordModal = () => {
+    dispatch(toggleResetPasswordModal(false));
+  };
 
   const [userEmail, setUserEmail] = useState<User["email"]>("");
+
+  console.log({ resetPasswordModalOpen });
 
   return (
     <>
@@ -57,11 +63,11 @@ export function AuthenticationFlow() {
         onSuccess={closeRegistrationModal}
         onRequestClose={closeRegistrationModal}
       />
-      {/* <ResetPasswordModal
+      <ResetPasswordModal
         email={userEmail}
         open={resetPasswordModalOpen}
         onRequestClose={closeResetPasswordModal}
-      /> */}
+      />
     </>
   );
 }

@@ -2,6 +2,7 @@ import { UserLoginBody } from "@/models/users";
 import {
   toggleLoginModal,
   toggleRegistrationModal,
+  toggleResetPasswordModal,
 } from "@/store/authentication";
 import { useLoginMutation } from "@/store/features/api/subApi/userApi";
 import { useAppDispatch } from "@/store/store";
@@ -63,8 +64,8 @@ export function LoginModal({
   });
 
   const handleForgetPasswordClick = () => {
-    // dispatch(toggleLoginModal(false));
-    // dispatch(toggleResetPasswordModal(true));
+    dispatch(toggleLoginModal(false));
+    dispatch(toggleResetPasswordModal(true));
   };
 
   const handleSignUpClick = () => {
@@ -97,7 +98,7 @@ export function LoginModal({
               error={errors.password?.message}
             />
             <button
-              type="button"
+              type="reset"
               className="text-right text-purple text-sm font-medium"
               onClick={handleForgetPasswordClick}
             >

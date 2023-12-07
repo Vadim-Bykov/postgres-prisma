@@ -5,10 +5,12 @@ const initialState: {
   registrationModalOpen: boolean;
   loginModalOpen: boolean;
   logoutModalOpen: boolean;
+  resetPasswordModalOpen: boolean;
 } = {
   registrationModalOpen: false,
   loginModalOpen: false,
   logoutModalOpen: false,
+  resetPasswordModalOpen: false,
 };
 
 export const authenticationSlice = createSlice({
@@ -24,8 +26,15 @@ export const authenticationSlice = createSlice({
     toggleLogoutModal: (state, action: PayloadAction<boolean>) => {
       state.logoutModalOpen = action.payload;
     },
+    toggleResetPasswordModal: (state, action: PayloadAction<boolean>) => {
+      state.resetPasswordModalOpen = action.payload;
+    },
   },
 });
 
-export const { toggleRegistrationModal, toggleLoginModal, toggleLogoutModal } =
-  authenticationSlice.actions;
+export const {
+  toggleRegistrationModal,
+  toggleLoginModal,
+  toggleLogoutModal,
+  toggleResetPasswordModal,
+} = authenticationSlice.actions;
