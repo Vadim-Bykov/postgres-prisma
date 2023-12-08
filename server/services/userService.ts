@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import { getUserDto } from "../dtos/userDto";
 import * as tokenService from "./tokenService";
+import * as mailService from "./mailService";
 import { ApiError } from "../error/ApiError";
 import { UserCreationBody, UserLoginBody } from "@/models/users";
 import { NextResponse } from "next/server";
@@ -31,7 +32,7 @@ UserCreationBody) => {
       throw ApiError.badRequest(`User with email ${email} already exists`);
     }
 
-    //   const activationLink = v4();
+    // const activationLink = v4();
     const hashPassword = await bcrypt.hash(password, 3);
     //   const fileName = saveFile(picture);
 
@@ -46,6 +47,8 @@ UserCreationBody) => {
         name,
       },
     });
+
+    await mailService.sendActivationMail({ name, email });
 
     await prisma.location.create({
       data: { ...location, userId: user.id },
