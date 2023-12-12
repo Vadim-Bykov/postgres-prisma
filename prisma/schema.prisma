@@ -20,6 +20,7 @@ model Users {
   project     Project     @default(IT_SCHOOL)
   location    Location?
   Token       Token[]
+  passwordResetLink PasswordResetLink[]
 }
 
 model Token {
@@ -34,6 +35,15 @@ model Location {
   country_name String?
   userId       Int     @unique
   Users        Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetLink {
+  link        String?
+  state       PasswordResetLinkState  @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
+  userId      Int     @unique
+  Users       Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model LocationAstro {
@@ -78,4 +88,10 @@ enum Environment {
 enum Project {
   IT_SCHOOL
   ASTRO
+}
+
+enum PasswordResetLinkState {
+  PENDING
+  REQUESTED
+  USED
 }

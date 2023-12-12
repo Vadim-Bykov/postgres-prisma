@@ -48,7 +48,7 @@ export function UserList() {
               disabled={isRemoving}
               loading={isRemoving}
               onClick={() => {
-                removeUser({ userId: user.id });
+                removeUser({ userId: user.id }).unwrap();
               }}
             >
               Delete

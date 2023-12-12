@@ -78,8 +78,6 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
     }
   });
 
-  console.log({ showFormError });
-
   return (
     <ModalHalfImage {...props}>
       <h1 className="text-3xl font-semibold mb-6">Let’s create your account</h1>

@@ -11,7 +11,7 @@ export function LogoutModal({ onSuccess, ...props }: Props) {
   const [logout, { isLoading: isLogouting }] = useLogoutMutation();
 
   const onLogout = async () => {
-    await logout();
+    await logout().unwrap();
     onSuccess?.();
   };
 

@@ -44,8 +44,6 @@ export function AuthenticationFlow() {
 
   const [userEmail, setUserEmail] = useState<User["email"]>("");
 
-  console.log({ resetPasswordModalOpen });
-
   return (
     <>
       <LoginModal

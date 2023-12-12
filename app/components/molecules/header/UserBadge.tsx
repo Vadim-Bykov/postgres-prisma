@@ -36,7 +36,10 @@ export function UserBadge({
       {loggedIn ? (
         <Button onClick={openLogoutModal}>{userData?.user?.name}</Button>
       ) : (
-        <AuthenticationButton />
+        <AuthenticationButton
+          disabled={isUserDataLoading}
+          loading={isUserDataLoading}
+        />
       )}
     </div>
   );

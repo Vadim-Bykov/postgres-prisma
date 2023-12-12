@@ -1,17 +1,12 @@
-import { AnimatedProps, animated } from "@react-spring/web";
-import {
-  CSSProperties,
-  ElementRef,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useForm } from "react-hook-form";
-import { Form } from "../../common/Form";
 import { User } from "@/models/users";
-import { EmailInput } from "../../molecules/inputs/EmailInput";
+import { useResetPasswordMutation } from "@/store/features/api/subApi/resetPasswordApi";
+import { AnimatedProps, animated } from "@react-spring/web";
+import clsx from "clsx";
+import { CSSProperties, useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
 import Button from "../../atoms/common/Button";
+import { Form } from "../../common/Form";
+import { EmailInput } from "../../molecules/inputs/EmailInput";
 
 const AnimatedForm = animated(Form);
 
@@ -35,6 +30,8 @@ export function ResetPasswordForm({
 
   // const [checkEmailStatus] = useCheckEmailStatusMutation();
 
+  const [resetPassword, { isError, error }] = useResetPasswordMutation();
+
   const defaultValues = useMemo(() => ({ email }), [email]);
 
   // const [sendRecoveryEmail] = useSendRecoveryEmailMutation();
@@ -54,6 +51,7 @@ export function ResetPasswordForm({
 
     try {
       setProcessingRequest(true);
+      await resetPassword({ email: trimmedEmail }).unwrap();
 
       // const emailStatusData = await checkEmailStatus({
       //   email: trimmedEmail,
@@ -99,7 +97,15 @@ export function ResetPasswordForm({
       </div>
 
       <EmailInput register={register} error={errors.email?.message} autoFocus />
-
+      <span
+        className={clsx(
+          "overflow-hidden text-pink",
+          "transition-max-height duration-500 ease-in-out",
+          isError ? "max-h-28" : "max-h-0"
+        )}
+      >
+        {error?.data?.message}
+      </span>
       <Button
         type="submit"
         size="large"

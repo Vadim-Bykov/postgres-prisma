@@ -1,9 +1,5 @@
 import { appApi } from "@/store/features/api/appApi";
-import {
-  useAuthenticationQuery,
-  useLoginMutation,
-  useLogoutMutation,
-} from "@/store/features/api/subApi/userApi";
+import { useAuthenticationQuery } from "@/store/features/api/subApi/userApi";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -35,9 +31,8 @@ export const NAVBAR_ITEMS: NavbarItem[] = [
 ];
 
 export function Navbar({ className }: { className?: string }) {
-  const { data: userData, isLoading } = useAuthenticationQuery();
-  const [login, { isLoading: isAuthorizing }] = useLoginMutation();
-  const [logout, { isLoading: isLogouting }] = useLogoutMutation();
+  const { data: userData } = useAuthenticationQuery();
+
   const [trigger, { data: location }] =
     appApi.endpoints.getLocation.useLazyQuery();
 
@@ -48,10 +43,6 @@ export function Navbar({ className }: { className?: string }) {
       trigger();
     }
   }, [userData, trigger]);
-
-  const sendUserData = () => {
-    login({ email: "bvntaev@gmail.com", password: "Password!" });
-  };
 
   const loggedIn = !!userData?.auth;
 
