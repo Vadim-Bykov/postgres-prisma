@@ -30,7 +30,10 @@ export function ResetPasswordForm({
 
   // const [checkEmailStatus] = useCheckEmailStatusMutation();
 
-  const [resetPassword, { isError, error }] = useResetPasswordMutation();
+  const [resetPassword, { isError, error }] = useResetPasswordMutation<{
+    isError: boolean;
+    error?: { data: { message: string; success: boolean } };
+  }>();
 
   const defaultValues = useMemo(() => ({ email }), [email]);
 
