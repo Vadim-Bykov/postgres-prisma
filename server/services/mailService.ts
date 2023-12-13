@@ -1,4 +1,5 @@
 import nodemailer from "nodemailer";
+import { EMAIL_HTML } from "../helpers/email/emailString";
 
 const SMTP_HOST = process.env.VERCEL_SMTP_HOST!;
 const SMTP_PORT = Number(process.env.VERCEL_SMTP_PORT)!;
@@ -32,13 +33,14 @@ export const sendActivationMail = async ({
     bcc: SMTP_USER,
     subject: "Registration on PRO IT SCHOOL",
     // subject: `Activate your account on ${API_URL}`,
-    html: `
-         <div>
-            <h1>Hello ${name}!</h1>
-            <h3>You've registered with email: ${email}!</h3>
-            <h3>We are happy to see you!</h3>
-         </div>
-       `,
+    html: EMAIL_HTML,
+    //  `
+    //      <div>
+    //         <h1>Hello ${name}!</h1>
+    //         <h3>You've registered with email: ${email}!</h3>
+    //         <h3>We are happy to see you!</h3>
+    //      </div>
+    //    `,
   });
 };
 
