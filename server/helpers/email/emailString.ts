@@ -10,35 +10,6 @@ const src_2 =
 const src_4 =
   "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";
 
-//   `data:image/png;base64,${Buffer.from(
-//   imageData_1,
-//   "binary"
-// ).toString("base64")}`;
-
-// const imageData_2 = fs.readFileSync(__dirname + "images/image-2.png", "binary");
-// const src_2 = `data:image/png;base64,${Buffer.from(
-//   imageData_2,
-//   "binary"
-// ).toString("base64")}`;
-
-// const imageData_3 = fs.readFileSync(__dirname + "images/image-3.png", "binary");
-// const src_3 = `data:image/png;base64,${Buffer.from(
-//   imageData_3,
-//   "binary"
-// ).toString("base64")}`;
-
-// const imageData_4 = fs.readFileSync(__dirname + "images/image-4.png", "binary");
-// const src_4 = `data:image/png;base64,${Buffer.from(
-//   imageData_4,
-//   "binary"
-// ).toString("base64")}`;
-
-// const imageData_5 = fs.readFileSync(__dirname + "images/image-5.png", "binary");
-// const src_5 = `data:image/png;base64,${Buffer.from(
-//   imageData_5,
-//   "binary"
-// ).toString("base64")}`;
-
 export const EMAIL_HTML = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -169,7 +140,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="https://cdn.templates.unlayer.com/assets/1679317094521-sc.png" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
+      <img align="center" border="0" src="data:image/png;base64, ${src_5}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
