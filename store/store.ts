@@ -3,10 +3,12 @@ import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import { userReducer } from "./userSlice";
 import { appApi } from "./features/api/appApi";
+import { authenticationSlice } from "./authentication";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
+    authentication: authenticationSlice.reducer,
     [appApi.reducerPath]: appApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

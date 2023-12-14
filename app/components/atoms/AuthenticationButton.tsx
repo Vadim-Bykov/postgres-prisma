@@ -1,8 +1,8 @@
 import Button, {
   Props as ButtonProps,
 } from "@/app/components/atoms/common/Button";
+import { toggleLoginModal } from "@/store/authentication";
 import { useAppDispatch } from "@/store/store";
-// import { toggleEmailVerificationModal } from "@/components/services/authentication";
 import { MouseEventHandler } from "react";
 
 export function AuthenticationButton({
@@ -14,7 +14,7 @@ export function AuthenticationButton({
 
   const handleLoginSignupClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     onClick?.(e);
-    // dispatch(toggleEmailVerificationModal(true));
+    dispatch(toggleLoginModal(true));
   };
 
   return (

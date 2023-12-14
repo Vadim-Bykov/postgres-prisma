@@ -86,6 +86,20 @@ export const removeRefreshToken = async (refreshToken: string) => {
   }
 };
 
+export const removeAllRefreshToken = async (userId: number) => {
+  try {
+    const tokenData = await prisma.token.deleteMany({ where: { userId } });
+
+    if (!tokenData) {
+      return { warning: `This user was logged out earlier` };
+    }
+
+    return { numberOfRemovedTokens: tokenData.count };
+  } catch (error: any) {
+    throw ApiError.badRequest(error?.message, error);
+  }
+};
+
 export const findRefreshToken = async (refreshToken: string) => {
   try {
     const tokenData = await prisma.token.findUnique({
