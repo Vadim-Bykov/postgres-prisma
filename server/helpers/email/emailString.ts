@@ -393,7 +393,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   <!--[if (mso)|(IE)]><td style="padding:5px 15px"><![endif]-->
   
-    <a href="${API_URL}/course" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
+    <a href="${API_URL}course" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
       Курсы
     </a>
   
