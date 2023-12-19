@@ -5,15 +5,22 @@ import clsx from "clsx";
 
 export function HeaderContent({ runAnimation }: { runAnimation: boolean }) {
   return (
-    <div className="self-center flex items-center max-w-7xl gap-10">
+    <div
+      className={clsx(
+        "self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 overflow-hidden transition-height pt-[96px] md:pt-0",
+        runAnimation ? "h-[100vh]" : "h-[0vh]"
+      )}
+    >
       <div
         className={clsx(
           "basis-1/2  duration-700 ease-in-out transition-transform",
           runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
         )}
       >
-        <h1 className="text-6xl font-semibold mb-5">PRO IT SCHOOL</h1>
-        <p className="text-xl mb-12">
+        <h1 className="hidden md:inline-block text-6xl font-semibold mb-5">
+          PRO IT SCHOOL
+        </h1>
+        <p className="md:text-xl mb-12">
           Курсы повышения квалификации по робототехнике для педагогов начальной
           школы
         </p>

@@ -8,8 +8,10 @@ import { AuthenticationButton } from "../../atoms/AuthenticationButton";
 import Button from "../../atoms/common/Button";
 
 export function UserBadge({
+  onLoginLogoutClick,
   className,
 }: {
+  onLoginLogoutClick?: () => void;
   className?: HTMLAttributes<HTMLDivElement>["className"];
 }) {
   const { data: userData, isLoading: isUserDataLoading } =
@@ -29,6 +31,7 @@ export function UserBadge({
 
   const openLogoutModal = () => {
     dispatch(toggleLogoutModal(true));
+    onLoginLogoutClick?.();
   };
 
   return (
@@ -39,6 +42,7 @@ export function UserBadge({
         <AuthenticationButton
           disabled={isUserDataLoading}
           loading={isUserDataLoading}
+          onClick={onLoginLogoutClick}
         />
       )}
     </div>
