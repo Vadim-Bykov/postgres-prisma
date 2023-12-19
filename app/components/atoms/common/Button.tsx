@@ -40,7 +40,7 @@ export default function Button({
         "rounded-sm font-medium text-sm border",
         "transition-all duration-200 ease-in-out",
         "focus:outline-none focus:ring-1 focus:ring-pink",
-        "active:scale-95",
+        !loading && !disabled && "active:scale-95",
         disabled && "opacity-50",
         size === "medium" ? "py-2 px-5" : "py-4 px-6",
         variant === "primary" && [
