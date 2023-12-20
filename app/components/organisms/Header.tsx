@@ -73,7 +73,7 @@ export function Header({}) {
     <>
       <header
         className={clsx(
-          "bg-zinc-950 flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity",
+          "relative bg-[#141024] flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity",
           animation ? "opacity-100" : "opacity-70"
         )}
       >

@@ -13,7 +13,7 @@ export const BurgerMenuButton = ({
   };
 
   return (
-    <div className={clsx("gap-3 ", styles.burgerMenu)} onClick={updateMenu}>
+    <div className={clsx("gap-3 z-20", styles.burgerMenu)} onClick={updateMenu}>
       <div
         className={clsx(
           "bg-red",

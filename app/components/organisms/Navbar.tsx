@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NavItem } from "../molecules/header/NavItem";
 import { UserBadge } from "../molecules/header/UserBadge";
 import { NavbarItem, Pathname } from "./Header";
 
@@ -30,7 +30,7 @@ export function Navbar({
         ])}
       >
         {navbarItems.map(({ route, title }) => (
-          <NavbarItem
+          <NavItem
             key={route}
             route={route}
             title={title}
@@ -41,31 +41,5 @@ export function Navbar({
 
       <UserBadge />
     </div>
-  );
-}
-
-function NavbarItem({
-  route,
-  title,
-  isActive,
-}: {
-  route: string;
-  title: string;
-  isActive: boolean;
-}) {
-  return (
-    <Link
-      href={route}
-      className={clsx(["relative min-w-fit h-full"])}
-      scroll={false}
-    >
-      <div
-        className={clsx(
-          "bg-red w-full h-[6px] absolute -top-2 transition duration-300 scale-0 opacity-100",
-          isActive && " scale-100"
-        )}
-      />
-      <span className="text-xl">{title}</span>
-    </Link>
   );
 }
