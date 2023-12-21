@@ -20,8 +20,8 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       <Header />
-      {children}
       <AuthenticationFlow />
+      {children}
     </Provider>
   );
 }
