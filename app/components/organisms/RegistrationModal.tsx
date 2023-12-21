@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import Button from "../atoms/common/Button";
 import Icon from "../atoms/common/Icon/Icon";
 import { Form } from "../common/Form";
-import { ModalProps } from "../common/Modal/Modal";
+import { Modal, ModalProps } from "../common/Modal/Modal";
 import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
@@ -79,14 +79,23 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   });
 
   return (
-    <ModalHalfImage {...props}>
+    <Modal
+      className={{
+        base: clsx(
+          "px-5 py-10 md:px-20 md:py-20 sm:w-[390px]",
+          "w-[70%] box-content overflow-hidden"
+        ),
+      }}
+      withCloseIcon
+      {...props}
+    >
       <h1 className="text-3xl font-semibold mb-6">Let’s create your account</h1>
 
       <Form
         preventSubmission={isUserCreating}
         onChange={() => setShowFormError(false)}
         onSubmit={onSubmit}
-        className="flex flex-col gap-4 mb-5 md:mb-0"
+        className="flex flex-col gap-4 w-full overflow-y-auto"
       >
         <EmailInput error={errors.email?.message} register={register} />
         <NameInput
@@ -148,7 +157,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           Submit
         </Button>
       </Form>
-    </ModalHalfImage>
+    </Modal>
   );
 }
 

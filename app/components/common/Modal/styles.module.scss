@@ -1,49 +1,49 @@
 .modalContent {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-    height: auto;
+  height: auto;
 
-    overflow: auto;
-    border-radius: 30px;
-    background-color: #fff;
-    box-shadow: 0 25px 80px rgba(0,0,0,.1);
+  overflow: auto;
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.1);
 
-    scale: 0;
-    transition: scale 300ms ease-in-out;
+  scale: 0;
+  transition: scale 300ms ease-in-out;
 
-    @media screen and (max-width: 767px) {
-        & {
-            border-radius: 15px;
-        }
+  @media screen and (max-width: 767px) {
+    & {
+      border-radius: 15px;
     }
+  }
 }
 
 .autoWidth {
-    width: auto;
+  width: auto;
 }
 
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    background-color: rgba(0,0,0,.2);
+  background-color: rgba(0, 0, 0, 0.2);
 
-    z-index: 20;
+  z-index: 20;
 }
 
 .afterOpenContent {
-    scale: 1;
+  scale: 1;
 }
 
 .beforeCloseContent {
-    scale: 0;
+  scale: 0;
 }

@@ -6,12 +6,18 @@ import { Modal, ModalProps } from "../common/Modal/Modal";
 
 export function ModalHalfImage({
   children,
+  className,
   ...props
 }: PropsWithChildren<ModalProps>) {
   return (
     <Modal
       className={{
-        base: clsx("overflow-hidden", "w-[90%] max-h-[95%]", "lg:w-[920px]"),
+        base: clsx(
+          "overflow-hidden",
+          "w-[90%] max-h-[99%]",
+          "lg:w-[920px]",
+          typeof className === "object" && className.base
+        ),
       }}
       withCloseIcon
       {...props}

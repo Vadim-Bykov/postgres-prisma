@@ -2,6 +2,7 @@ import ReactModal from "react-modal";
 import styles from "./styles.module.scss";
 import clsx from "clsx";
 import { IconButton } from "../../atoms/common/IconButton";
+import { useEffect } from "react";
 
 interface ModalClassNames extends ReactModal.Classes {
   closeIcon?: string;
@@ -13,6 +14,7 @@ export interface ModalProps
   autoWidth?: boolean; // TODO remove this prop and pass styles instead
   className?: string | Partial<ModalClassNames>;
   withCloseIcon?: boolean;
+  blockScrolling?: boolean;
 }
 
 export function Modal({
@@ -20,9 +22,16 @@ export function Modal({
   className,
   autoWidth = false,
   withCloseIcon = false,
+  blockScrolling = true,
   children,
   ...props
 }: ModalProps) {
+  useEffect(() => {
+    if (typeof window !== "undefined" && blockScrolling) {
+      document.body.style.overflow = open ? "hidden" : "auto";
+    }
+  }, [open, blockScrolling]);
+
   return (
     <ReactModal
       isOpen={open}

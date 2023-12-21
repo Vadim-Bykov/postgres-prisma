@@ -80,11 +80,11 @@ export function LoginModal({
   }, [defaultValues, props.open, reset]);
 
   return (
-    <ModalHalfImage {...props}>
+    <ModalHalfImage className={{ base: "overflow-y-auto" }} {...props}>
       <>
         <Form
           preventSubmission={isAuthorizing}
-          className="flex flex-col mb-5 md:mb-0"
+          className="flex flex-col"
           onChange={() => setShowFormError(false)}
           onSubmit={onSubmit}
         >
