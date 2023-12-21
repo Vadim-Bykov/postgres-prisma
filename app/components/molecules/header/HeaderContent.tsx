@@ -3,12 +3,19 @@ import React from "react";
 import Button from "../../atoms/common/Button";
 import clsx from "clsx";
 
-export function HeaderContent({ runAnimation }: { runAnimation: boolean }) {
+export function HeaderContent({
+  runAnimation,
+  className,
+}: {
+  runAnimation: boolean;
+  className?: string;
+}) {
   return (
     <div
       className={clsx(
-        "self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 transition-height pt-[68px] md:pt-0 overflow-hidden",
-        runAnimation ? "h-[100vh]" : "h-[0vh]"
+        "self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 transition-height pt-[68px] md:pt-0",
+        runAnimation ? "h-[100vh]" : "h-[0vh]",
+        className
       )}
     >
       <div

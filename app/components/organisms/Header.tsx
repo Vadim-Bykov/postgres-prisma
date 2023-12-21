@@ -87,7 +87,10 @@ export function Header({}) {
           navbarItems={filteredNavbarItems}
         />
 
-        <HeaderContent runAnimation={pathname === "/" && animation} />
+        <HeaderContent
+          runAnimation={pathname === "/" && animation}
+          className={clsx(pathname !== "/" && "overflow-hidden")}
+        />
       </header>
     </>
   );
