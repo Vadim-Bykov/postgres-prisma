@@ -36,7 +36,7 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
       <div className="absolute w-[calc(100vw-20px)] h-[68px] flex justify-between items-center text-center gap-5 px-5">
         <BurgerMenuButton isOpen={isOpen} onClick={toggleMenu} />
 
-        <h1 className="text-3xl font-semibold">PRO IT SCHOOL</h1>
+        <h1 className="text-3xl font-semibold">АСТРО</h1>
       </div>
 
       <section

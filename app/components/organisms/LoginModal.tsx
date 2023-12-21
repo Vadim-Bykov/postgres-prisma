@@ -88,9 +88,7 @@ export function LoginModal({
           onChange={() => setShowFormError(false)}
           onSubmit={onSubmit}
         >
-          <h1 className="text-3xl font-semibold mb-6">
-            Login to PRO IT SCHOOL
-          </h1>
+          <h1 className="text-3xl font-semibold mb-6">Login to АСТРО</h1>
           <fieldset className="flex flex-col gap-2 mb-6">
             <EmailInput register={register} error={errors.email?.message} />
             <PasswordInput

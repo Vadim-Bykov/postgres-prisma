@@ -25,13 +25,12 @@ export function HeaderContent({
         )}
       >
         <h1 className="hidden md:inline-block text-6xl font-semibold mb-5">
-          PRO IT SCHOOL
+          АСТРО
+          <br />
+          консультации
         </h1>
-        <p className="md:text-xl mb-12">
-          Курсы повышения квалификации по робототехнике для педагогов начальной
-          школы
-        </p>
-        <Button>Записаться на курс</Button>
+        <p className="md:text-xl mb-12">Заказать полный пакет со скидкой 20%</p>
+        <Button>Заказать со скидкой 20%</Button>
       </div>
 
       <div

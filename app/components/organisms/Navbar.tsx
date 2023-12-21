@@ -21,7 +21,7 @@ export function Navbar({
         className
       )}
     >
-      <h1 className="text-3xl font-semibold">PRO IT SCHOOL</h1>
+      <h1 className="text-3xl font-semibold">АСТРО</h1>
 
       <nav
         className={clsx([

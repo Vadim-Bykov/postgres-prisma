@@ -28,10 +28,10 @@ export const sendActivationMail = async ({
   // <a href="${urlLink}" >${urlLink}</a>
 
   await transporter.sendMail({
-    from: { address: SMTP_USER, name: "PRO IT SCHOOL" },
+    from: { address: SMTP_USER, name: "АСТРО" },
     to: email,
     bcc: SMTP_USER,
-    subject: "Registration on PRO IT SCHOOL",
+    subject: "Registration on АСТРО",
     // subject: `Activate your account on ${API_URL}`,
     html: getEmailHtml({ name }),
     //  `
@@ -55,7 +55,7 @@ export const sendResetPasswordLinkMail = async ({
   // <a href="${urlLink}" >${urlLink}</a>
 
   await transporter.sendMail({
-    from: { address: SMTP_USER, name: "PRO IT SCHOOL" },
+    from: { address: SMTP_USER, name: "АСТРО" },
     to: email,
     bcc: SMTP_USER,
     subject: "Reset password link",
