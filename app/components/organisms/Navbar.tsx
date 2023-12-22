@@ -1,8 +1,8 @@
+import { useAppPathname } from "@/utils/useAppRouter";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
 import { NavItem } from "../molecules/header/NavItem";
 import { UserBadge } from "../molecules/header/UserBadge";
-import { NavbarItem, Pathname } from "./Header";
+import { NavbarItem } from "./Header";
 
 export function Navbar({
   navbarItems,
@@ -11,8 +11,7 @@ export function Navbar({
   navbarItems: NavbarItem[];
   className?: string;
 }) {
-  // @ts-ignore
-  const pathname: Pathname = usePathname();
+  const pathname = useAppPathname();
 
   return (
     <div

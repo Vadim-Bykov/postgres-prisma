@@ -13,14 +13,14 @@ export function HeaderContent({
   return (
     <div
       className={clsx(
-        "self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 transition-height pt-[68px] md:pt-0",
-        runAnimation ? "h-[100vh]" : "h-[0vh]",
+        "self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 transition-height pt-[68px] md:pt-0 overflow-y-hidden",
+        runAnimation ? "h-[calc(100vh-68px)]" : "h-[0vh]",
         className
       )}
     >
       <div
         className={clsx(
-          "basis-1/2  duration-700 ease-in-out transition-transform",
+          "basis-1/2 flex flex-col grow items-start justify-center duration-700 ease-in-out transition-transform mt-5 md:mt-0",
           runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
         )}
       >
@@ -29,7 +29,9 @@ export function HeaderContent({
           <br />
           консультации
         </h1>
-        <p className="md:text-xl mb-12">Заказать полный пакет со скидкой 20%</p>
+        <p className="md:text-xl mb-5 md:mb-12">
+          Заказать полный пакет со скидкой 20%
+        </p>
         <Button>Заказать со скидкой 20%</Button>
       </div>
 

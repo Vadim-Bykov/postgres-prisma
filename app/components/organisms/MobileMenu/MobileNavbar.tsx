@@ -1,7 +1,7 @@
+import { useAppPathname } from "@/utils/useAppRouter";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
 import { NavItem } from "../../molecules/header/NavItem";
-import { NavbarItem, Pathname } from "../Header";
+import { NavbarItem } from "../Header";
 
 export function MobileNavbar({
   navbarItems,
@@ -10,9 +10,7 @@ export function MobileNavbar({
   navbarItems: NavbarItem[];
   onNavItemClick: () => void;
 }) {
-  // @ts-ignore
-  const pathname: Pathname = usePathname();
-
+  const pathname = useAppPathname();
   return (
     <nav className={clsx(["flex flex-col items-center gap-y-8"])}>
       {navbarItems.map(({ route, title }) => (

@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { HeaderContent } from "../molecules/header/HeaderContent";
 import { MobileMenu } from "./MobileMenu/MobileMenu";
 import { Navbar } from "./Navbar";
-
-export type Pathname = "/" | "/course" | "/admin" | "/account";
+import { Pathname, useAppPathname } from "@/utils/useAppRouter";
 
 export interface NavbarItem {
   route: Pathname;
@@ -22,8 +21,8 @@ const NAVBAR_ITEMS: NavbarItem[] = [
     authenticationRequired: false,
   },
   {
-    route: "/course",
-    title: "Курсы",
+    route: "/consultation",
+    title: "Консультации",
     authenticationRequired: false,
   },
   {
@@ -40,8 +39,7 @@ const NAVBAR_ITEMS: NavbarItem[] = [
 
 export function Header({}) {
   const [animation, runAnimation] = useState(false);
-  // @ts-ignore
-  const pathname: Pathname = usePathname();
+  const pathname = useAppPathname();
 
   useEffect(() => {
     runAnimation(true);
@@ -73,7 +71,7 @@ export function Header({}) {
     <>
       <header
         className={clsx(
-          "relative bg-[#141024] flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity",
+          "relative bg-primary flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity",
           animation ? "opacity-100" : "opacity-70"
         )}
       >

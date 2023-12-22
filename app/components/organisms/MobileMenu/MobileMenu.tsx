@@ -23,7 +23,7 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
   return (
     <menu
       className={clsx(
-        "absolute md:hidden left-0 top-0 right-0 z-20 flex flex-col bg-[#141024] h-screen max-w-md",
+        "absolute md:hidden left-0 top-0 right-0 z-20 flex flex-col bg-primary h-screen max-w-md",
         "transition-width",
         BURGER_TRANSITION_CLASSNAMES,
         isOpen ? "w-full" : "w-[0px]"

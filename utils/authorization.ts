@@ -16,3 +16,16 @@ export function useAuthorizedRoute() {
     }
   }, [loggedIn, router]);
 }
+
+export function useAdminRoute() {
+  const router = useRouter();
+  const isAdmin = useAppSelector(
+    (state) => state.user.userData?.roles === "ADMIN"
+  );
+
+  useEffect(() => {
+    if (!isAdmin) {
+      router.replace("/");
+    }
+  }, [isAdmin, router]);
+}

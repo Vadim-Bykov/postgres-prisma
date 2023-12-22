@@ -38,6 +38,9 @@ module.exports = {
           DEFAULT: "#FF3B30",
           hover: "#D52027",
         },
+        primary: {
+          DEFAULT: "#141024",
+        },
       },
     },
   },
