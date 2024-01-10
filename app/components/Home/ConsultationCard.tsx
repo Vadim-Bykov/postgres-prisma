@@ -1,27 +1,59 @@
 import clsx from "clsx";
 import Link from "next/link";
 import Button from "../atoms/common/Button";
+import { Consultation } from "./ConsultationList";
+import { useEffect, useRef } from "react";
 
-export function ConsultationCard({ primary }: { primary?: boolean }) {
+interface Props extends Consultation {
+  setMaxWidth?: (item: { id: number; width: number }) => void;
+  itemWidth?: number;
+  className?: string;
+}
+
+export function ConsultationCard({
+  primary,
+  title,
+  price,
+  currency,
+  id,
+  itemWidth,
+  setMaxWidth,
+}: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ref && ref.current?.clientWidth) {
+      // 5 - border-2 + 1px extra
+      setMaxWidth?.({ id, width: ref.current.clientWidth + 6 });
+    }
+  }, [id, ref, setMaxWidth]);
+
   return (
     <div
+      ref={ref}
+      style={{ width: itemWidth }}
       className={clsx(
-        "max-w-sm flex flex-col items-center gap-4 py-10 px-5 md:px-10 text-center",
+        "max-w-md flex flex-col items-center gap-4 py-10 px-5 md:px-10 text-center",
         "border-2 border-gray-300 rounded-2xl",
         primary ? "bg-primary text-white" : "bg-white"
       )}
     >
       <h3 className="text-[clamp(16px,5vw,30px)] md:text-3xl font-semibold">
-        –&nbsp;Профориентация&nbsp;–
+        –&nbsp;{title}&nbsp;–
       </h3>
-      <p className="text-5xl font-semibold">8.700 ₽</p>
+      <p className="text-5xl font-semibold">
+        {price} {currency}
+      </p>
       <Link
-        href={`/consultation/${1}`}
-        className="text-lg text-purple-800 font-medium underline"
+        href={`/consultation/${id}`}
+        className={clsx(
+          "text-lg font-medium underline",
+          primary ? "text-yellow-300" : "text-purple-800"
+        )}
       >
         Узнать подробнее
       </Link>
-      <Button>Оставить заявку</Button>
+      <Button className="w-full">Оставить заявку</Button>
     </div>
   );
 }
