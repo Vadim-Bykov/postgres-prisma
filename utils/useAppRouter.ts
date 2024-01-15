@@ -1,19 +1,22 @@
-import React from "react";
-import clsx from "clsx";
-import Link from "next/link";
-import { Url } from "url";
-import { usePathname, useRouter } from "next/navigation";
 import {
   AppRouterInstance,
   NavigateOptions,
 } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { usePathname, useRouter } from "next/navigation";
 
-export type Pathname = "/" | "/admin" | "/account" | "/consultation";
+export type Pathname =
+  | "/"
+  | "/admin"
+  | "/account"
+  | "/consultation"
+  | `/consultation/${number}`
+  | "/purchase"
+  | `/purchase/${number}`;
 
 interface AppRouter extends AppRouterInstance {
   push(href: Pathname, options?: NavigateOptions): void;
 }
-const useAppRouter = () => {
+export const useAppRouter = () => {
   const router: AppRouter = useRouter();
   return router;
 };

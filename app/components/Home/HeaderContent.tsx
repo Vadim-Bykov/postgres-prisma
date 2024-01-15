@@ -2,6 +2,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../atoms/common/Button";
+import { AuthenticationButton } from "../atoms/AuthenticationButton";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
@@ -38,7 +39,9 @@ export function HeaderContent({ className }: { className?: string }) {
           <p className="md:text-xl mb-5 md:mb-12">
             Заказать полный пакет со скидкой 20%
           </p>
-          <Button>Заказать со скидкой 20%</Button>
+          <AuthenticationButton authenticationForActionRequired>
+            Заказать со скидкой 20%
+          </AuthenticationButton>
         </div>
 
         <div

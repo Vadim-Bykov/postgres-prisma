@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Button from "../atoms/common/Button";
 import Skeleton from "react-loading-skeleton";
+import { AuthenticationButton } from "../atoms/AuthenticationButton";
+import { useAppPathname, useAppRouter } from "@/utils/useAppRouter";
 
 export function ConsultationCardPlaceholder() {
   return <Skeleton width={400} height={280} />;
@@ -26,6 +28,7 @@ export function ConsultationCard({
   setMaxWidth,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const router = useAppRouter();
 
   useEffect(() => {
     if (ref && ref.current?.clientWidth) {
@@ -59,7 +62,13 @@ export function ConsultationCard({
       >
         Узнать подробнее
       </Link>
-      <Button className="w-full">Оставить заявку</Button>
+      <AuthenticationButton
+        authenticationForActionRequired
+        className="w-full"
+        onClick={() => router.push(`/purchase/${id}`)}
+      >
+        Оставить заявку
+      </AuthenticationButton>
     </div>
   );
 }
