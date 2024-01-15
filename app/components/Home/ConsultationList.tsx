@@ -1,15 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { ConsultationCard } from "./ConsultationCard";
 import { useGetAllConsultationsQuery } from "@/store/features/api/subApi/consultationApi";
+import { range } from "lodash-es";
+import { useState } from "react";
+import {
+  ConsultationCard,
+  ConsultationCardPlaceholder,
+} from "./ConsultationCard";
+
+function Placeholder() {
+  return range(5).map((index) => <ConsultationCardPlaceholder key={index} />);
+}
 
 export function ConsultationList() {
   const [itemWidth, setItemWidth] = useState<{ id: number; width: number }[]>(
     []
   );
 
-  const { data: consults } = useGetAllConsultationsQuery();
+  const { data: consults, isLoading } = useGetAllConsultationsQuery();
 
   const setMaxWidth = (item: { id: number; width: number }) => {
     setItemWidth((prev) => {
@@ -28,14 +36,18 @@ export function ConsultationList() {
 
   return (
     <div className="flex justify-evenly flex-wrap gap-4">
-      {consults?.map((consultation) => (
-        <ConsultationCard
-          key={consultation.id}
-          {...consultation}
-          setMaxWidth={setMaxWidth}
-          itemWidth={maxWidth}
-        />
-      ))}
+      {isLoading ? (
+        <Placeholder />
+      ) : (
+        consults?.map((consultation) => (
+          <ConsultationCard
+            key={consultation.id}
+            {...consultation}
+            setMaxWidth={setMaxWidth}
+            itemWidth={maxWidth}
+          />
+        ))
+      )}
     </div>
   );
 }

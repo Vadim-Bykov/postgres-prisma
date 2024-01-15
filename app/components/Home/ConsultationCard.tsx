@@ -4,6 +4,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Button from "../atoms/common/Button";
+import Skeleton from "react-loading-skeleton";
+
+export function ConsultationCardPlaceholder() {
+  return <Skeleton width={400} height={280} />;
+}
 
 interface Props extends Consultation {
   setMaxWidth?: (item: { id: number; width: number }) => void;

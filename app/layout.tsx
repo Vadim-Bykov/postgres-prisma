@@ -2,6 +2,7 @@ import Wrapper from "@/app/components/Wrapper";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://postgres-prisma.vercel.app"),
