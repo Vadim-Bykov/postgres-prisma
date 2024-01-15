@@ -1,12 +1,10 @@
 import { appApi } from "@/store/features/api/appApi";
 import { useAuthenticationQuery } from "@/store/features/api/subApi/userApi";
+import { Pathname, useAppPathname } from "@/utils/useAppRouter";
 import clsx from "clsx";
-import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { HeaderContent } from "../molecules/header/HeaderContent";
 import { MobileMenu } from "./MobileMenu/MobileMenu";
 import { Navbar } from "./Navbar";
-import { Pathname, useAppPathname } from "@/utils/useAppRouter";
 
 export interface NavbarItem {
   route: Pathname;
@@ -71,7 +69,7 @@ export function Header({}) {
     <>
       <header
         className={clsx(
-          "relative bg-primary flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity",
+          "relative bg-primary flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity h-[68px] md:h-auto",
           animation ? "opacity-100" : "opacity-70"
         )}
       >
@@ -83,11 +81,6 @@ export function Header({}) {
             animation && "translate-y-[0]"
           )}
           navbarItems={filteredNavbarItems}
-        />
-
-        <HeaderContent
-          runAnimation={pathname === "/" && animation}
-          className={clsx(pathname !== "/" && "overflow-hidden")}
         />
       </header>
     </>
