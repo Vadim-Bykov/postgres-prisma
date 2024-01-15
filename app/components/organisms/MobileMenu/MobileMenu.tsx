@@ -36,7 +36,10 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
       )}
     >
       <div
-        className="absolute left-0 top-0 w-[calc(100vw-20px)] h-screen z-0"
+        className={clsx(
+          "absolute left-0 top-0 w-[calc(100vw-20px)] z-0",
+          isOpen ? "h-screen" : "h-0"
+        )}
         onClick={isOpen ? toggleMenu : undefined}
       />
       <div className="absolute w-[calc(100vw-20px)] h-[68px] flex justify-between items-center text-center gap-5 px-5">
