@@ -1,8 +1,9 @@
+import { formatCurrencyAmount } from "@/utils/formatiing";
+import { Consultation } from "@prisma/client";
 import clsx from "clsx";
 import Link from "next/link";
-import Button from "../atoms/common/Button";
-import { Consultation } from "./ConsultationList";
 import { useEffect, useRef } from "react";
+import Button from "../atoms/common/Button";
 
 interface Props extends Consultation {
   setMaxWidth?: (item: { id: number; width: number }) => void;
@@ -42,7 +43,7 @@ export function ConsultationCard({
         –&nbsp;{title}&nbsp;–
       </h3>
       <p className="text-5xl font-semibold">
-        {price} {currency}
+        {formatCurrencyAmount({ price, currency })}
       </p>
       <Link
         href={`/consultation/${id}`}

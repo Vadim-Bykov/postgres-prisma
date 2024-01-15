@@ -1,0 +1,39 @@
+import prisma from "@/lib/prisma";
+import { ApiError } from "../error/ApiError";
+
+export const getAllConsultations = async () => {
+  try {
+    const consultations = await prisma.consultation.findMany({
+      where: { status: "PUBLISHED" },
+    });
+
+    return consultations;
+  } catch (error) {
+    throw ApiError.badRequest("getAllConsultations error", error);
+  }
+};
+
+export const getConsultation = async (id: number) => {
+  try {
+    const consultation = await prisma.consultation.findUnique({
+      where: { id },
+    });
+
+    return consultation;
+  } catch (error) {
+    throw ApiError.badRequest("getConsultation error", error);
+  }
+};
+
+export const deprecateConsultation = async (id: number) => {
+  try {
+    const consultation = await prisma.consultation.update({
+      where: { id },
+      data: { status: "DEPRECATED" },
+    });
+
+    return consultation;
+  } catch (error) {
+    throw ApiError.badRequest("deprecateConsultation error", error);
+  }
+};

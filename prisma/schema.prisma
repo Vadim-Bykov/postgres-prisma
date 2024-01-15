@@ -95,3 +95,26 @@ enum PasswordResetLinkState {
   REQUESTED
   USED
 }
+
+enum ConsultationStatus {
+  PUBLISHED
+  PENDING
+  DEPRECATED
+}
+enum Currency {
+  RUB @map("₽")
+  USD @map("$")
+}
+
+model Consultation {
+  id            Int            @id @unique @default(autoincrement())
+  title         String
+  price         Int
+  currency      Currency      @default(RUB) 
+  perks         String[]
+  status        ConsultationStatus @default(PENDING)
+  primary       Boolean?      @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?
+  removedAt     DateTime?
+}

@@ -1,4 +1,6 @@
 import ms from "ms";
+import { Currency as PrismaCurrency } from "@prisma/client";
+import { Currency } from "@/prisma/enumAdapter";
 
 export function leaveOnlyNumbers(s: string) {
   return s.replace(/\D+/g, "");
@@ -17,6 +19,16 @@ export function formatUsdAmount(
     currency: "USD",
     ...options,
   }).format(amount);
+}
+
+export function formatCurrencyAmount({
+  price,
+  currency,
+}: {
+  price: number;
+  currency: PrismaCurrency;
+}) {
+  return `${Currency[currency]} ${price}`;
 }
 
 export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {

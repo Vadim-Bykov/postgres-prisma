@@ -5,7 +5,7 @@ const url = process.env.VERCEL_URL;
 
 export const appApi = createApi({
   reducerPath: "api",
-  tagTypes: ["Users", "Auth"],
+  tagTypes: ["Users", "Auth", "Consultation"],
   baseQuery: fetchBaseQuery({
     baseUrl: `${String(url).replace("undefined", "")}/api/`,
   }),
