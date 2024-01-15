@@ -4,11 +4,17 @@ import { MobileNavbar } from "./MobileNavbar";
 import { UserBadge } from "../../molecules/header/UserBadge";
 import { BurgerMenuButton } from "./BurgerMenuButton";
 import { NavbarItem } from "../Header";
+import { useAppPathname } from "@/utils/useAppRouter";
 
 export const BURGER_TRANSITION_CLASSNAMES = "ease-in duration-300";
 
 export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
   const [isOpen, setOpen] = useState(false);
+  const pathname = useAppPathname();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   const toggleMenu = () => {
     setOpen((prev) => !prev);
