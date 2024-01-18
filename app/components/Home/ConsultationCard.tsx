@@ -1,15 +1,18 @@
 import { formatCurrencyAmount } from "@/utils/formatiing";
+import { useAppRouter } from "@/utils/useAppRouter";
 import { Consultation } from "@prisma/client";
 import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import Button from "../atoms/common/Button";
 import Skeleton from "react-loading-skeleton";
 import { AuthenticationButton } from "../atoms/AuthenticationButton";
-import { useAppPathname, useAppRouter } from "@/utils/useAppRouter";
 
 export function ConsultationCardPlaceholder() {
-  return <Skeleton width={400} height={280} />;
+  return (
+    <div className="overflow-hidden rounded-2xl">
+      <Skeleton width={400} height={280} />
+    </div>
+  );
 }
 
 interface Props extends Consultation {
