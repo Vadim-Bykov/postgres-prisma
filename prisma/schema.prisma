@@ -109,6 +109,7 @@ enum Currency {
 model Consultation {
   id            Int            @id @unique @default(autoincrement())
   title         String
+  explanation   String?
   price         Int
   currency      Currency      @default(RUB) 
   perks         String[]

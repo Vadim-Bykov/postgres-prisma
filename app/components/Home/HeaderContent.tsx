@@ -3,13 +3,17 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../atoms/common/Button";
 import { AuthenticationButton } from "../atoms/AuthenticationButton";
+import { useAppRouter } from "@/utils/useAppRouter";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
+  const { push } = useAppRouter();
 
   useEffect(() => {
     setAnimation(true);
   }, []);
+
+  const purchaseFullDiscountPackage = () => push("/purchase");
 
   return (
     <section
@@ -39,7 +43,10 @@ export function HeaderContent({ className }: { className?: string }) {
           <p className="md:text-xl mb-5 md:mb-12">
             Заказать полный пакет со скидкой 20%
           </p>
-          <AuthenticationButton authenticationForActionRequired>
+          <AuthenticationButton
+            authenticationForActionRequired
+            onClick={purchaseFullDiscountPackage}
+          >
             Заказать со скидкой 20%
           </AuthenticationButton>
         </div>
