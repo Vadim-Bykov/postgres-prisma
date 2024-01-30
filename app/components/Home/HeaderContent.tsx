@@ -1,9 +1,9 @@
+import { useGetAllConsultationsQuery } from "@/store/features/api/subApi/consultationApi";
+import { useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Button from "../atoms/common/Button";
 import { AuthenticationButton } from "../atoms/AuthenticationButton";
-import { useAppRouter } from "@/utils/useAppRouter";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
@@ -13,7 +13,11 @@ export function HeaderContent({ className }: { className?: string }) {
     setAnimation(true);
   }, []);
 
-  const purchaseFullDiscountPackage = () => push("/purchase");
+  const { data: consults, isLoading } = useGetAllConsultationsQuery();
+  const primaryConsultationId = consults?.find((item) => item.primary)
+    ?.id as number;
+  const purchaseFullDiscountPackage = () =>
+    push(`/consultation/${primaryConsultationId}`);
 
   return (
     <section
@@ -41,13 +45,14 @@ export function HeaderContent({ className }: { className?: string }) {
             консультации
           </h1>
           <p className="md:text-xl mb-5 md:mb-12">
-            Заказать полный пакет со скидкой 20%
+            Заказать полный пакет со скидкой
           </p>
           <AuthenticationButton
             authenticationForActionRequired
             onClick={purchaseFullDiscountPackage}
+            disabled={isLoading || !primaryConsultationId}
           >
-            Заказать со скидкой 20%
+            Узнать подробнее
           </AuthenticationButton>
         </div>
 
@@ -58,7 +63,7 @@ export function HeaderContent({ className }: { className?: string }) {
           )}
         >
           <Image
-            src={require("@/public/header.png")}
+            src={require("@/public/header.jpeg")}
             priority
             className="w-auto"
             alt="Header image"

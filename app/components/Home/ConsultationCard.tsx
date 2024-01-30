@@ -10,7 +10,7 @@ import { AuthenticationButton } from "../atoms/AuthenticationButton";
 export function ConsultationCardPlaceholder() {
   return (
     <div className="overflow-hidden rounded-2xl">
-      <Skeleton width={400} height={280} />
+      <Skeleton width={400} height={240} />
     </div>
   );
 }
@@ -45,32 +45,24 @@ export function ConsultationCard({
       ref={ref}
       style={{ width: itemWidth }}
       className={clsx(
-        "max-w-md flex flex-col items-center gap-4 py-10 px-5 md:px-10 text-center",
+        "max-w-md flex flex-col items-center gap-6 py-10 px-5 md:px-10 text-center",
         "border-2 border-gray-300 rounded-2xl",
         primary ? "bg-primary text-white" : "bg-white"
       )}
     >
       <h3 className="text-[clamp(16px,5vw,30px)] md:text-3xl font-semibold">
-        –&nbsp;{title}&nbsp;–
+        {title}
       </h3>
       <p className="text-5xl font-semibold">
         {formatCurrencyAmount({ price, currency })}
       </p>
-      <Link
-        href={`/consultation/${id}`}
-        className={clsx(
-          "text-lg font-medium underline",
-          primary ? "text-yellow-300" : "text-purple-800"
-        )}
-      >
-        Узнать подробнее
-      </Link>
+
       <AuthenticationButton
         authenticationForActionRequired
         className="w-full"
-        onClick={() => router.push(`/purchase/${id}`)}
+        onClick={() => router.push(`/consultation/${id}`)}
       >
-        Оставить заявку
+        Узнать подробнее
       </AuthenticationButton>
     </div>
   );
