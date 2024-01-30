@@ -3,7 +3,7 @@ import { useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { AuthenticationButton } from "../atoms/AuthenticationButton";
+import Button from "../atoms/common/Button";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
@@ -47,13 +47,12 @@ export function HeaderContent({ className }: { className?: string }) {
           <p className="md:text-xl mb-5 md:mb-12">
             Заказать полный пакет со скидкой
           </p>
-          <AuthenticationButton
-            authenticationForActionRequired
+          <Button
             onClick={purchaseFullDiscountPackage}
             disabled={isLoading || !primaryConsultationId}
           >
             Узнать подробнее
-          </AuthenticationButton>
+          </Button>
         </div>
 
         <div

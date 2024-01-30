@@ -2,10 +2,9 @@ import { formatCurrencyAmount } from "@/utils/formatiing";
 import { useAppRouter } from "@/utils/useAppRouter";
 import { Consultation } from "@prisma/client";
 import clsx from "clsx";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
-import { AuthenticationButton } from "../atoms/AuthenticationButton";
+import Button from "../atoms/common/Button";
 
 export function ConsultationCardPlaceholder() {
   return (
@@ -57,13 +56,12 @@ export function ConsultationCard({
         {formatCurrencyAmount({ price, currency })}
       </p>
 
-      <AuthenticationButton
-        authenticationForActionRequired
+      <Button
         className="w-full"
         onClick={() => router.push(`/consultation/${id}`)}
       >
         Узнать подробнее
-      </AuthenticationButton>
+      </Button>
     </div>
   );
 }

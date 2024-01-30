@@ -104,6 +104,7 @@ enum ConsultationStatus {
 enum Currency {
   RUB @map("₽")
   USD @map("$")
+  BYN  @map("Br")
 }
 
 model Consultation {
@@ -118,4 +119,12 @@ model Consultation {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?
   removedAt     DateTime?
+}
+
+model Banking {
+  id            Int            @id @unique @default(autoincrement())
+  bankName      String
+  currency      Currency      @default(BYN) 
+  number        String
+  ownerName     String?
 }
