@@ -5,6 +5,7 @@ export const getAllConsultations = async () => {
   try {
     const consultations = await prisma.consultation.findMany({
       where: { status: "PUBLISHED" },
+      orderBy: { primary: "desc" },
     });
 
     return consultations;

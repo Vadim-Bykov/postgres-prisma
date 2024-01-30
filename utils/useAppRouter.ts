@@ -9,9 +9,7 @@ export type Pathname =
   | "/admin"
   | "/account"
   | "/consultation"
-  | `/consultation/${number}`
-  | "/purchase"
-  | `/purchase/${number}`;
+  | `/consultation/${number}`;
 
 interface AppRouter extends AppRouterInstance {
   push(href: Pathname, options?: NavigateOptions): void;

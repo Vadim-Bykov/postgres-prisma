@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { PropsWithChildren } from "react";
 
 export function PageLayout({
@@ -5,7 +6,12 @@ export function PageLayout({
   className,
 }: PropsWithChildren<{ className?: string }>) {
   return (
-    <main className="flex min-h-screen md:min-h-[calc(100vh-78px)]  min-w-full flex-col pb-10 px-10 md:px-20 gap-10 md:gap-20">
+    <main
+      className={clsx(
+        "flex min-h-screen md:min-h-[calc(100vh-78px)]  min-w-full flex-col pb-10 gap-10 md:gap-20",
+        className
+      )}
+    >
       {children}
     </main>
   );

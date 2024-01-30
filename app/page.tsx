@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <HeaderContent />
 
-      <PageLayout>
+      <PageLayout className="px-10 md:px-20 py-10">
         <AboutMe />
         <ConsultationList />
       </PageLayout>
