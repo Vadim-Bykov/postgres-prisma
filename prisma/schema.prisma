@@ -21,6 +21,8 @@ model Users {
   location    Location?
   Token       Token[]
   passwordResetLink PasswordResetLink[]
+  purchase    Purchase[]
+
 }
 
 model Token {
@@ -119,6 +121,7 @@ model Consultation {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?
   removedAt     DateTime?
+  purchase      Purchase[]
 }
 
 model Banking {
@@ -127,4 +130,30 @@ model Banking {
   currency      Currency      @default(BYN) 
   number        String
   ownerName     String?
+  purchase      Purchase[]
+}
+
+enum PaymentStatus {
+  CHECKING
+  CONFIRMED
+}
+
+enum PurchaseStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DONE
+}
+
+model Purchase {
+  id                  Int             @id @unique @default(autoincrement())
+  userId              Int
+  users               Users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consultationId      Int
+  consultation        Consultation    @relation(fields: [consultationId], references: [id])
+  bankRecipientId     Int           
+  banking             Banking         @relation(fields: [bankRecipientId], references: [id])
+  paymentNumber       String?  
+  createdAt           DateTime        @default(now())
+  status              PurchaseStatus  @default(NOT_STARTED)
+  paymentStatus       PaymentStatus   @default(CHECKING)
 }

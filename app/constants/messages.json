@@ -18,5 +18,6 @@
     "purchasedButNotRedeemed": "You have already purchased this reward, but have not marked it as redeemed. Please go to the unused tab in your reward history and mark it as redeemed before you purchase another.",
     "singleUseRedeemedAlready": "This reward can only be purchased once.",
     "wasSoldOutWhileBuying": "Oops, it’s gone! Due to popular demand this reward was swooped up in a flash. Stay tuned for the next drop."
-  }
+  },
+  "location": "К сожалению оплата в Беларуси сейчас не может быть совершена. Обратитесь ко мне в соц. сетях и мы обсудим эту проблему."
 }

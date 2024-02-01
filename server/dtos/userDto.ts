@@ -6,7 +6,7 @@ export interface UserDto {
   id: User["id"];
   email: string;
   picture?: string;
-  roles?: Role;
+  role?: Role;
   name?: string;
   createdAt: User["createdAt"];
   location?: UserLocation;

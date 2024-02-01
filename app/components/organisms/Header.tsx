@@ -28,11 +28,11 @@ const NAVBAR_ITEMS: NavbarItem[] = [
     title: "Мой аккаунт",
     authenticationRequired: true,
   },
-  {
-    route: "/admin",
-    title: "Admin",
-    authenticationRequired: true,
-  },
+  // {
+  //   route: "/admin",
+  //   title: "Admin",
+  //   authenticationRequired: true,
+  // },
 ];
 
 export function Header({}) {
@@ -61,7 +61,7 @@ export function Header({}) {
     : NAVBAR_ITEMS.filter(({ authenticationRequired, route }) => {
         return (
           !authenticationRequired ||
-          (route === "/admin" && userData?.user?.roles === "ADMIN")
+          (route === "/admin" && userData?.user?.role === "ADMIN")
         );
       });
 

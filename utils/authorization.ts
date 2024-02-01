@@ -20,7 +20,7 @@ export function useAuthorizedRoute() {
 export function useAdminRoute() {
   const router = useRouter();
   const isAdmin = useAppSelector(
-    (state) => state.user.userData?.roles === "ADMIN"
+    (state) => state.user.userData?.role === "ADMIN"
   );
 
   useEffect(() => {

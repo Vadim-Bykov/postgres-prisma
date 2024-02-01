@@ -1,11 +1,9 @@
 "use client";
 
-import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
-import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
 import { useGetConsultationQuery } from "@/store/features/api/subApi/consultationApi";
 import { formatCurrencyAmount } from "@/utils/formatiing";
 import Image from "next/image";
-import { useState } from "react";
+import { PaymentInfo } from "./PaymentInfo";
 
 const source: { [key: string]: string } = {
   1: require("@/public/images/product/prof.jpg"),
@@ -17,16 +15,6 @@ const source: { [key: string]: string } = {
 export function ConsultationDetails({ id }: { id: string }) {
   const { data: consultation } = useGetConsultationQuery({ id });
   const imageSource = source[id];
-  const [showBanking, setShowBanking] = useState(false);
-
-  const { data: banking, isLoading: isBankingDataLoading } =
-    useBankingDataQuery(undefined, {
-      skip: !showBanking,
-    });
-
-  const getBankingData = () => {
-    setShowBanking(true);
-  };
 
   if (!consultation) {
     return null;
@@ -56,23 +44,8 @@ export function ConsultationDetails({ id }: { id: string }) {
             <li key={perk}>• {perk}</li>
           ))}
         </ul>
-        <AuthenticationButton
-          authenticationForActionRequired
-          onClick={getBankingData}
-          disabled={isBankingDataLoading}
-          loading={isBankingDataLoading}
-        >
-          Получить данные для оплаты
-        </AuthenticationButton>
 
-        {banking?.map(({ bankName, number, ownerName, id, currency }) => (
-          <div key={id}>
-            <p>{bankName}</p>
-            <p>{number}</p>
-            <p>Валюта - {currency}</p>
-            {ownerName && <p>{ownerName}</p>}
-          </div>
-        ))}
+        <PaymentInfo consultationId={id} />
       </div>
     </div>
   );

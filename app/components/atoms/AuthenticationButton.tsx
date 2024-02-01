@@ -13,6 +13,7 @@ export function AuthenticationButton({
   children = "Log in / Sign up",
   authenticationForActionRequired,
   onClick,
+  disabled,
   ...props
 }: Props) {
   const dispatch = useAppDispatch();
@@ -30,7 +31,11 @@ export function AuthenticationButton({
   };
 
   return (
-    <Button {...props} onClick={handleLoginSignupClick}>
+    <Button
+      disabled={disabled || isAuthorized === undefined}
+      {...props}
+      onClick={handleLoginSignupClick}
+    >
       {children}
     </Button>
   );

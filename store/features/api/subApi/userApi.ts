@@ -1,6 +1,6 @@
 import { UserDto } from "@/server/dtos/userDto";
 import { appApi } from "../appApi";
-import { User, UserCreationBody, UserLoginBody } from "@/models/users";
+import { UserCreationBody, UserLoginBody } from "@/models/users";
 
 export const userApi = appApi.injectEndpoints({
   endpoints: (builder) => ({

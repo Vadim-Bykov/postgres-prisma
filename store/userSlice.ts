@@ -6,13 +6,13 @@ import { UserLocation } from "@/models/location";
 
 interface UserState {
   userData?: UserDto;
-  isAuthorized: boolean;
+  isAuthorized?: boolean;
   location?: UserLocation;
 }
 
 const initialState: UserState = {
   userData: undefined,
-  isAuthorized: false,
+  isAuthorized: undefined,
 };
 
 export const userSlice = createSlice({
