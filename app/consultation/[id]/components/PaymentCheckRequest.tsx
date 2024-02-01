@@ -6,6 +6,7 @@ import { PurchaseBody } from "@/models/purchase";
 import { useCreatePurchaseMutation } from "@/store/features/api/subApi/purchase";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
+import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 interface FormData {
@@ -13,18 +14,14 @@ interface FormData {
   paymentNumber: string | null;
 }
 
-export function PaymentCheckRequest({
-  consultationId,
-  banking,
-}: {
-  consultationId: string;
-  banking: Banking[];
-}) {
+export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const { register, handleSubmit } = useForm<FormData>();
   const bankOptions = banking.map((bank) => ({
     value: bank.id,
     label: bank.bankName,
   }));
+
+  const { id: consultationId } = useParams();
 
   const [purchaseConsultation, { isLoading, isError, error }] =
     useCreatePurchaseMutation();

@@ -8,7 +8,7 @@ import { PaymentCheckRequest } from "./PaymentCheckRequest";
 import { useAppSelector } from "@/store/store";
 import messages from "@/app/constants/messages.json";
 
-export function PaymentInfo({ consultationId }: { consultationId: string }) {
+export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
   const [locationError, setLocationError] = useState("");
   const userData = useAppSelector((state) => state.user.userData);
@@ -77,10 +77,7 @@ export function PaymentInfo({ consultationId }: { consultationId: string }) {
             </p>
           </div>
 
-          <PaymentCheckRequest
-            consultationId={consultationId}
-            banking={banking}
-          />
+          <PaymentCheckRequest banking={banking} />
         </>
       )}
     </>

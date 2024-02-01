@@ -45,7 +45,7 @@ export function ConsultationDetails({ id }: { id: string }) {
           ))}
         </ul>
 
-        <PaymentInfo consultationId={id} />
+        <PaymentInfo />
       </div>
     </div>
   );
