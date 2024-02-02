@@ -6,11 +6,8 @@ import { src_4 } from "./src_4";
 import { src_5 } from "./src_5";
 // TODO: it's better to upload images and set src= as https link to the storage instead of base64 (since gmail service doesn't work with base64 images)
 
-const VERCEL_URL = process.env.VERCEL_URL!;
-const ENV = process.env.VERCEL_ENV as Environment;
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
-const API_URL =
-  ENV === "production" ? "https://pro-it-schhol.vercel.app/" : VERCEL_URL;
+const API_URL = "https://pro-it-schhol.vercel.app/";
 
 export const getRegistrationEmailHtml = ({
   name,

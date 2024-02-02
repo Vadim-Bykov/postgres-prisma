@@ -77,6 +77,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       }
     }
   });
+  console.log({ errors });
 
   return (
     <Modal
@@ -110,8 +111,10 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           error={errors.password?.message}
           containerClassName="mb-2"
           registerOptions={{
-            validate: validatePassword,
-            minLength: PASSWORD_MIN_LENGTH,
+            minLength: {
+              message: messages.validation.minLengthPassword,
+              value: PASSWORD_MIN_LENGTH,
+            },
             onBlur: () => {
               trigger("confirmPassword");
             },

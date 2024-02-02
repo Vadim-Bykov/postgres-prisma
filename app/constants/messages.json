@@ -1,6 +1,7 @@
 {
   "validation": {
     "required": "This field is required.",
+    "minLengthPassword": "Пароль должен быть минимум 8 символов без пробелов.",
     "email": "Please enter a valid email address.",
     "firstName": "First name has invalid characters. Please try again.",
     "lastName": "Last name has invalid characters. Please try again.",
