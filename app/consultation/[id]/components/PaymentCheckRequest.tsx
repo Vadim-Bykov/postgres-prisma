@@ -3,49 +3,77 @@ import { Input } from "@/app/components/atoms/common/Input";
 import { InputSelect } from "@/app/components/atoms/common/InputSelect";
 import { Form } from "@/app/components/common/Form";
 import { PurchaseBody } from "@/models/purchase";
-import { useCreatePurchaseMutation } from "@/store/features/api/subApi/purchase";
+import {
+  useCreatePurchaseMutation,
+  useGetUserPurchaseQuery,
+  useUpdatePurchaseMutation,
+} from "@/store/features/api/subApi/purchase";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import messages from "@/app/constants/messages.json";
+import { OptionHTMLAttributes } from "react";
 
 interface FormData {
-  bankRecipientId: number;
-  paymentNumber: string | null;
+  bankRecipientId: string;
+  paymentNumber?: string | null;
 }
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
-  const { register, handleSubmit } = useForm<FormData>();
-  const bankOptions = banking.map((bank) => ({
-    value: bank.id,
-    label: bank.bankName,
-  }));
-
   const { id: consultationId } = useParams();
+  const { register, handleSubmit } = useForm<FormData>();
 
-  const [purchaseConsultation, { isLoading, isError, error }] =
-    useCreatePurchaseMutation();
+  const { data: userPurchase } = useGetUserPurchaseQuery({
+    consultationId: consultationId as string,
+  });
+
+  const [
+    purchaseConsultation,
+    { data: createdPurchase, isSuccess: isPurchased, isLoading: isPurchasing },
+  ] = useCreatePurchaseMutation();
+  const [
+    updatePurchase,
+    {
+      data: updatedPurchase,
+      isSuccess: isUpdated,
+      isLoading: isUpdating,
+      isError,
+      error,
+    },
+  ] = useUpdatePurchaseMutation();
+
+  const userHasPurchase =
+    !!userPurchase || !!createdPurchase || !!updatedPurchase;
+
+  const bankOptions: OptionHTMLAttributes<HTMLOptionElement>[] =
+    banking.map((bank) => ({
+      value: bank.id,
+      label: bank.bankName,
+      selected: userHasPurchase
+        ? userPurchase?.bankRecipientId === bank.id
+        : false,
+    })) ?? [];
 
   const onSubmit = handleSubmit(
     async ({ bankRecipientId, paymentNumber }: FormData) => {
+      if (bankRecipientId === "0") return;
+
       const purchase: PurchaseBody = {
         bankRecipientId: +bankRecipientId,
         consultationId: +consultationId,
         paymentNumber,
       };
 
-      purchaseConsultation(purchase);
+      userHasPurchase
+        ? updatePurchase(purchase)
+        : purchaseConsultation(purchase);
     }
   );
 
   return (
     <Form className="flex flex-col gap-3" onSubmit={onSubmit}>
       <div className="flex flex-col gap-1 text-xs">
-        <InputSelect
-          label="Банк"
-          {...register("bankRecipientId")}
-          options={bankOptions}
-        />
         <p>
           Укажите пожалуйста банк получатель, на который производили оплату (
           {banking?.map(({ bankName }, index) => (
@@ -56,24 +84,59 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
           ))}
           ).
         </p>
+        <InputSelect
+          label="Банк получатель"
+          {...register("bankRecipientId")}
+          options={[
+            {
+              label: "Выберите банк получатель",
+              value: 0,
+              selected: !userHasPurchase,
+              disabled: true,
+              hidden: true,
+            },
+            ...bankOptions,
+          ]}
+        />
       </div>
 
       <div className="flex flex-col gap-1 text-xs">
-        <Input label="Номер счета оплаты" {...register("paymentNumber")} />
         <p>
           По возможности укажите пожалуйста последние 4 цифры номер счета, с
           которого производилась оплата.
         </p>
+        <Input
+          label="Номер счета оплаты"
+          {...register("paymentNumber")}
+          defaultValue={
+            userPurchase ? userPurchase.paymentNumber || "" : undefined
+          }
+        />
       </div>
 
       <Button
         type="submit"
         className="self-start"
-        disabled={isLoading}
-        loading={isLoading}
+        disabled={isPurchasing || isUpdating}
+        loading={isPurchasing || isUpdating}
       >
-        Проверить оплату
+        {userHasPurchase ? "Исправить данные об оплате" : "Проверить оплату"}
       </Button>
+      <span
+        className={clsx(
+          "overflow-hidden text-green-600",
+          "transition-max-height duration-500 ease-in-out",
+          isPurchased || isUpdated ? "max-h-28" : "max-h-0"
+        )}
+      >
+        {
+          messages.payments[
+            createdPurchase?.paymentStatus ||
+              updatedPurchase?.paymentStatus ||
+              "CHECKING"
+          ]
+        }
+      </span>
       <span
         className={clsx(
           "overflow-hidden text-pink",

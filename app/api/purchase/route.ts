@@ -32,3 +32,19 @@ export async function GET() {
     }
   }
 }
+
+export async function PATCH(request: Request) {
+  try {
+    const purchaseBody: PurchaseBody = await request.json();
+
+    const purchase = await purchaseService.updateUserPurchase(purchaseBody);
+
+    return NextResponse.json(purchase);
+  } catch (error) {
+    if (error instanceof NextResponse) {
+      return error;
+    } else {
+      return ApiError.badRequest("Purchase update error", error);
+    }
+  }
+}

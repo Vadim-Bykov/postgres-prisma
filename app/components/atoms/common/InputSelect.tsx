@@ -63,9 +63,9 @@ export const InputSelect = forwardRef<HTMLSelectElement, Props>(function Input(
           )}
           {...props}
         >
-          {options.map((item) => (
-            <option key={item.value as string | number} value={item.value}>
-              {item.label}
+          {options.map(({ value, label, ...rest }) => (
+            <option key={value as string | number} value={value} {...rest}>
+              {label}
             </option>
           ))}
         </select>

@@ -7,6 +7,8 @@ import { useState } from "react";
 import { PaymentCheckRequest } from "./PaymentCheckRequest";
 import { useAppSelector } from "@/store/store";
 import messages from "@/app/constants/messages.json";
+import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
+import { useParams } from "next/navigation";
 
 export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
@@ -15,6 +17,13 @@ export function PaymentInfo() {
 
   const userLocationCountry = userData?.location?.country;
   const isAdmin = userData?.role === "ADMIN";
+
+  const { id: consultationId } = useParams();
+  const { data: userPurchase, isLoading: isUserPurchaseChecking } =
+    useGetUserPurchaseQuery(
+      { consultationId: consultationId as string },
+      { skip: !userData }
+    );
 
   const {
     data: banking,
@@ -35,13 +44,26 @@ export function PaymentInfo() {
   };
   return (
     <>
+      <span
+        className={clsx(
+          "overflow-hidden text-green-600",
+          "transition-max-height duration-500 ease-in-out",
+          userPurchase?.paymentStatus && !showBanking ? "max-h-28" : "max-h-0"
+        )}
+      >
+        {/* @ts-ignore */}
+        {messages.payments[userPurchase?.paymentStatus || "CHECKING"]}
+      </span>
+
       <AuthenticationButton
         authenticationForActionRequired
         onClick={getBankingData}
-        disabled={isBankingDataLoading}
+        disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
         loading={isBankingDataLoading}
       >
-        Получить данные для оплаты
+        {userPurchase?.paymentStatus
+          ? "Хочу исправить ошибку в данных об оплате"
+          : "Получить данные для оплаты"}
       </AuthenticationButton>
 
       <span

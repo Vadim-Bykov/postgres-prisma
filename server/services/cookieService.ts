@@ -3,6 +3,8 @@ import {
   REFRESH_TOKEN_COOKIE,
 } from "@/app/constants/constants";
 import { cookies } from "next/headers";
+import { ApiError } from "../error/ApiError";
+import * as tokenService from "./tokenService";
 
 export const setTokensToCookies = ({
   refreshToken,
@@ -28,4 +30,15 @@ export const getTokensFromCookies = () => {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE)?.value;
   return refreshToken;
+};
+
+export const getUserDataFromCookies = async () => {
+  const refreshToken = getTokensFromCookies();
+
+  if (!refreshToken) {
+    throw ApiError.badRequest("No refreshToken in Purchase request");
+  }
+  const userData = await tokenService.validateRefreshToken(refreshToken);
+
+  return userData;
 };

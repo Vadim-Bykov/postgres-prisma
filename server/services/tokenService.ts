@@ -68,7 +68,7 @@ export const validateRefreshToken = async (refreshToken: string) => {
     if (error.code === "ERR_JWT_EXPIRED") {
       removeRefreshToken(refreshToken);
     }
-    return ApiError.badRequest("Your token has expired.", error);
+    throw ApiError.badRequest("Your token has expired.", error);
   }
 };
 

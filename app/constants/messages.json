@@ -19,5 +19,9 @@
     "singleUseRedeemedAlready": "This reward can only be purchased once.",
     "wasSoldOutWhileBuying": "Oops, it’s gone! Due to popular demand this reward was swooped up in a flash. Stay tuned for the next drop."
   },
-  "location": "К сожалению оплата в Беларуси сейчас не может быть совершена. Обратитесь ко мне в соц. сетях и мы обсудим эту проблему."
+  "location": "К сожалению оплата в Беларуси сейчас не может быть совершена. Обратитесь ко мне в соц. сетях и мы обсудим эту проблему.",
+  "payments": {
+    "CHECKING": "Мы проверим оплату в течении суток и свяжемся с Вами. Спасибо за оплату!",
+    "CONFIRMED": "Мы проверили, ваша оплата прошла успешно. Спасибо за оплату!"
+  }
 }

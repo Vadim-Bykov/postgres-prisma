@@ -8,16 +8,30 @@ export const purchaseApi = appApi.injectEndpoints({
       query: () => "purchase",
       providesTags: ["Purchase"],
     }),
+    getUserPurchase: builder.query<Purchase, { consultationId: string }>({
+      query: ({ consultationId }) => `purchase/${consultationId}`,
+      providesTags: ["Purchase"],
+    }),
     createPurchase: builder.mutation<Purchase, PurchaseBody>({
       query: (purchaseData) => ({
         url: "purchase",
         method: "POST",
         body: purchaseData,
       }),
-      invalidatesTags: ["Purchase"],
+    }),
+    updatePurchase: builder.mutation<Purchase, PurchaseBody>({
+      query: (purchaseData) => ({
+        url: "purchase",
+        method: "PATCH",
+        body: purchaseData,
+      }),
     }),
   }),
 });
 
-export const { useGetAllUserPurchasesQuery, useCreatePurchaseMutation } =
-  purchaseApi;
+export const {
+  useGetAllUserPurchasesQuery,
+  useCreatePurchaseMutation,
+  useGetUserPurchaseQuery,
+  useUpdatePurchaseMutation,
+} = purchaseApi;

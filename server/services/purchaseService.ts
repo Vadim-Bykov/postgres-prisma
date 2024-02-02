@@ -5,18 +5,11 @@ import { ApiError } from "../error/ApiError";
 import prisma from "@/lib/prisma";
 import * as mailService from "./mailService";
 import { NextResponse } from "next/server";
+import messages from "@/app/constants/messages.json";
 
 export const getAllUserPurchases = async () => {
   try {
-    const refreshToken = cookieService.getTokensFromCookies();
-
-    if (!refreshToken) {
-      throw ApiError.badRequest("No refreshToken in Purchase request");
-    }
-    const userData = await tokenService.validateRefreshToken(refreshToken);
-    if (userData instanceof NextResponse) {
-      throw userData;
-    }
+    const userData = await cookieService.getUserDataFromCookies();
 
     const purchases = await prisma.purchase.findMany({
       where: { userId: userData.id },
@@ -38,17 +31,9 @@ export const createPurchase = async ({
   paymentNumber,
 }: PurchaseBody) => {
   try {
-    const refreshToken = cookieService.getTokensFromCookies();
+    const userData = await cookieService.getUserDataFromCookies();
 
-    if (!refreshToken) {
-      throw ApiError.badRequest("No refreshToken in Purchase request");
-    }
-    const userData = await tokenService.validateRefreshToken(refreshToken);
-    if (userData instanceof NextResponse) {
-      throw userData;
-    }
-
-    const equalPurchase = await prisma.purchase.findFirst({
+    const boughtPreviouslyPurchase = await prisma.purchase.findFirst({
       where: {
         userId: userData.id,
         consultationId,
@@ -57,9 +42,11 @@ export const createPurchase = async ({
       },
     });
 
-    if (equalPurchase) {
+    if (boughtPreviouslyPurchase) {
       throw ApiError.badRequest(
-        "Ты уже отправил эту оплату на проверку. Мы проверим оплату в течении суток и свяжемся с тобой. Спасибо за оплату!"
+        `Ты уже отправил эту оплату на проверку. ${
+          messages.payments[boughtPreviouslyPurchase.paymentStatus]
+        }`
       );
     }
 
@@ -80,6 +67,58 @@ export const createPurchase = async ({
       throw error;
     } else {
       throw ApiError.badRequest("createPurchase error", error);
+    }
+  }
+};
+
+export const getUserPurchase = async (consultationId: number) => {
+  try {
+    const userData = await cookieService.getUserDataFromCookies();
+
+    const purchase = await prisma.purchase.findFirst({
+      where: { consultationId, userId: userData.id },
+    });
+
+    return purchase;
+  } catch (error: any) {
+    if (error instanceof NextResponse) {
+      throw error;
+    } else {
+      throw ApiError.badRequest("getUserPurchase error", error);
+    }
+  }
+};
+
+export const updateUserPurchase = async ({
+  bankRecipientId,
+  consultationId,
+  paymentNumber,
+}: PurchaseBody) => {
+  try {
+    const userData = await cookieService.getUserDataFromCookies();
+    const userPurchase = await prisma.purchase.findFirst({
+      where: { consultationId, userId: userData.id },
+    });
+    if (!userPurchase) {
+      throw ApiError.badRequest(
+        "Ваши предыдущие сведения об оплате не найдены"
+      );
+    }
+    const purchase = await prisma.purchase.update({
+      where: { id: userPurchase.id },
+      data: {
+        bankRecipientId,
+        consultationId,
+        paymentNumber,
+      },
+    });
+
+    return purchase;
+  } catch (error: any) {
+    if (error instanceof NextResponse) {
+      throw error;
+    } else {
+      throw ApiError.badRequest("updateUserPurchase error", error);
     }
   }
 };
