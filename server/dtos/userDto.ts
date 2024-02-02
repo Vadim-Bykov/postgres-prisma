@@ -7,7 +7,7 @@ export interface UserDto {
   email: string;
   picture?: string;
   role?: Role;
-  name?: string;
+  name: string;
   createdAt: User["createdAt"];
   location?: UserLocation;
 }

@@ -59,7 +59,11 @@ export const createPurchase = async ({
       },
     });
 
-    //  mailService.sendActivationMail()
+    mailService.sendCheckingPurchaseMail({
+      name: userData.name,
+      email: userData.email,
+      consultationId,
+    });
 
     return purchase;
   } catch (error: any) {

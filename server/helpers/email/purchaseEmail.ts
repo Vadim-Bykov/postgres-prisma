@@ -1,4 +1,4 @@
-import { Environment } from "@prisma/client";
+import messages from "@/app/constants/messages.json";
 import { src_1 } from "./src_1";
 import { src_2 } from "./src_2";
 import { src_3 } from "./src_3";
@@ -6,16 +6,15 @@ import { src_4 } from "./src_4";
 import { src_5 } from "./src_5";
 // TODO: it's better to upload images and set src= as https link to the storage instead of base64 (since gmail service doesn't work with base64 images)
 
-const VERCEL_URL = process.env.VERCEL_URL!;
-const ENV = process.env.VERCEL_ENV as Environment;
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
-const API_URL =
-  ENV === "production" ? "https://pro-it-schhol.vercel.app/" : VERCEL_URL;
+const API_URL = "https://pro-it-schhol.vercel.app/";
 
-export const getEmailHtml = ({
+export const getPurchaseEmailHtml = ({
   name,
+  consultation,
 }: {
   name: string;
+  consultation?: string;
 }) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -220,7 +219,10 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:5px 50px 10px;font-family:'Raleway',sans-serif;" align="left">
         
   <div style="font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;">Рады тебя видеть частью нашей большой команды интересующейся астрологией.</p>
+    <p style="line-height: 140%;">Рады, что ты обратился к нам за консультацией${
+      consultation ? "на тему " + consultation : ""
+    }.</p>
+    <p style="line-height: 140%;">${messages.payments.CHECKING}</p>
   </div>
 
       </td>
@@ -413,20 +415,6 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
 <!--[if (mso)|(IE)]></tr></table><![endif]-->
 </div>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<table style="font-family:'Raleway',sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-  <tbody>
-    <tr>
-      <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 40px;font-family:'Raleway',sans-serif;" align="left">
-        
-  <div style="font-size: 14px; line-height: 160%; text-align: center; word-wrap: break-word;">
-    <p style="font-size: 14px; line-height: 160%;">Ты получил это письмо так как прошел регистрацию на <a rel="noopener" href="${API_URL}" target="_blank">${API_URL}</a>.</p>
-  </div>
 
       </td>
     </tr>

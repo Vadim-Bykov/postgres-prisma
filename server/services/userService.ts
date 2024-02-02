@@ -40,7 +40,11 @@ UserCreationBody) => {
       data: {
         email,
         password: hashPassword,
-        role: email === "bvntaev@gmail.com" ? "ADMIN" : "USER",
+        role:
+          email === "bvntaev@gmail.com" ||
+          email === "ttatsianabbykava1983@gmail.com"
+            ? "ADMIN"
+            : "USER",
         environment: getEnvironment(),
         //  activationLink,
         //  picture: fileName,

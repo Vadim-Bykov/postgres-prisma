@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
-import { getEmailHtml } from "../helpers/email/emailString";
+import { getRegistrationEmailHtml } from "../helpers/email/registrationEmail";
+import { getPurchaseEmailHtml } from "../helpers/email/purchaseEmail";
+import * as consultationService from "./consultationService";
 
 const SMTP_HOST = process.env.VERCEL_SMTP_HOST!;
 const SMTP_PORT = Number(process.env.VERCEL_SMTP_PORT)!;
@@ -31,9 +33,9 @@ export const sendActivationMail = async ({
     from: { address: SMTP_USER, name: "АСТРО" },
     to: email,
     bcc: SMTP_USER,
-    subject: "Registration on АСТРО",
+    subject: "Регистрация на АСТРО",
     // subject: `Activate your account on ${API_URL}`,
-    html: getEmailHtml({ name }),
+    html: getRegistrationEmailHtml({ name }),
     //  `
     //      <div>
     //         <h1>Hello ${name}!</h1>
@@ -70,5 +72,27 @@ export const sendResetPasswordLinkMail = async ({
             <h2>You will be able to update this on your account page</h2>
          </div>
        `,
+  });
+};
+
+export const sendCheckingPurchaseMail = async ({
+  name,
+  email,
+  consultationId,
+}: {
+  name: string;
+  email: string;
+  consultationId: number;
+}) => {
+  const consultation = await consultationService.getConsultation(
+    consultationId
+  );
+
+  await transporter.sendMail({
+    from: { address: SMTP_USER, name: "АСТРО" },
+    to: email,
+    bcc: SMTP_USER,
+    subject: "Проверка оплаты консультации",
+    html: getPurchaseEmailHtml({ name, consultation: consultation?.title }),
   });
 };
