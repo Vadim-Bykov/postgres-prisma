@@ -71,10 +71,12 @@ export const sendCheckingPurchaseMail = async ({
   name,
   email,
   consultationId,
+  isProvidedDataUpdate,
 }: {
   name: string;
   email: string;
   consultationId: number;
+  isProvidedDataUpdate?: boolean;
 }) => {
   try {
     const consultation = await consultationService.getConsultation(
@@ -89,7 +91,7 @@ export const sendCheckingPurchaseMail = async ({
       html: getPurchaseEmailHtml({
         name,
         consultation: consultation?.title,
-        isProvidedDataUpdate: true,
+        isProvidedDataUpdate,
       }),
     });
   } catch (error: any) {

@@ -141,6 +141,7 @@ export const updateUserPurchase = async ({
         name: userData.name,
         email: userData.email,
         consultationId,
+        isProvidedDataUpdate: true,
       }),
     ]);
 
