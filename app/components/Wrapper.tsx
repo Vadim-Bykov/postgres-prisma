@@ -6,6 +6,7 @@ import ReactModal from "react-modal";
 import { Provider } from "react-redux";
 import { AuthenticationFlow } from "./organisms/AuthenticationFlow";
 import { Header } from "./organisms/Header";
+import { Footer } from "./common/Footer";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -22,6 +23,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
       <Header />
       <AuthenticationFlow />
       {children}
+      <Footer />
     </Provider>
   );
 }

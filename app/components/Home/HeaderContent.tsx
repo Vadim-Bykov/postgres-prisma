@@ -35,7 +35,7 @@ export function HeaderContent({ className }: { className?: string }) {
       >
         <div
           className={clsx(
-            "basis-1/2 flex flex-col grow items-start justify-center duration-700 ease-in-out transition-transform mt-5 md:mt-0",
+            "w-full basis-1/2 flex flex-col grow items-start justify-center duration-700 ease-in-out transition-transform mt-5 md:mt-0 ",
             runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
           )}
         >

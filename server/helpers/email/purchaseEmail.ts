@@ -22,7 +22,7 @@ export const getPurchaseEmailHtml = ({
     ? `Вы обновили данные об оплате за консультацию${
         consultation ? " на тему " + consultation : ""
       }.`
-    : `Рады, что ты обратился к нам за консультацией${
+    : `Рады, что Вы обратились к нам за консультацией${
         consultation ? " на тему " + consultation : ""
       }.`;
 
