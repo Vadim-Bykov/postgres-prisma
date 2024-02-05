@@ -49,20 +49,21 @@ export const createPurchase = async ({
       );
     }
 
-    const purchase = await prisma.purchase.create({
-      data: {
-        userId: userData.id,
+    const [purchase] = await Promise.all([
+      prisma.purchase.create({
+        data: {
+          userId: userData.id,
+          consultationId,
+          bankRecipientId,
+          paymentNumber,
+        },
+      }),
+      await mailService.sendCheckingPurchaseMail({
+        name: userData.name,
+        email: userData.email,
         consultationId,
-        bankRecipientId,
-        paymentNumber,
-      },
-    });
-
-    mailService.sendCheckingPurchaseMail({
-      name: userData.name,
-      email: userData.email,
-      consultationId,
-    });
+      }),
+    ]);
 
     return purchase;
   } catch (error: any) {
@@ -127,20 +128,21 @@ export const updateUserPurchase = async ({
       );
     }
 
-    const purchase = await prisma.purchase.update({
-      where: { id: userPurchase.id },
-      data: {
-        bankRecipientId,
+    const [purchase] = await Promise.all([
+      prisma.purchase.update({
+        where: { id: userPurchase.id },
+        data: {
+          bankRecipientId,
+          consultationId,
+          paymentNumber,
+        },
+      }),
+      await mailService.sendCheckingPurchaseMail({
+        name: userData.name,
+        email: userData.email,
         consultationId,
-        paymentNumber,
-      },
-    });
-
-    mailService.sendCheckingPurchaseMail({
-      name: userData.name,
-      email: userData.email,
-      consultationId,
-    });
+      }),
+    ]);
 
     return purchase;
   } catch (error: any) {

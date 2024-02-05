@@ -35,15 +35,7 @@ export const sendActivationMail = async ({
     to: email,
     bcc: SMTP_USER,
     subject: "Регистрация на АСТРО",
-    // subject: `Activate your account on ${API_URL}`,
     html: getRegistrationEmailHtml({ name }),
-    //  `
-    //      <div>
-    //         <h1>Hello ${name}!</h1>
-    //         <h3>You've registered with email: ${email}!</h3>
-    //         <h3>We are happy to see you!</h3>
-    //      </div>
-    //    `,
   });
 };
 
@@ -55,7 +47,6 @@ export const sendResetPasswordLinkMail = async ({
   email: string;
 }) => {
   const urlLink = `${API_URL}/reset-password/${link}`;
-  // <a href="${urlLink}" >${urlLink}</a>
 
   await transporter.sendMail({
     from: { address: SMTP_USER, name: "АСТРО" },
@@ -90,7 +81,7 @@ export const sendCheckingPurchaseMail = async ({
       consultationId
     );
 
-    const mail = await transporter.sendMail({
+    await transporter.sendMail({
       from: { address: SMTP_USER, name: "АСТРО" },
       to: email,
       bcc: SMTP_USER,
