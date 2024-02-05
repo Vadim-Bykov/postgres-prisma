@@ -77,7 +77,6 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       }
     }
   });
-  console.log({ errors });
 
   return (
     <Modal

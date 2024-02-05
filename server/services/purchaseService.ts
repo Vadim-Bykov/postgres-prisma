@@ -1,11 +1,10 @@
+import messages from "@/app/constants/messages.json";
+import prisma from "@/lib/prisma";
 import { PurchaseBody } from "@/models/purchase";
 import * as cookieService from "@/server/services/cookieService";
-import * as tokenService from "@/server/services/tokenService";
-import { ApiError } from "../error/ApiError";
-import prisma from "@/lib/prisma";
-import * as mailService from "./mailService";
 import { NextResponse } from "next/server";
-import messages from "@/app/constants/messages.json";
+import { ApiError } from "../error/ApiError";
+import * as mailService from "./mailService";
 
 export const getAllUserPurchases = async () => {
   try {
@@ -100,14 +99,34 @@ export const updateUserPurchase = async ({
 }: PurchaseBody) => {
   try {
     const userData = await cookieService.getUserDataFromCookies();
-    const userPurchase = await prisma.purchase.findFirst({
-      where: { consultationId, userId: userData.id },
-    });
+    const [userPurchase, boughtPreviouslyPurchase] = await Promise.all([
+      prisma.purchase.findFirst({
+        where: { consultationId, userId: userData.id },
+      }),
+      prisma.purchase.findFirst({
+        where: {
+          userId: userData.id,
+          consultationId,
+          bankRecipientId,
+          paymentNumber,
+        },
+      }),
+    ]);
+
     if (!userPurchase) {
       throw ApiError.badRequest(
         "Ваши предыдущие сведения об оплате не найдены"
       );
     }
+
+    if (boughtPreviouslyPurchase) {
+      throw ApiError.badRequest(
+        `Ты уже отправил эту оплату на проверку. ${
+          messages.payments[boughtPreviouslyPurchase.paymentStatus]
+        }`
+      );
+    }
+
     const purchase = await prisma.purchase.update({
       where: { id: userPurchase.id },
       data: {
@@ -115,6 +134,12 @@ export const updateUserPurchase = async ({
         consultationId,
         paymentNumber,
       },
+    });
+
+    mailService.sendCheckingPurchaseMail({
+      name: userData.name,
+      email: userData.email,
+      consultationId,
     });
 
     return purchase;

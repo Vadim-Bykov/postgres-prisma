@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { getRegistrationEmailHtml } from "../helpers/email/registrationEmail";
 import { getPurchaseEmailHtml } from "../helpers/email/purchaseEmail";
 import * as consultationService from "./consultationService";
+import { ApiError } from "../error/ApiError";
 
 const SMTP_HOST = process.env.VERCEL_SMTP_HOST!;
 const SMTP_PORT = Number(process.env.VERCEL_SMTP_PORT)!;
@@ -84,15 +85,23 @@ export const sendCheckingPurchaseMail = async ({
   email: string;
   consultationId: number;
 }) => {
-  const consultation = await consultationService.getConsultation(
-    consultationId
-  );
+  try {
+    const consultation = await consultationService.getConsultation(
+      consultationId
+    );
 
-  await transporter.sendMail({
-    from: { address: SMTP_USER, name: "АСТРО" },
-    to: email,
-    bcc: SMTP_USER,
-    subject: "Проверка оплаты консультации",
-    html: getPurchaseEmailHtml({ name, consultation: consultation?.title }),
-  });
+    const mail = await transporter.sendMail({
+      from: { address: SMTP_USER, name: "АСТРО" },
+      to: email,
+      bcc: SMTP_USER,
+      subject: "Проверка оплаты консультации",
+      html: getPurchaseEmailHtml({
+        name,
+        consultation: consultation?.title,
+        isProvidedDataUpdate: true,
+      }),
+    });
+  } catch (error: any) {
+    throw ApiError.badRequest("Sending email error", error);
+  }
 };

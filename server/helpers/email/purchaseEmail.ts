@@ -12,10 +12,21 @@ const API_URL = "https://pro-it-schhol.vercel.app/";
 export const getPurchaseEmailHtml = ({
   name,
   consultation,
+  isProvidedDataUpdate,
 }: {
   name: string;
   consultation?: string;
-}) => `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  isProvidedDataUpdate?: boolean;
+}) => {
+  const text = isProvidedDataUpdate
+    ? `Вы обновили данные об оплате за консультацию${
+        consultation ? " на тему " + consultation : ""
+      }.`
+    : `Рады, что ты обратился к нам за консультацией${
+        consultation ? " на тему " + consultation : ""
+      }.`;
+
+  return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <!--[if gte mso 9]>
@@ -219,9 +230,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:5px 50px 10px;font-family:'Raleway',sans-serif;" align="left">
         
   <div style="font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;">
-    <p style="line-height: 140%;">Рады, что ты обратился к нам за консультацией${
-      consultation ? "на тему " + consultation : ""
-    }.</p>
+    <p style="line-height: 140%;">${text}</p>
     <p style="line-height: 140%;">${messages.payments.CHECKING}</p>
   </div>
 
@@ -443,3 +452,4 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
 </html>
 `;
+};
