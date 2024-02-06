@@ -17,3 +17,8 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@font-face {
+  font-family: Logotype;
+  src: url("../public/fonts/KingthingsPetrock/Regular.ttf") format("truetype");
+}

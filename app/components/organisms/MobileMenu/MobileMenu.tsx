@@ -5,6 +5,8 @@ import { UserBadge } from "../../molecules/header/UserBadge";
 import { BurgerMenuButton } from "./BurgerMenuButton";
 import { NavbarItem } from "../Header";
 import { useAppPathname } from "@/utils/useAppRouter";
+import { BRAND_NAME } from "@/app/constants/brand";
+import Image from "next/image";
 
 export const BURGER_TRANSITION_CLASSNAMES = "ease-in duration-300";
 
@@ -42,10 +44,17 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
         )}
         onClick={isOpen ? toggleMenu : undefined}
       />
-      <div className="absolute w-[calc(100vw-20px)] h-[68px] flex justify-between items-center text-center gap-5 px-5">
+      <div className="absolute w-[calc(100vw-20px)] h-[68px] flex justify-between items-center text-center gap-5 pl-5">
         <BurgerMenuButton isOpen={isOpen} onClick={toggleMenu} />
 
-        <h1 className="text-3xl font-semibold">АСТРО</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold">{BRAND_NAME}</h1>
+          <Image
+            src={require("@/public/lion.svg")}
+            className="w-10 h-10"
+            alt="Lion image"
+          />
+        </div>
       </div>
 
       <section

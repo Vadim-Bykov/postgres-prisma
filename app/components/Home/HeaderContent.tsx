@@ -4,6 +4,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Button from "../atoms/common/Button";
+import { BRAND_NAME } from "@/app/constants/brand";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
@@ -39,11 +40,18 @@ export function HeaderContent({ className }: { className?: string }) {
             runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
           )}
         >
-          <h1 className="hidden md:inline-block text-6xl font-semibold mb-5">
-            АСТРО
-            <br />
-            консультации
-          </h1>
+          <div className="flex flex-col">
+            <Image
+              src={require("@/public/lion.svg")}
+              className="w-32 h-32 hidden md:block md:w-72 md:h-72"
+              alt="Lion image"
+            />
+            <h1 className="hidden md:inline-block text-6xl   mb-5">
+              {BRAND_NAME}
+              <p className="text-4xl font-logo font-medium">консультации</p>
+            </h1>
+          </div>
+
           <p className="md:text-xl mb-5 md:mb-12">
             Заказать полный пакет со скидкой
           </p>

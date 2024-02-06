@@ -3,6 +3,7 @@ import { getRegistrationEmailHtml } from "../helpers/email/registrationEmail";
 import { getPurchaseEmailHtml } from "../helpers/email/purchaseEmail";
 import * as consultationService from "./consultationService";
 import { ApiError } from "../error/ApiError";
+import { BRAND_NAME_STRING } from "@/app/constants/brand";
 
 const SMTP_HOST = process.env.VERCEL_SMTP_HOST!;
 const SMTP_PORT = Number(process.env.VERCEL_SMTP_PORT)!;
@@ -31,10 +32,10 @@ export const sendActivationMail = async ({
   // <a href="${urlLink}" >${urlLink}</a>
 
   await transporter.sendMail({
-    from: { address: SMTP_USER, name: "АСТРО" },
+    from: { address: SMTP_USER, name: BRAND_NAME_STRING },
     to: email,
     bcc: SMTP_USER,
-    subject: "Регистрация на АСТРО",
+    subject: `Регистрация на ${BRAND_NAME_STRING}`,
     html: getRegistrationEmailHtml({ name }),
   });
 };

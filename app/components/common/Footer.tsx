@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/app/constants/brand";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,7 +6,7 @@ const CONTACT_LINKS = [
   {
     name: "telegram",
     logo: require("@/public/images/email/telegram.webp"),
-    href: "https://t.me/bvntaev",
+    href: "https://t.me/T010120102011",
   },
   {
     name: "instagram",
@@ -21,20 +22,32 @@ const CONTACT_LINKS = [
 
 export function Footer() {
   return (
-    <div className="flex flex-grow justify-center gap-5 md:gap-8 p-10 bg-primary">
-      {CONTACT_LINKS.map(({ href, logo, name }) => {
-        return (
-          <Link target="_blank" href={href} key={name}>
-            <Image
-              priority
-              height={40}
-              width={40}
-              src={logo}
-              alt={`${logo} logo`}
-            />
-          </Link>
-        );
-      })}
-    </div>
+    <footer className="flex flex-grow flex-col lg:flex-row items-center justify-center gap-2 bg-primary px-10 md:px-20 py-2 lg:py-5">
+      <div className="basis-1/3 flex items-center gap-2">
+        <h3 className="text-3xl font-semibold text-white">{BRAND_NAME}</h3>
+        <Image
+          src={require("@/public/lion.svg")}
+          className="w-10 h-10"
+          alt="Lion image"
+        />
+      </div>
+      <div className="basis-1/3 flex flex-grow justify-center gap-3 md:gap-8">
+        {CONTACT_LINKS.map(({ href, logo, name }) => {
+          return (
+            <Link target="_blank" href={href} key={name}>
+              <Image
+                priority
+                height={40}
+                width={40}
+                src={logo}
+                alt={`${logo} logo`}
+              />
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="basis-1/3 " />
+    </footer>
   );
 }

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { NavItem } from "../molecules/header/NavItem";
 import { UserBadge } from "../molecules/header/UserBadge";
 import { NavbarItem } from "./Header";
+import { BRAND_NAME } from "@/app/constants/brand";
 
 export function Navbar({
   navbarItems,
@@ -20,7 +21,7 @@ export function Navbar({
         className
       )}
     >
-      <h1 className="text-3xl font-semibold">АСТРО</h1>
+      <h1 className="text-3xl font-semibold">{BRAND_NAME}</h1>
 
       <nav
         className={clsx([
