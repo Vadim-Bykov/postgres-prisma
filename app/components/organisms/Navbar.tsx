@@ -18,7 +18,7 @@ export function Navbar({
   return (
     <div
       className={clsx(
-        "hidden md:flex flex-grow justify-between items-center py-5",
+        "hidden lg:flex flex-grow justify-between items-center py-5",
         className
       )}
     >
