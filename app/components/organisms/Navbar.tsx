@@ -4,6 +4,7 @@ import { NavItem } from "../molecules/header/NavItem";
 import { UserBadge } from "../molecules/header/UserBadge";
 import { NavbarItem } from "./Header";
 import { BRAND_NAME } from "@/app/constants/brand";
+import Image from "next/image";
 
 export function Navbar({
   navbarItems,
@@ -21,7 +22,14 @@ export function Navbar({
         className
       )}
     >
-      <h1 className="text-3xl font-semibold">{BRAND_NAME}</h1>
+      <div className="flex items-center gap-2">
+        <Image
+          src={require("@/public/lion.svg")}
+          className="w-14 h-12"
+          alt="Lion image"
+        />
+        <h1 className="text-3xl">{BRAND_NAME}</h1>
+      </div>
 
       <nav
         className={clsx([
