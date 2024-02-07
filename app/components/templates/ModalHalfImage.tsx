@@ -22,17 +22,17 @@ export function ModalHalfImage({
       withCloseIcon
       {...props}
     >
-      <div className={clsx("bg-yellow", "w-full", "md:w-[45%]")}>
+      <div className={clsx("bg-yellow", "w-full", "lg:w-[45%]")}>
         <Image
           src={EyecatchImage}
           alt="Woman in a red sweater surrounded by flying reward providers logos"
-          className={clsx("w-full h-64 object-cover", "md:h-full")}
+          className={clsx("w-full h-64 object-cover", "lg:h-full")}
         />
       </div>
       <div
         className={clsx(
           "w-full p-5",
-          "md:w-[55%] md:py-14 md:px-10",
+          "lg:w-[55%] lg:py-14 lg:px-10",
           "lg:py-28 lg:px-20"
         )}
       >

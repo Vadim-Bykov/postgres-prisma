@@ -31,7 +31,7 @@ export function Footer() {
         />
         <h3 className="text-3xl text-white">{BRAND_NAME}</h3>
       </div>
-      <div className="basis-1/3 flex flex-grow justify-center gap-3 md:gap-8">
+      <div className="basis-1/3 flex flex-grow justify-center gap-3 lg:gap-8">
         {CONTACT_LINKS.map(({ href, logo, name }) => {
           return (
             <Link target="_blank" href={href} key={name}>

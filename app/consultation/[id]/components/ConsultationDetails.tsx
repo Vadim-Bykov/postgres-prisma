@@ -33,7 +33,7 @@ export function ConsultationDetails({ id }: { id: string }) {
         />
       )}
 
-      <div className="flex flex-col items-start gap-5 px-10 md:px-20 py-10">
+      <div className="flex flex-col items-start gap-5 px-10 lg:px-20 py-10">
         <h2 className="text-3xl font-semibold">{title}</h2>
         {explanation && <p>{explanation}</p>}
         <p>

@@ -69,7 +69,7 @@ export function Header({}) {
     <>
       <header
         className={clsx(
-          "relative bg-primary flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity h-[68px] md:h-auto",
+          "relative bg-primary flex flex-col text-white px-5 lg:px-20 duration-[3000ms] ease-in-out transition-opacity h-[68px] lg:h-auto",
           animation ? "opacity-100" : "opacity-70"
         )}
       >

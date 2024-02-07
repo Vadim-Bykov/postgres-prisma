@@ -59,7 +59,7 @@ export function Modal({
             buttonProps={{
               className: clsx(
                 "absolute top-5 right-5 z-10",
-                "md:top-8 md:right-8",
+                "lg:top-8 lg:right-8",
                 "transition-transform duration-300 ease-in-out",
                 "hover:rotate-180",
                 typeof className === "object" && className.closeIcon

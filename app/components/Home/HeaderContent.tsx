@@ -23,36 +23,36 @@ export function HeaderContent({ className }: { className?: string }) {
   return (
     <section
       className={clsx(
-        "relative bg-primary flex flex-col text-white px-5 md:px-20 duration-[3000ms] ease-in-out transition-opacity overflow-y-hidden",
+        "relative bg-primary flex flex-col text-white px-5 lg:px-20 duration-[3000ms] ease-in-out transition-opacity overflow-y-hidden",
         runAnimation ? "opacity-100" : "opacity-70"
       )}
     >
       <div
         className={clsx(
-          "bg-primary text-white self-center flex flex-col md:flex-row items-center max-w-7xl gap-5 md:gap-10 transition-height",
-          runAnimation ? "h-[calc(100vh-68px)]" : "h-[0vh]",
+          "bg-primary text-white self-center flex flex-col lg:flex-row items-center max-w-7xl gap-5 lg:gap-10 transition-height",
+          runAnimation ? "min-h-[calc(100vh-68px)]" : "min-h-[0vh]",
           className
         )}
       >
         <div
           className={clsx(
-            "w-full basis-1/2 flex flex-col grow items-start justify-center duration-700 ease-in-out transition-transform mt-5 md:mt-0 ",
+            "w-full basis-1/2 flex flex-col grow items-start justify-center duration-700 ease-in-out transition-transform mt-5 lg:mt-0 ",
             runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
           )}
         >
           <div className="flex flex-col">
             <Image
               src={require("@/public/lion.svg")}
-              className="w-32 h-32 hidden md:block md:w-72 md:h-72"
+              className="w-32 h-32 hidden lg:block lg:w-72 lg:h-72"
               alt="Lion image"
             />
-            <h1 className="hidden md:inline-block text-6xl   mb-5">
+            <h1 className="hidden lg:inline-block text-6xl   mb-5">
               {BRAND_NAME}
               <p className="text-4xl font-logo font-medium">консультации</p>
             </h1>
           </div>
 
-          <p className="md:text-xl mb-5 md:mb-12">
+          <p className="lg:text-xl mb-5 lg:mb-12">
             Заказать полный пакет со скидкой
           </p>
           <Button

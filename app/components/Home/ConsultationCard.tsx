@@ -44,12 +44,12 @@ export function ConsultationCard({
       ref={ref}
       style={{ width: itemWidth }}
       className={clsx(
-        "max-w-md flex flex-col items-center gap-6 py-10 px-5 md:px-10 text-center",
+        "max-w-md flex flex-col items-center gap-6 py-10 px-5 lg:px-10 text-center",
         "border-2 border-gray-300 rounded-2xl",
         primary ? "bg-primary text-white" : "bg-white"
       )}
     >
-      <h3 className="text-[clamp(16px,5vw,30px)] md:text-3xl font-semibold">
+      <h3 className="text-[clamp(16px,5vw,30px)] lg:text-3xl font-semibold">
         {title}
       </h3>
       <p className="text-5xl font-semibold">

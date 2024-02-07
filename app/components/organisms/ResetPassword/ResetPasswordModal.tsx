@@ -48,7 +48,7 @@ export function ResetPasswordModal({
     <Modal
       className={{
         base: clsx(
-          "p-10 md:p-20 sm:w-[390px]",
+          "p-10 lg:p-20 sm:w-[390px]",
           "w-[70%] box-content overflow-hidden"
         ),
       }}
