@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import clsx from "clsx";
 import Image from "next/image";
-import EyecatchImage from "@/public/images/login/eyecatch.png";
+import Lion from "@/public/lion.svg";
 import { Modal, ModalProps } from "../common/Modal/Modal";
 
 export function ModalHalfImage({
@@ -22,9 +22,9 @@ export function ModalHalfImage({
       withCloseIcon
       {...props}
     >
-      <div className={clsx("bg-yellow", "w-full", "lg:w-[45%]")}>
+      <div className={clsx("bg-yellow", "w-full", "lg:w-[45%] p-1")}>
         <Image
-          src={EyecatchImage}
+          src={Lion}
           alt="Woman in a red sweater surrounded by flying reward providers logos"
           className={clsx("w-full h-64 object-cover", "lg:h-full")}
         />
