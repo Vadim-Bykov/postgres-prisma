@@ -30,7 +30,7 @@ export function PasswordInput({
   return (
     <Input
       type={passwordHidden ? "password" : "text"}
-      label={label ?? "Password"}
+      label={label ?? "Пароль"}
       renderRight={() => (
         <IconButton
           buttonProps={{

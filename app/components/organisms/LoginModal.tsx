@@ -89,7 +89,9 @@ export function LoginModal({
           onChange={() => setShowFormError(false)}
           onSubmit={onSubmit}
         >
-          <h1 className="text-3xl font-semibold mb-6">Воити в {BRAND_NAME}</h1>
+          <h1 className="text-3xl font-logo mb-6">
+            Воити в аккаунт {BRAND_NAME}
+          </h1>
           <fieldset className="flex flex-col gap-2 mb-6">
             <EmailInput register={register} error={errors.email?.message} />
             <PasswordInput
@@ -101,7 +103,7 @@ export function LoginModal({
               className="text-right text-purple text-sm font-medium"
               onClick={handleForgetPasswordClick}
             >
-              Forgot password?
+              Забыли пароль?
             </button>
             <span
               className={clsx(
@@ -120,18 +122,19 @@ export function LoginModal({
             disabled={isAuthorizing}
             loading={isAuthorizing}
           >
-            Login
+            Войти
           </Button>
-          <span>
-            Don’t have an account?{" "}
+          <p>
+            У вас еще нет аккаунта?{" "}
             <button
               type="reset"
               className="text-purple font-medium"
               onClick={handleSignUpClick}
             >
-              Sign up
+              Пройти регистрацию.
             </button>
-          </span>
+          </p>
+          <small>Это займет 1 минуту</small>
         </Form>
       </>
     </ModalHalfImage>

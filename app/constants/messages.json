@@ -1,12 +1,12 @@
 {
   "validation": {
-    "required": "This field is required.",
+    "required": "Это поле обязательное для заполнения.",
     "minLengthPassword": "Пароль должен быть минимум 8 символов без пробелов.",
-    "email": "Please enter a valid email address.",
+    "email": "Пожалуйста введите корректный адрес электронной почты",
     "firstName": "First name has invalid characters. Please try again.",
     "lastName": "Last name has invalid characters. Please try again.",
     "phoneNumber": "Please enter a valid phone number.",
-    "passwordConfirmation": "The passwords entered do not match."
+    "passwordConfirmation": "Введенный пароль не соответствует."
   },
   "registration": {
     "wrongLoginCredentials": "The email address and/or password entered are incorrect.",

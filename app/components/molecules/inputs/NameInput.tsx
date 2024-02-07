@@ -17,7 +17,7 @@ export function NameInput({ variant, register, ...props }: Props) {
 
   return (
     <Input
-      label={`${firstName ? "First" : "Last"} name`}
+      label={firstName ? "Имя" : "Фамилия"}
       type="text"
       autoComplete={`${firstName ? "given" : "family"}-name`}
       {...props}

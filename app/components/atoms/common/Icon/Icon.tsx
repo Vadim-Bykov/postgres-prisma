@@ -45,30 +45,46 @@ export default function Icon({
   className,
   style = {},
 }: Props) {
-  const iconPath = "@/public/icons/" + name;
-  // console.log({ "colorVariants[color]": colorVariants[color] });
+  // const iconPath = "@/public/icons/" + name;
+  const iconPath = `/icons/${name}`;
 
   return (
-    <Image
-      src={require("@/public/icons/" + name)}
-      width={size}
-      height={size}
-      alt="icon"
-      // style={{
-      //   width: size,
-      //   height: size,
-      //   WebkitMaskImage: `url(${"@/public/icons/" + name})`,
-      //   maskImage: `url(${"@/public/icons/" + name})`,
-      //   ...style,
-      // }}
+    <i
+      style={{
+        width: size,
+        height: size,
+        WebkitMaskImage: `url(${iconPath})`,
+        maskImage: `url(${iconPath})`,
+        ...style,
+      }}
       className={clsx(
         styles.icon,
         !inline && "block",
         inline && "inline-block",
-        // colorVariants[color],
-        // color,
+        colorVariants[color],
         className
       )}
     />
+    // <Image
+    //   src={require("@/public/icons/" + name)}
+    //   width={size}
+    //   height={size}
+    //   alt="icon"
+    //   // style={{
+    //   //   width: size,
+    //   //   height: size,
+    //   //   WebkitMaskImage: `url(${"@/public/icons/" + name})`,
+    //   //   maskImage: `url(${"@/public/icons/" + name})`,
+    //   //   ...style,
+    //   // }}
+    //   className={clsx(
+    //     styles.icon,
+    //     !inline && "block",
+    //     inline && "inline-block",
+    //     // colorVariants[color],
+    //     // color,
+    //     className
+    //   )}
+    // />
   );
 }

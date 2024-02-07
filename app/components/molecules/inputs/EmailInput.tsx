@@ -15,7 +15,7 @@ export function EmailInput({ register, ...props }: Props) {
   return (
     <Input
       type="email"
-      label="Email"
+      label="Электронная почта"
       // placeholder="example@domain.com"
       {...props}
       {...register("email", {

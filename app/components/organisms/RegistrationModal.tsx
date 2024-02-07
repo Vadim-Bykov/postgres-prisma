@@ -6,12 +6,7 @@ import { UserLoginBody } from "@/models/users";
 import { toggleRegistrationModal } from "@/store/authentication";
 import { useCreateUserMutation } from "@/store/features/api/subApi/userApi";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import {
-  validateNumberOrSymbolInclusion,
-  validatePassword,
-  validatePasswordLength,
-  validateUpperAndLowerCaseInclusion,
-} from "@/utils/validation";
+import { validatePasswordLength } from "@/utils/validation";
 import clsx from "clsx";
 import { HTMLAttributes, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,7 +17,6 @@ import { Modal, ModalProps } from "../common/Modal/Modal";
 import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
-import { ModalHalfImage } from "../templates/ModalHalfImage";
 
 type FormValues = {
   firstName: string;
@@ -46,6 +40,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
     reset,
     trigger,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>();
 
@@ -89,13 +84,15 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       withCloseIcon
       {...props}
     >
-      <h1 className="text-3xl font-semibold mb-6">Let’s create your account</h1>
+      <h1 className="text-3xl font-semibold mb-6">
+        Давай создадим тебе аккаунт
+      </h1>
 
       <Form
         preventSubmission={isUserCreating}
         onChange={() => setShowFormError(false)}
         onSubmit={onSubmit}
-        className="flex flex-col gap-4 w-full overflow-y-auto"
+        className="flex flex-col gap-4 w-full overflow-y-auto p-0.5"
       >
         <EmailInput error={errors.email?.message} register={register} />
         <NameInput
@@ -103,31 +100,46 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           register={register}
           error={errors.firstName?.message}
         />
+        <div>
+          <PasswordInput
+            register={register}
+            name="password"
+            containerClassName="mb-1"
+            error={errors.password?.message}
+            registerOptions={{
+              minLength: {
+                message: messages.validation.minLengthPassword,
+                value: PASSWORD_MIN_LENGTH,
+              },
+              onChange(event) {
+                setValue("password", event?.target.value?.trim());
+              },
+              onBlur: () => {
+                trigger("confirmPassword");
+              },
+            }}
+          />
+          <PasswordRequirements password={password} />
+        </div>
         <PasswordInput
           register={register}
-          label="Password"
-          name="password"
-          error={errors.password?.message}
-          containerClassName="mb-2"
-          registerOptions={{
-            minLength: {
-              message: messages.validation.minLengthPassword,
-              value: PASSWORD_MIN_LENGTH,
-            },
-            onBlur: () => {
-              trigger("confirmPassword");
-            },
-          }}
-        />
-        <PasswordRequirements password={password} />
-        <PasswordInput
-          register={register}
-          label="Confirm password"
+          label="Подтверждение пароля"
           name="confirmPassword"
           registerOptions={{
-            validate: (confirmPassword) =>
-              confirmPassword === watch("password") ||
-              messages.validation.passwordConfirmation,
+            validate: (confirmPassword) => {
+              console.log({
+                'confirmPassword === watch("password")':
+                  confirmPassword === watch("password"),
+              });
+
+              return (
+                confirmPassword === watch("password") ||
+                messages.validation.passwordConfirmation
+              );
+            },
+            onChange: () => {
+              trigger("confirmPassword");
+            },
             onBlur: () => {
               setShowPasswordConfirmationError(true);
             },
@@ -156,7 +168,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           disabled={isUserCreating}
           className="w-full"
         >
-          Submit
+          Зарегистрироваться
         </Button>
       </Form>
     </Modal>
@@ -164,18 +176,18 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
 }
 
 const requirements = [
+  // {
+  //   label: "Upper and lowercase letters",
+  //   validationRule: validateUpperAndLowerCaseInclusion,
+  // },
   {
-    label: "Upper and lowercase letters",
-    validationRule: validateUpperAndLowerCaseInclusion,
-  },
-  {
-    label: "More than 8 characters",
+    label: "Более 8 символов",
     validationRule: validatePasswordLength,
   },
-  {
-    label: "Contains a number or symbol",
-    validationRule: validateNumberOrSymbolInclusion,
-  },
+  // {
+  //   label: "Contains a number or symbol",
+  //   validationRule: validateNumberOrSymbolInclusion,
+  // },
 ];
 
 function PasswordRequirement({
@@ -189,10 +201,14 @@ function PasswordRequirement({
     <li
       className={clsx(
         "flex items-center gap-2 text-xs font-medium mb-1",
-        fulfilled ? "opacity-100" : "opacity-60"
+        fulfilled ? "text-green-500" : "text-purple-light"
       )}
     >
-      <Icon name="checkmark.svg" size={14} />
+      <Icon
+        name="checkmark.svg"
+        size={14}
+        color={fulfilled ? "green" : "purple-light"}
+      />
       {label}
     </li>
   );
