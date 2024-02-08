@@ -12,6 +12,7 @@ export const getAllUserPurchases = async () => {
 
     const purchases = await prisma.purchase.findMany({
       where: { userId: userData.id },
+      include: { consultation: true },
     });
 
     return purchases;
@@ -81,7 +82,10 @@ export const getUserPurchase = async (consultationId: number) => {
 
     const purchase = await prisma.purchase.findFirst({
       where: { consultationId, userId: userData.id },
+      include: { consultation: true },
     });
+
+    console.log({ purchase });
 
     return purchase;
   } catch (error: any) {

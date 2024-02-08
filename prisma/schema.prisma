@@ -48,34 +48,6 @@ model PasswordResetLink {
   Users       Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model LocationAstro {
-  country      String?
-  city         String?
-  country_name String?
-  userId       Int        @unique
-  UsersAstro   UsersAstro @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model TokenAstro {
-  refreshToken String     @id @unique
-  userId       Int
-  UsersAstro   UsersAstro @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model UsersAstro {
-  id            Int            @id @unique @default(autoincrement())
-  name          String
-  email         String         @unique
-  password      String
-  role          Role           @default(USER)
-  image         String?
-  createdAt     DateTime       @default(now())
-  environment   Environment    @default(production)
-  project       Project        @default(ASTRO)
-  LocationAstro LocationAstro?
-  TokenAstro    TokenAstro[]
-}
-
 enum Role {
   USER
   ADMIN
@@ -149,7 +121,7 @@ model Purchase {
   id                  Int             @id @unique @default(autoincrement())
   userId              Int
   users               Users           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  consultationId      Int
+  consultationId      Int             
   consultation        Consultation    @relation(fields: [consultationId], references: [id])
   bankRecipientId     Int           
   banking             Banking         @relation(fields: [bankRecipientId], references: [id])
