@@ -5,31 +5,27 @@ import { formatCurrencyAmount } from "@/utils/formatiing";
 import Image from "next/image";
 import { PaymentInfo } from "./PaymentInfo";
 
-const source: { [key: string]: string } = {
-  1: require("@/public/images/product/prof.jpg"),
-  2: require("@/public/images/product/analis.jpg"),
-  3: require("@/public/images/product/finance.png"),
-  4: require("@/public/images/product/earth.jpeg"),
-};
-
 export function ConsultationDetails({ id }: { id: string }) {
   const { data: consultation } = useGetConsultationQuery({ id });
-  const imageSource = source[id];
 
   if (!consultation) {
     return null;
   }
 
-  const { explanation, title, price, currency, perks } = consultation;
+  const { explanation, title, price, currency, perks, imageSource } =
+    consultation;
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 relative">
       {imageSource && (
         <Image
           src={imageSource}
           priority
-          className="w-fit self-center"
-          alt="Finance image"
+          width="0"
+          height="0"
+          sizes="100%"
+          className="self-center w-fit"
+          alt="Consultation related image"
         />
       )}
 
