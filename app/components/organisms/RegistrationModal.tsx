@@ -127,11 +127,6 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           name="confirmPassword"
           registerOptions={{
             validate: (confirmPassword) => {
-              console.log({
-                'confirmPassword === watch("password")':
-                  confirmPassword === watch("password"),
-              });
-
               return (
                 confirmPassword === watch("password") ||
                 messages.validation.passwordConfirmation

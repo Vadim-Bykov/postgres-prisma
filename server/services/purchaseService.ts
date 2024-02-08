@@ -85,8 +85,6 @@ export const getUserPurchase = async (consultationId: number) => {
       include: { consultation: true },
     });
 
-    console.log({ purchase });
-
     return purchase;
   } catch (error: any) {
     if (error instanceof NextResponse) {
