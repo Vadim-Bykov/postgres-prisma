@@ -1,10 +1,8 @@
-import { useGetAllConsultationsQuery } from "@/store/features/api/subApi/consultationApi";
+import { BRAND_NAME } from "@/app/constants/brand";
 import { useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Button from "../atoms/common/Button";
-import { BRAND_NAME } from "@/app/constants/brand";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
@@ -13,12 +11,6 @@ export function HeaderContent({ className }: { className?: string }) {
   useEffect(() => {
     setAnimation(true);
   }, []);
-
-  const { data: consults, isLoading } = useGetAllConsultationsQuery();
-  const primaryConsultationId = consults?.find((item) => item.primary)
-    ?.id as number;
-  const purchaseFullDiscountPackage = () =>
-    push(`/consultation/${primaryConsultationId}`);
 
   return (
     <section
@@ -30,7 +22,9 @@ export function HeaderContent({ className }: { className?: string }) {
       <div
         className={clsx(
           "bg-primary text-white self-center flex flex-col lg:flex-row items-center max-w-7xl gap-5 lg:gap-10 transition-height",
-          runAnimation ? "min-h-[calc(100vh-68px)]" : "min-h-[0vh]",
+          runAnimation
+            ? "min-h-[calc(100vh-68px)] lg:min-h-[calc(100vh-88px)]"
+            : "min-h-[0vh]",
           className
         )}
       >
@@ -40,39 +34,26 @@ export function HeaderContent({ className }: { className?: string }) {
             runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
           )}
         >
-          <div className="flex flex-col">
+          <div className="flex lg:flex-col items-center gap-5">
             <Image
               src={require("@/public/lion.svg")}
-              className="w-32 h-32 hidden lg:block lg:w-72 lg:h-72"
+              className="w-28 h-28 lg:w-72 lg:h-72"
               alt="Lion image"
             />
-            <h1 className="hidden lg:inline-block text-6xl   mb-5">
-              {BRAND_NAME}
-              <p className="text-4xl font-logo font-medium">консультации</p>
-            </h1>
+            <h1 className="text-3xl lg:text-6xl  mb-5">{BRAND_NAME}</h1>
           </div>
-
-          <p className="lg:text-xl mb-5 lg:mb-12">
-            Заказать полный пакет со скидкой
-          </p>
-          <Button
-            onClick={purchaseFullDiscountPackage}
-            disabled={isLoading || !primaryConsultationId}
-          >
-            Узнать подробнее
-          </Button>
         </div>
 
         <div
           className={clsx(
             "basis-1/2 duration-700 ease-in-out transition-transform",
-            runAnimation ? "translate-x-[0]" : "translate-x-[150%]"
+            runAnimation ? "translate-x-[0]" : "translate-x-[200%]"
           )}
         >
           <Image
             src={require("@/public/header.jpeg")}
             priority
-            className="w-auto"
+            className="w-auto max-h-screen"
             alt="Header image"
           />
         </div>
