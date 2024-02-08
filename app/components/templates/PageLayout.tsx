@@ -8,7 +8,7 @@ export function PageLayout({
   return (
     <main
       className={clsx(
-        "flex min-h-screen lg:min-h-[calc(100vh-78px)]  min-w-full flex-col pb-10 gap-10 lg:gap-20",
+        "flex min-h-[calc(100vh-68px-112px)] lg:min-h-[calc(100vh-88px-80px)]  min-w-full flex-col pb-10 gap-10 lg:gap-20",
         className
       )}
     >
