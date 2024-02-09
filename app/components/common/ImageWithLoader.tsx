@@ -1,36 +1,30 @@
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import clsx from "clsx";
+import { OnLoadingComplete } from "next/dist/shared/lib/get-img-props";
 import Image, { ImageProps } from "next/image";
 import React, { ReactEventHandler, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 
 export function ImageWithLoader({
-  onLoad,
-  onLoadStart,
+  onLoadingComplete,
   className,
   width,
   height,
   alt,
   ...props
 }: ImageProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { isMobile } = useWindowDimensions();
 
-  const onLoadStartAction: ReactEventHandler<HTMLImageElement> = (e) => {
-    onLoadStart?.(e);
-    setIsLoading(true);
-  };
-
-  const onLoadAction: ReactEventHandler<HTMLImageElement> = (e) => {
-    onLoad?.(e);
+  const onLoadAction: OnLoadingComplete = (e) => {
+    onLoadingComplete?.(e);
     setIsLoading(false);
   };
 
   return (
     <>
       <Image
-        onLoad={onLoadAction}
-        onLoadStart={onLoadStartAction}
+        onLoadingComplete={onLoadAction}
         className={className}
         width={width}
         height={height}

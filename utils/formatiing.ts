@@ -44,7 +44,6 @@ export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
 };
 export function formatGoogleDriveImageUrl(url: string) {
   const imageId = url.split("/d/")[1]?.split("/view")[0];
-  console.log({ imageId });
 
   return `https://drive.google.com/uc?export=view&id=${imageId}`;
 }
