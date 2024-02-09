@@ -1,15 +1,36 @@
 "use client";
 
 import { useGetConsultationQuery } from "@/store/features/api/subApi/consultationApi";
-import { formatCurrencyAmount } from "@/utils/formatiing";
-import Image from "next/image";
+import {
+  formatCurrencyAmount,
+  formatGoogleDriveImageUrl,
+} from "@/utils/formatiing";
 import { PaymentInfo } from "./PaymentInfo";
+import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
+import Skeleton from "react-loading-skeleton";
+import { useWindowDimensions } from "@/utils/useWindowDimensions";
+
+export function ConsultationPlaceholder() {
+  const { isMobile, width } = useWindowDimensions();
+  return (
+    <div className="flex flex-col gap-8 items-center">
+      <Skeleton width={isMobile ? width : 768} className="aspect-video" />
+      <Skeleton width={width - 60} height={32} />
+      <Skeleton width={width - 60} height={200} />
+      <div>
+        <Skeleton width={width - 60} height={18} />
+        <Skeleton width={width - 60} height={18} />
+        <Skeleton width={width - 60} height={18} />
+      </div>
+    </div>
+  );
+}
 
 export function ConsultationDetails({ id }: { id: string }) {
   const { data: consultation } = useGetConsultationQuery({ id });
 
   if (!consultation) {
-    return null;
+    return <ConsultationPlaceholder />;
   }
 
   const { explanation, title, price, currency, perks, imageSource } =
@@ -17,17 +38,16 @@ export function ConsultationDetails({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-8 relative">
-      {imageSource && (
-        <Image
-          src={imageSource}
-          priority
-          width="0"
-          height="0"
-          sizes="100%"
-          className="self-center w-fit"
-          alt="Consultation related image"
-        />
-      )}
+      <ImageWithLoader
+        src={formatGoogleDriveImageUrl(imageSource)}
+        priority
+        width="0"
+        height="0"
+        sizes="100%"
+        placeholder="empty"
+        className="self-center w-full md:w-fit"
+        alt="Consultation related image"
+      />
 
       <div className="flex flex-col items-start gap-5 px-5 lg:px-20">
         <h2 className="text-3xl font-semibold">{title}</h2>

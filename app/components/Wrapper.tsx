@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { AuthenticationFlow } from "./organisms/AuthenticationFlow";
 import { Header } from "./organisms/Header";
 import { Footer } from "./common/Footer";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -20,10 +21,12 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <Provider store={store}>
-      <Header />
-      <AuthenticationFlow />
-      {children}
-      <Footer />
+      <SkeletonTheme baseColor="#CDCDCD">
+        <Header />
+        <AuthenticationFlow />
+        {children}
+        <Footer />
+      </SkeletonTheme>
     </Provider>
   );
 }

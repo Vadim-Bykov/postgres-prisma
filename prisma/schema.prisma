@@ -94,7 +94,7 @@ model Consultation {
   updatedAt     DateTime?
   removedAt     DateTime?
   purchase      Purchase[]
-  imageSource   String?
+  imageSource   String
 }
 
 model Banking {
