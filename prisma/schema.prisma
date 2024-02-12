@@ -15,13 +15,14 @@ model Users {
   password    String
   role        Role        @default(USER)
   image       String?
-  createdAt   DateTime    @default(now())
   environment Environment @default(production)
   project     Project     @default(IT_SCHOOL)
   location    Location?
   Token       Token[]
   passwordResetLink PasswordResetLink[]
   purchase    Purchase[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime?
 
 }
 
@@ -90,11 +91,17 @@ model Consultation {
   perks         String[]
   status        ConsultationStatus @default(PENDING)
   primary       Boolean?      @default(false)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?
   removedAt     DateTime?
   purchase      Purchase[]
   imageSource   String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?
+}
+
+enum PaymentSystem {
+  MIR
+  VISA
+  MASTERCARD
 }
 
 model Banking {
@@ -103,6 +110,7 @@ model Banking {
   currency      Currency      @default(BYN) 
   number        String
   ownerName     String?
+  paymentSystem PaymentSystem @default(VISA)
   purchase      Purchase[]
 }
 
@@ -126,7 +134,8 @@ model Purchase {
   bankRecipientId     Int           
   banking             Banking         @relation(fields: [bankRecipientId], references: [id])
   paymentNumber       String?  
-  createdAt           DateTime        @default(now())
   status              PurchaseStatus  @default(NOT_STARTED)
   paymentStatus       PaymentStatus   @default(CHECKING)
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime?
 }

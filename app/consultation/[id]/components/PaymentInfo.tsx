@@ -9,6 +9,14 @@ import { useAppSelector } from "@/store/store";
 import messages from "@/app/constants/messages.json";
 import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
 import { useParams } from "next/navigation";
+import Image from "next/image";
+import { Banking } from "@prisma/client";
+
+const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
+  MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
+  VISA: require("@/public/icons/payment/visa.svg"),
+  MIR: require("@/public/icons/payment/mir.png"),
+};
 
 export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
@@ -77,14 +85,23 @@ export function PaymentInfo() {
         {error?.data?.message || locationError}
       </span>
 
-      {banking?.map(({ bankName, number, ownerName, id, currency }) => (
-        <div key={id}>
-          <p>{bankName}</p>
-          <p>{number}</p>
-          <p>Валюта - {currency}</p>
-          {ownerName && <p>{ownerName}</p>}
-        </div>
-      ))}
+      {banking?.map(
+        ({ bankName, number, ownerName, id, currency, paymentSystem }) => (
+          <div key={id}>
+            <div className="flex items-center gap-3">
+              <p>{bankName} </p>
+              <Image
+                alt="Payment system logo"
+                className="w-8 h-auto"
+                src={PAYMENT_SYSTEM_LOGO[paymentSystem]}
+              />
+            </div>
+            <p>{number}</p>
+            <p>Валюта - {currency}</p>
+            {ownerName && <p>{ownerName}</p>}
+          </div>
+        )
+      )}
 
       {banking && (
         <>

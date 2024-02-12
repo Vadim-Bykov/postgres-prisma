@@ -137,6 +137,7 @@ export const updateUserPurchase = async ({
           bankRecipientId,
           consultationId,
           paymentNumber,
+          updatedAt: new Date().toISOString(),
         },
       }),
       await mailService.sendCheckingPurchaseMail({

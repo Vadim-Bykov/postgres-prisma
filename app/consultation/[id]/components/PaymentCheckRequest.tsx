@@ -50,10 +50,11 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
     banking.map((bank) => ({
       value: bank.id,
       label: bank.bankName,
-      selected: userHasPurchase
-        ? userPurchase?.bankRecipientId === bank.id
-        : false,
     })) ?? [];
+
+  const defaultBankValue = userHasPurchase
+    ? banking.findIndex((bank) => userPurchase?.bankRecipientId === bank.id) + 1
+    : 0;
 
   const onSubmit = handleSubmit(
     async ({ bankRecipientId, paymentNumber }: FormData) => {
@@ -85,13 +86,13 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
           ).
         </p>
         <InputSelect
+          defaultValue={defaultBankValue}
           label="Банк получатель"
           {...register("bankRecipientId")}
           options={[
             {
               label: "Выберите банк получатель",
               value: 0,
-              selected: !userHasPurchase,
               disabled: true,
               hidden: true,
             },
