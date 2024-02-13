@@ -1,5 +1,6 @@
 "use client";
 
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
 import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
 import clsx from "clsx";
@@ -11,6 +12,7 @@ import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Banking } from "@prisma/client";
+import { IconButton } from "@/app/components/atoms/common/IconButton";
 
 const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
   MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
@@ -96,8 +98,18 @@ export function PaymentInfo() {
                 src={PAYMENT_SYSTEM_LOGO[paymentSystem]}
               />
             </div>
-            <p>{number}</p>
+
+            <CopyToClipboard text={number.split(" ").join("")}>
+              <div className="flex gap-3">
+                <p>{number}</p>
+                <IconButton
+                  iconProps={{ name: "file-copy-line.svg", color: "purple" }}
+                />
+              </div>
+            </CopyToClipboard>
+
             <p>Валюта - {currency}</p>
+
             {ownerName && <p>{ownerName}</p>}
           </div>
         )
