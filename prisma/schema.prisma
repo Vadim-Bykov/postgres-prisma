@@ -15,8 +15,9 @@ model Users {
   password    String
   role        Role        @default(USER)
   image       String?
+  emailNotification Boolean @default(true)
+  project     Project     @default(ASTRO)
   environment Environment @default(production)
-  project     Project     @default(IT_SCHOOL)
   location    Location?
   Token       Token[]
   passwordResetLink PasswordResetLink[]

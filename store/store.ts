@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { userReducer } from "./userSlice";
 import { appApi } from "./features/api/appApi";
 import { authenticationSlice } from "./authentication";
+import { appReducer } from "./app";
 
 export const store = configureStore({
   reducer: {
+    app: appReducer,
     user: userReducer,
     authentication: authenticationSlice.reducer,
     [appApi.reducerPath]: appApi.reducer,

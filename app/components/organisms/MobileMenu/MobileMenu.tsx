@@ -64,7 +64,7 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
           BURGER_TRANSITION_CLASSNAMES
         )}
       >
-        <UserBadge onLoginLogoutClick={toggleMenu} className="mb-10" />
+        <UserBadge onAvatarLogoClick={toggleMenu} className="mb-10" />
 
         <MobileNavbar navbarItems={navbarItems} onNavItemClick={toggleMenu} />
       </section>

@@ -19,5 +19,5 @@ export function useWindowDimensions(delay = 700) {
     };
   }, [delay]);
 
-  return { width, height, isMobile: width < 768 };
+  return { width, height, isMobile: width < 768, isTablet: width < 1024 };
 }

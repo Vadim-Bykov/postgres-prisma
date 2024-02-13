@@ -8,6 +8,10 @@ export type Pathname =
   | "/"
   | "/admin"
   | "/account"
+  | "/account/personal-details"
+  | "/account/notifications"
+  | "/account/support"
+  | "/account/purchases"
   | "/consultation"
   | `/consultation/${number}`;
 

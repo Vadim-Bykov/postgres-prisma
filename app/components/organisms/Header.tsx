@@ -80,7 +80,7 @@ export function Header({}) {
             "-translate-y-20 duration-700 ease-in-out transition-transform",
             animation && "translate-y-[0]"
           )}
-          navbarItems={filteredNavbarItems}
+          navbarItems={filteredNavbarItems.slice(0, -1)}
         />
       </header>
     </>
