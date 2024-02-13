@@ -50,7 +50,7 @@ export const sendResetPasswordLinkMail = async ({
   const urlLink = `${API_URL}/reset-password/${link}`;
 
   await transporter.sendMail({
-    from: { address: SMTP_USER, name: "АСТРО" },
+    from: { address: SMTP_USER, name: BRAND_NAME_STRING },
     to: email,
     bcc: SMTP_USER,
     subject: "Reset password link",
@@ -85,7 +85,7 @@ export const sendCheckingPurchaseMail = async ({
     );
 
     await transporter.sendMail({
-      from: { address: SMTP_USER, name: "АСТРО" },
+      from: { address: SMTP_USER, name: BRAND_NAME_STRING },
       to: email,
       bcc: SMTP_USER,
       subject: "Проверка оплаты консультации",
