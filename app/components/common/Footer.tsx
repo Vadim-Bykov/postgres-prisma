@@ -1,4 +1,9 @@
 import { BRAND_NAME } from "@/app/constants/brand";
+import {
+  EMAIL_ADDRESS,
+  INSTAGRAM_ACCOUNT,
+  TELEGRAM_ACCOUNT,
+} from "@/app/constants/socialConnections";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,17 +11,17 @@ const CONTACT_LINKS = [
   {
     name: "telegram",
     logo: require("@/public/images/email/telegram.webp"),
-    href: "https://t.me/T010120102011",
+    href: TELEGRAM_ACCOUNT,
   },
   {
     name: "instagram",
     logo: require("@/public/images/email/instagram.png"),
-    href: "https://www.instagram.com/",
+    href: INSTAGRAM_ACCOUNT,
   },
   {
     name: "email",
     logo: require("@/public/images/email/email.png"),
-    href: "mailto:vadya1981@yandex.by",
+    href: `mailto:${EMAIL_ADDRESS}`,
   },
 ];
 
