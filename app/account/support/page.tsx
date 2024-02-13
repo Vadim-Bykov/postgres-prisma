@@ -1,10 +1,10 @@
 import { AccountNavigationLayout } from "../components/AccountNavigationLayout";
 
-export default function PersonalDetails() {
+export default function SupportPage() {
   return (
-    <AccountNavigationLayout>
+    <div>
       {/* TODO: insert component with page content */}
       support{" "}
-    </AccountNavigationLayout>
+    </div>
   );
 }

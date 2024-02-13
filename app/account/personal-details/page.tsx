@@ -1,10 +1,8 @@
-import { AccountNavigationLayout } from "../components/AccountNavigationLayout";
-
-export default function PersonalDetails() {
+export default function PersonalDetailsPage() {
   return (
-    <AccountNavigationLayout>
+    <div>
       {/* TODO: insert component with page content */}
       personal details content
-    </AccountNavigationLayout>
+    </div>
   );
 }

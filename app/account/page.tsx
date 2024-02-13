@@ -4,14 +4,14 @@ import { useAuthorizedRoute } from "@/utils/authorization";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { useEffect } from "react";
 import { MobileAccountNavigation } from "./components/MobileAccountNavigation";
-import { useRouter } from "next/navigation";
+import { useAppRouter } from "@/utils/useAppRouter";
 
 export const dynamic = "force-dynamic";
 
 export default function Account() {
   useAuthorizedRoute();
   const { isTablet } = useWindowDimensions();
-  const { replace } = useRouter();
+  const { replace } = useAppRouter();
 
   useEffect(() => {
     if (!isTablet) {
