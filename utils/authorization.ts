@@ -11,7 +11,7 @@ export function useAuthorizedRoute() {
   const loggedIn = useIsLoggedIn();
 
   useEffect(() => {
-    if (!loggedIn) {
+    if (loggedIn !== undefined && !loggedIn) {
       router.replace("/");
     }
   }, [loggedIn, router]);

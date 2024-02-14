@@ -3,6 +3,7 @@ import Button, {
 } from "@/app/components/atoms/common/Button";
 import { toggleLoginModal } from "@/store/authentication";
 import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useIsLoggedIn } from "@/utils/authorization";
 import { MouseEventHandler } from "react";
 
 interface Props extends ButtonProps {
@@ -17,22 +18,22 @@ export function AuthenticationButton({
   ...props
 }: Props) {
   const dispatch = useAppDispatch();
-  const { isAuthorized } = useAppSelector((state) => state.user);
+  const loggedIn = useIsLoggedIn();
 
   const handleLoginSignupClick: MouseEventHandler<HTMLButtonElement> = (e) => {
-    if (isAuthorized) {
+    if (loggedIn) {
       onClick?.(e);
     } else if (!authenticationForActionRequired) {
       onClick?.(e);
       dispatch(toggleLoginModal(true));
-    } else if (authenticationForActionRequired && !isAuthorized) {
+    } else if (authenticationForActionRequired && !loggedIn) {
       dispatch(toggleLoginModal(true));
     }
   };
 
   return (
     <Button
-      disabled={disabled || isAuthorized === undefined}
+      disabled={disabled || loggedIn === undefined}
       {...props}
       onClick={handleLoginSignupClick}
     >

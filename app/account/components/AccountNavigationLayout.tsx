@@ -66,8 +66,8 @@ export function AccountNavigationLayout({
           "lg:border-r border-r-[#EFEDF4]"
         )}
       >
-        <div className="mb-12">
-          <div className="relative w-fit mb-4">
+        <div className="mb-12 flex flex-col items-center">
+          <div className="w-fit mb-4">
             <Image
               priority
               src={AvatarImage}

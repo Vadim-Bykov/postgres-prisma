@@ -19,7 +19,7 @@ export function MobileAccountNavigation() {
       <MobileHeader />
 
       <div className="mt-10 mb-14 flex flex-col items-center">
-        <div className="relative mb-4">
+        <div className="mb-4">
           <Image
             priority
             src={AvatarImage}
