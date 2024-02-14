@@ -13,7 +13,7 @@ import { Pathname } from "@/utils/useAppRouter";
 export interface AccountNavItem {
   id: number;
   text: string;
-  route: Pathname;
+  route?: Pathname;
   iconSource: string;
 }
 
@@ -45,7 +45,6 @@ export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
   {
     id: 5,
     text: "Выйти из аккаунта",
-    route: "/",
     iconSource: "account/logout-box-r-line.svg",
   },
 ];
@@ -82,10 +81,10 @@ export function AccountNavigationLayout({
         <nav className="flex flex-col flex-grow gap-4">
           {ACCOUNT_NAV_ITEMS.map((navItem) => {
             const { id, route } = navItem;
-            return route === "/" ? (
-              <LogoutNavItem key={id} {...navItem} />
-            ) : (
+            return route ? (
               <NavItem key={id} {...navItem} />
+            ) : (
+              <LogoutNavItem key={id} {...navItem} />
             );
           })}
         </nav>

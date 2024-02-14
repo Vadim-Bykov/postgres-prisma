@@ -33,10 +33,10 @@ export function MobileAccountNavigation() {
       <nav className="flex flex-col flex-grow gap-4 w-full max-w-lg">
         {ACCOUNT_NAV_ITEMS.map((navItem) => {
           const { id, route } = navItem;
-          return route === "/" ? (
-            <LogoutNavItem key={id} {...navItem} isTablet />
-          ) : (
+          return route ? (
             <NavItem key={id} {...navItem} isTablet />
+          ) : (
+            <LogoutNavItem key={id} {...navItem} isTablet />
           );
         })}
       </nav>

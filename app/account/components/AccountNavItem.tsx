@@ -11,7 +11,11 @@ interface Props extends AccountNavItem {
 
 export function NavItem({ id, iconSource, text, route, isTablet }: Props) {
   return (
-    <Link key={id} href={route} className="flex gap-3 items-center relative">
+    <Link
+      key={id}
+      href={route as string}
+      className="flex gap-3 items-center relative"
+    >
       <Icon name={iconSource} className="relative top-[1px]" />
       <span>{text}</span>
       {isTablet && (
