@@ -12,6 +12,7 @@ interface Props extends AccountNavItem {
 export function NavItem({ id, iconSource, text, route, isTablet }: Props) {
   return (
     <Link
+      replace={!isTablet}
       key={id}
       href={route as string}
       className="flex gap-3 items-center relative"

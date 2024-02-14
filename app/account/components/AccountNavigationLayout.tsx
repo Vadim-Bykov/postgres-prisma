@@ -91,7 +91,11 @@ export function AccountNavigationLayout({
       </section>
 
       <MobileHeader />
-      <section className={clsx("flex-grow", className)}>{children}</section>
+      <section
+        className={clsx("w-full flex flex-col items-center p-5", className)}
+      >
+        {children}
+      </section>
     </div>
   );
 }

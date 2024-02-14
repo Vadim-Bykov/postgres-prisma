@@ -176,7 +176,7 @@ const requirements = [
   //   validationRule: validateUpperAndLowerCaseInclusion,
   // },
   {
-    label: "Более 8 символов",
+    label: "Минимум 8 символов",
     validationRule: validatePasswordLength,
   },
   // {
@@ -209,7 +209,7 @@ function PasswordRequirement({
   );
 }
 
-function PasswordRequirements({
+export function PasswordRequirements({
   password,
   containerClassName,
 }: {

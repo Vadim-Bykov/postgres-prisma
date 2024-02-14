@@ -2,7 +2,6 @@ import { BRAND_NAME } from "@/app/constants/brand";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Paragraph } from "../common/Paragraph";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
