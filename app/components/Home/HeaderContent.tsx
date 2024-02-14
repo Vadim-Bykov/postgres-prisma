@@ -1,12 +1,11 @@
 import { BRAND_NAME } from "@/app/constants/brand";
-import { useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Paragraph } from "../common/Paragraph";
 
 export function HeaderContent({ className }: { className?: string }) {
   const [runAnimation, setAnimation] = useState(false);
-  const { push } = useAppRouter();
 
   useEffect(() => {
     setAnimation(true);
@@ -34,14 +33,19 @@ export function HeaderContent({ className }: { className?: string }) {
             runAnimation ? "translate-x-[0]" : "-translate-x-[200%]"
           )}
         >
-          <div className="flex lg:flex-col items-center gap-5">
+          <div className="hidden lg:flex lg:flex-col items-center gap-5">
             <Image
               src={require("@/public/lion.svg")}
               className="w-28 h-28 lg:w-72 lg:h-72"
               alt="Lion image"
             />
-            <h1 className="text-3xl lg:text-6xl  mb-5">{BRAND_NAME}</h1>
+            <h1 className="text-3xl lg:text-6xl mb-5">{BRAND_NAME}</h1>
           </div>
+          <p className="mb-1">
+            Tот, кто владеет астрологическими знаниями, Кто способен прочесть
+            потенциал карты и умеет ориентироваться в динамике -
+          </p>
+          <p>Тот имеет преимущество зрячего перед слепым.</p>
         </div>
 
         <div
