@@ -9,6 +9,7 @@ import { PaymentInfo } from "./PaymentInfo";
 import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import Skeleton from "react-loading-skeleton";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
+import { Paragraph } from "@/app/components/common/Paragraph";
 
 export function ConsultationPlaceholder() {
   const { isMobile, width } = useWindowDimensions();
@@ -33,8 +34,15 @@ export function ConsultationDetails({ id }: { id: string }) {
     return <ConsultationPlaceholder />;
   }
 
-  const { explanation, title, price, currency, perks, imageSource } =
-    consultation;
+  const {
+    explanation,
+    title,
+    description,
+    price,
+    currency,
+    perks,
+    imageSource,
+  } = consultation;
 
   return (
     <div className="flex flex-col gap-8 lg:pt-2 relative">
@@ -51,7 +59,12 @@ export function ConsultationDetails({ id }: { id: string }) {
 
       <div className="flex flex-col items-start gap-5 px-5 lg:px-20">
         <h2 className="text-3xl font-semibold">{title}</h2>
-        {explanation && <p>{explanation}</p>}
+        <div className="flex flex-col gap-2">
+          {description.map((paragraph) => {
+            return <Paragraph key={paragraph}>{paragraph}</Paragraph>;
+          })}
+        </div>
+        {explanation && <Paragraph>{explanation}</Paragraph>}
         <p>
           Стоимость консультации {formatCurrencyAmount({ price, currency })}.
         </p>
