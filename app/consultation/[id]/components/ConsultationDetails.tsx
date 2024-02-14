@@ -34,15 +34,8 @@ export function ConsultationDetails({ id }: { id: string }) {
     return <ConsultationPlaceholder />;
   }
 
-  const {
-    explanation,
-    title,
-    description,
-    price,
-    currency,
-    perks,
-    imageSource,
-  } = consultation;
+  const { title, description, price, currency, perks, imageSource } =
+    consultation;
 
   return (
     <div className="flex flex-col gap-8 lg:pt-2 relative">
@@ -64,7 +57,6 @@ export function ConsultationDetails({ id }: { id: string }) {
             return <Paragraph key={paragraph}>{paragraph}</Paragraph>;
           })}
         </div>
-        {explanation && <Paragraph>{explanation}</Paragraph>}
         <p>
           Стоимость консультации {formatCurrencyAmount({ price, currency })}.
         </p>

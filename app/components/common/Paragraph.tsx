@@ -27,7 +27,7 @@ export function Paragraph({
       ref={ref}
       className={clsx(
         "text-justify",
-        isMoreThenTwoLines || (indentRequired && "indent-4 lg:indent-6"),
+        (isMoreThenTwoLines || indentRequired) && "indent-4 lg:indent-6",
         className
       )}
     >

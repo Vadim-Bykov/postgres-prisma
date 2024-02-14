@@ -87,7 +87,6 @@ model Consultation {
   id            Int            @id @unique @default(autoincrement())
   title         String
   description   String[]
-  explanation   String?
   price         Int
   currency      Currency      @default(RUB) 
   perks         String[]
