@@ -40,7 +40,10 @@ export function UserBadge({
 
   const onAvatarClick = () => {
     onAvatarLogoClick?.();
-    dispatch(storeAccountEntryRoute(asPath));
+    const isAccountRoute = asPath.includes("/account");
+    if (!isAccountRoute) {
+      dispatch(storeAccountEntryRoute(asPath));
+    }
     isTablet ? push("/account") : push("/account/personal-details");
   };
 

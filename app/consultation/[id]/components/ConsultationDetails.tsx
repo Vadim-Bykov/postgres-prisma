@@ -37,7 +37,7 @@ export function ConsultationDetails({ id }: { id: string }) {
     consultation;
 
   return (
-    <div className="flex flex-col gap-8 relative">
+    <div className="flex flex-col gap-8 lg:pt-2 relative">
       <ImageWithLoader
         src={formatGoogleDriveImageUrl(imageSource)}
         priority
