@@ -1,23 +1,28 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { AccountNavItem } from "./AccountNavigationLayout";
+import { AccountNavItem } from "./AccountNavigation";
 import Icon from "@/app/components/atoms/common/Icon/Icon";
-import { toggleLogoutModal } from "@/store/authentication";
 import { useAppDispatch } from "@/store/store";
+import { toggleLogoutModal } from "@/store/authentication";
 
-interface Props extends AccountNavItem {
+interface NavItemProps extends AccountNavItem {
   isTablet?: boolean;
 }
 
-export function NavItem({ id, iconSource, text, route, isTablet }: Props) {
+export function NavItem({
+  iconSource,
+  text,
+  href,
+  target,
+  isTablet,
+}: NavItemProps) {
   return (
     <Link
-      replace={!isTablet}
-      key={id}
-      href={route as string}
+      href={href}
+      target={target}
       className="flex gap-3 items-center relative"
     >
-      <Icon name={iconSource} className="relative top-[1px]" />
+      <Icon name={iconSource} className="relative top-px" />
       <span>{text}</span>
       {isTablet && (
         <span className="flex flex-grow justify-end">
@@ -28,27 +33,19 @@ export function NavItem({ id, iconSource, text, route, isTablet }: Props) {
   );
 }
 
-export function LogoutNavItem({ id, iconSource, text, isTablet }: Props) {
+export function LogoutNavItem({ isTablet }: { isTablet?: boolean }) {
   const dispatch = useAppDispatch();
 
   const openLogoutModal = () => {
     dispatch(toggleLogoutModal(true));
   };
-
   return (
     <div
-      className={clsx(
-        "flex flex-col relative",
-        !isTablet && "flex-grow justify-end"
-      )}
+      className={clsx("flex flex-col", !isTablet && "flex-grow justify-end")}
     >
-      <button
-        key={id}
-        className="flex gap-3 items-center relative"
-        onClick={openLogoutModal}
-      >
-        <Icon inline name={iconSource} className="relative top-[1px]" />
-        <span>{text}</span>
+      <button className="flex gap-3 items-center" onClick={openLogoutModal}>
+        <Icon inline name="account/logout-box-r-line.svg" className="top-px" />
+        <span>Log out</span>
         {isTablet && (
           <span className="flex flex-grow justify-end">
             <Icon

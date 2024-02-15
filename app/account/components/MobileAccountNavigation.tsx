@@ -1,8 +1,7 @@
 import AvatarImage from "@/public/icons/avatar.svg";
 import { useAppSelector } from "@/store/store";
 import Image from "next/image";
-import { LogoutNavItem, NavItem } from "./AccountNavItem";
-import { ACCOUNT_NAV_ITEMS } from "./AccountNavigationLayout";
+import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
 
 export function MobileAccountNavigation() {
@@ -30,16 +29,8 @@ export function MobileAccountNavigation() {
         <h1 className="text-2xl font-semibold font-serif">{userName}</h1>
         <p className="text-sm">{userEmail}</p>
       </div>
-      <nav className="flex flex-col flex-grow gap-4 w-full max-w-lg">
-        {ACCOUNT_NAV_ITEMS.map((navItem) => {
-          const { id, route } = navItem;
-          return route ? (
-            <NavItem key={id} {...navItem} isTablet />
-          ) : (
-            <LogoutNavItem key={id} {...navItem} isTablet />
-          );
-        })}
-      </nav>
+
+      <AccountNavigation isTablet />
     </section>
   );
 }

@@ -6,48 +6,8 @@ import { useAuthorizedRoute } from "@/utils/authorization";
 import clsx from "clsx";
 import Image from "next/image";
 import { PropsWithChildren } from "react";
-import { LogoutNavItem, NavItem } from "./AccountNavItem";
+import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
-import { Pathname } from "@/utils/useAppRouter";
-
-export interface AccountNavItem {
-  id: number;
-  text: string;
-  route?: Pathname;
-  iconSource: string;
-}
-
-export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
-  {
-    id: 1,
-    text: "Личные данные",
-    route: "/account/personal-details",
-    iconSource: "account/account-circle-line.svg",
-  },
-  {
-    id: 2,
-    text: "Мои покупки",
-    route: "/account/purchases",
-    iconSource: "account/bank-line.svg",
-  },
-  {
-    id: 3,
-    text: "Уведомления",
-    route: "/account/notifications",
-    iconSource: "account/notification-3-line.svg",
-  },
-  {
-    id: 4,
-    text: "Поддержка",
-    route: "/account/support",
-    iconSource: "account/question-line.svg",
-  },
-  {
-    id: 5,
-    text: "Выйти из аккаунта",
-    iconSource: "account/logout-box-r-line.svg",
-  },
-];
 
 export function AccountNavigationLayout({
   children,
@@ -78,16 +38,8 @@ export function AccountNavigationLayout({
           <h1 className="text-2xl font-semibold font-serif">{userName}</h1>
           <p className="text-sm">{userEmail}</p>
         </div>
-        <nav className="flex flex-col flex-grow gap-4">
-          {ACCOUNT_NAV_ITEMS.map((navItem) => {
-            const { id, route } = navItem;
-            return route ? (
-              <NavItem key={id} {...navItem} />
-            ) : (
-              <LogoutNavItem key={id} {...navItem} />
-            );
-          })}
-        </nav>
+
+        <AccountNavigation />
       </section>
 
       <MobileHeader />
