@@ -83,12 +83,14 @@ export const login = async ({ email, password }: UserLoginBody) => {
   try {
     const user = await prisma.users.findFirst({ where: { email } });
     if (!user) {
-      throw ApiError.badRequest(`User with email ${email} doesn't exist`);
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${email} не зарегистрирован в базе`
+      );
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
-      throw ApiError.badRequest("Password is invalid");
+      throw ApiError.badRequest("Неверный пароль");
     }
 
     const location = await prisma.location.findUnique({
