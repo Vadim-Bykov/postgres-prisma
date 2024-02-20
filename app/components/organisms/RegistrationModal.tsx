@@ -84,7 +84,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       withCloseIcon
       {...props}
     >
-      <h1 className="text-3xl font-semibold mb-6">
+      <h1 className="font-head text-3xl font-semibold mb-6">
         Давай создадим тебе аккаунт
       </h1>
 

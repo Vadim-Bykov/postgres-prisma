@@ -27,7 +27,7 @@ export function LogoutModal({ onSuccess, ...props }: Props) {
       withCloseIcon
       {...props}
     >
-      <h2 className="text-2xl font-semibold text-center mb-5">
+      <h2 className="font-head text-2xl font-semibold text-center mb-5">
         Ты действительно хочешь выйти из аккаунта?
       </h2>
 

@@ -93,7 +93,9 @@ export function ResetPasswordForm({
       style={style}
     >
       <div>
-        <h1 className="text-3xl font-semibold mb-2">Reset password</h1>
+        <h1 className="font-head text-3xl font-semibold mb-2">
+          Reset password
+        </h1>
         <p>
           Enter your email address and we&#39;ll send you a password reset link.
         </p>

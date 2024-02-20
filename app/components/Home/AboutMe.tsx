@@ -3,7 +3,7 @@ import React from "react";
 export function AboutMe() {
   return (
     <section>
-      <h2 className="text-3xl font-semibold mb-1">Обо мне:</h2>
+      <h2 className="font-head text-3xl font-semibold mb-1">Обо мне:</h2>
       <p className="text-lg mb-3">
         Меня зовут <span className="font-semibold">Татьяна</span>. Я -{" "}
         <span className="font-semibold">астролог</span> по финансам +

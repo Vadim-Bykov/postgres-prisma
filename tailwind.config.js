@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       fontFamily: {
         logo: "Logotype",
+        head: "HeaderType",
       },
       transitionProperty: {
         "max-height": "max-height",

@@ -131,7 +131,7 @@ export function LoginModal({
               className="text-purple font-medium"
               onClick={handleSignUpClick}
             >
-              Пройти регистрацию.
+              Зарегистрироваться.
             </button>
           </p>
           <small>Это займет 1 минуту</small>

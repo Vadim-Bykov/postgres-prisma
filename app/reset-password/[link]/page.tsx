@@ -46,10 +46,10 @@ export default function ResetPasswordPage({
     >
       <div className="flex flex-col basis-full gap-6 w-ful">
         <div>
-          <h1 className="text-3xl font-semibold mb-2">
-            We have reset your password.
+          <h1 className="font-head text-3xl font-semibold mb-2">
+            Мы сбросили ваш пароль.
           </h1>
-          <p>Login with the password in the email.</p>
+          <p>Войдите в аккаунт с паролем, который выслан на почту.</p>
         </div>
         <Button size="large" onClick={goHome}>
           Okay!

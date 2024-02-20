@@ -49,7 +49,7 @@ export function ConsultationCard({
         primary ? "bg-primary text-white" : "bg-white"
       )}
     >
-      <h3 className="text-[clamp(16px,5vw,30px)] lg:text-3xl font-semibold">
+      <h3 className="font-head text-[clamp(16px,5vw,30px)] lg:text-3xl font-semibold">
         {title}
       </h3>
       <p className="text-5xl font-semibold">

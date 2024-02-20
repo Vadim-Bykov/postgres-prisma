@@ -14,8 +14,10 @@ export function ResetPasswordSent({ onButtonClick, style }: Props) {
       className="flex flex-col basis-full gap-6 w-ful"
     >
       <div>
-        <h1 className="text-3xl font-semibold mb-2">Check your email!</h1>
-        <p>We have sent you a link to reset your password.</p>
+        <h1 className="font-head text-3xl font-semibold mb-2">
+          Проверьте почту!
+        </h1>
+        <p>Мы послали вам ссылку чтобы сбросить пароль.</p>
       </div>
 
       <Button size="large" onClick={onButtonClick}>

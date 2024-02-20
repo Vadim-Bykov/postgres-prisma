@@ -149,7 +149,7 @@ export function PersonalDetails() {
   );
   return (
     <div className="w-full max-w-[450px] flex flex-col items-center">
-      <h2 className="text-2xl font-semibold mb-6">
+      <h2 className="text-2xl font-head font-semibold mb-6">
         Здесь ты можешь исправить личные данные своего аккаунта
       </h2>
 

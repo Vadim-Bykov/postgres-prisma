@@ -35,7 +35,7 @@ export function AccountNavigationLayout({
               className="w-24 h-24"
             />
           </div>
-          <h1 className="text-2xl font-semibold font-serif">{userName}</h1>
+          <h1 className="font-head text-2xl font-semibold">{userName}</h1>
           <p className="text-sm">{userEmail}</p>
         </div>
 
