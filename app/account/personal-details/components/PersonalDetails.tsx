@@ -9,10 +9,7 @@ import { ToggleInput } from "@/app/components/molecules/inputs/ToggleInput";
 import { PasswordRequirements } from "@/app/components/organisms/RegistrationModal";
 import messages from "@/app/constants/messages.json";
 import { PASSWORD_MIN_LENGTH } from "@/app/constants/validation";
-import {
-  useCreateUserMutation,
-  useUpdateUserPersonalDataMutation,
-} from "@/store/features/api/subApi/userApi";
+import { useUpdateUserPersonalDataMutation } from "@/store/features/api/subApi/userApi";
 import { useAppSelector } from "@/store/store";
 import clsx from "clsx";
 import { useEffect, useState } from "react";

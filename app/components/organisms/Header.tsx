@@ -23,11 +23,11 @@ const NAVBAR_ITEMS: NavbarItem[] = [
     title: "Консультации",
     authenticationRequired: false,
   },
-  {
-    route: "/account",
-    title: "Мой аккаунт",
-    authenticationRequired: true,
-  },
+  // {
+  //   route: "/account",
+  //   title: "Мой аккаунт",
+  //   authenticationRequired: true,
+  // },
   // {
   //   route: "/admin",
   //   title: "Admin",
