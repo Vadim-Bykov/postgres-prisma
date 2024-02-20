@@ -5,6 +5,7 @@ import { setTokensToCookies } from "@/server/services/cookieService";
 import * as tokenService from "@/server/services/tokenService";
 import * as userService from "@/server/services/userService";
 import { NextRequest, NextResponse } from "next/server";
+import { getUserDto } from "@/server/dtos/userDto";
 
 export const dynamic = "force-dynamic";
 
@@ -29,11 +30,13 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ auth: false });
       }
 
+      const userDto = getUserDto(userData);
+
       const { refreshToken: updatedRefreshToken } =
-        await tokenService.generateToken(tokenPayload);
+        await tokenService.generateToken(userDto);
 
       const tokeData = await tokenService.saveRefreshToken({
-        userId: tokenPayload.id,
+        userId: userData.id,
         refreshToken,
         updatedRefreshToken,
       });
@@ -41,7 +44,7 @@ export async function GET(request: NextRequest) {
       setTokensToCookies({ refreshToken: tokeData.refreshToken });
 
       return NextResponse.json({
-        user: tokenPayload,
+        user: userDto,
         auth: true,
       });
     }
