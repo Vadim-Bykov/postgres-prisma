@@ -7,6 +7,7 @@ import {
   getJwtAccessSecretKey,
   getJwtRefreshSecretKey,
 } from "../helpers/token";
+import { Token } from "@prisma/client";
 
 const JWT_ACCESS_SECRET = getJwtAccessSecretKey();
 const JWT_REFRESH_SECRET = getJwtRefreshSecretKey();
@@ -107,6 +108,78 @@ export const findRefreshToken = async (refreshToken: string) => {
     });
 
     return tokenData;
+  } catch (error: any) {
+    throw ApiError.badRequest(error?.message, error);
+  }
+};
+
+export const updateRefreshToken = async ({
+  userId,
+  newRefreshToken,
+  oldRefreshToken,
+}: {
+  userId: number;
+  newRefreshToken: string;
+  oldRefreshToken?: string;
+}) => {
+  const tokenData = oldRefreshToken
+    ? await findRefreshToken(oldRefreshToken)
+    : await findRefreshTokenByUserId(userId);
+
+  if (tokenData) {
+    const updatedTokenData = await prisma.token.update({
+      where: { refreshToken: tokenData.refreshToken },
+      data: { refreshToken: newRefreshToken },
+    });
+
+    return updatedTokenData;
+  } else {
+    const createdTokenData = await prisma.token.create({
+      data: { refreshToken: newRefreshToken, userId },
+    });
+    return createdTokenData;
+  }
+};
+
+export const findRefreshTokenByUserId = async (userId: number) => {
+  try {
+    const tokenData = await prisma.token.findFirst({
+      where: { userId },
+    });
+
+    return tokenData;
+  } catch (error: any) {
+    throw ApiError.badRequest(error?.message, error);
+  }
+};
+
+export const compareRefreshTokenWithSavedInDb = async (
+  refreshToken: string
+) => {
+  try {
+    const userData = await validateRefreshToken(refreshToken);
+
+    const tokenData = await prisma.token.findUnique({
+      where: { refreshToken },
+    });
+
+    if (tokenData) {
+      return true;
+    }
+
+    const tokenDataUserId = await findRefreshTokenByUserId(userData.id);
+    if (tokenDataUserId) {
+      const userDataFromDbToken = await validateRefreshToken(
+        tokenDataUserId.refreshToken
+      );
+
+      const isTokenValid =
+        JSON.stringify(userData) === JSON.stringify(userDataFromDbToken);
+
+      return isTokenValid;
+    }
+
+    return false;
   } catch (error: any) {
     throw ApiError.badRequest(error?.message, error);
   }

@@ -1,5 +1,9 @@
 import prisma from "@/lib/prisma";
-import { UserCreationBody, UserLoginBody } from "@/models/users";
+import {
+  UpdateUserPersonalDataBody,
+  UserCreationBody,
+  UserLoginBody,
+} from "@/models/users";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import { v4 } from "uuid";
@@ -8,6 +12,7 @@ import { ApiError } from "../error/ApiError";
 import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
+import * as cookieService from "@/server/services/cookieService";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -29,7 +34,9 @@ UserCreationBody) => {
     const candidate = await prisma.users.findFirst({ where: { email } });
 
     if (candidate) {
-      throw ApiError.badRequest(`User with email ${email} already exists`);
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${email} уже зарегистрирован в базе`
+      );
     }
 
     // const activationLink = v4();
@@ -231,6 +238,77 @@ export const resetUserPassword = async (link: string) => {
       throw error;
     } else {
       throw ApiError.badRequest("Reset User password", error);
+    }
+  }
+};
+
+export const updateUserPersonalData = async ({
+  email,
+  name,
+  password,
+  newPassword,
+}: UpdateUserPersonalDataBody) => {
+  try {
+    if (!password) {
+      throw ApiError.badRequest(`Введите пожалуйста пароль`);
+    }
+    const userData = await cookieService.getUserDataFromCookies();
+    const [user, candidate] = await Promise.all([
+      prisma.users.findUnique({ where: { id: userData.id } }),
+      email && prisma.users.findUnique({ where: { email } }),
+    ]);
+
+    if (!user) {
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${email} не зарегистрирован в базе`
+      );
+    }
+
+    if (candidate) {
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${email} уже зарегистрирован в базе`
+      );
+    }
+
+    let hashPassword;
+
+    if (password && newPassword) {
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        throw ApiError.badRequest("Неверный старый пароль");
+      }
+      hashPassword = await bcrypt.hash(newPassword, 3);
+    }
+
+    const updatedUser = await prisma.users.update({
+      where: { id: user.id },
+      data: {
+        email,
+        name,
+        password: hashPassword,
+      },
+    });
+
+    if ((email || newPassword) && updatedUser) {
+      await tokenService.removeAllRefreshToken(updatedUser.id);
+    }
+
+    const userDto = getUserDto({ ...updatedUser, location: userData.location });
+
+    const oldRefreshToken = cookieService.getTokensFromCookies();
+    const { refreshToken } = await tokenService.generateToken(userDto);
+    await tokenService.updateRefreshToken({
+      userId: userDto.id,
+      newRefreshToken: refreshToken,
+      oldRefreshToken,
+    });
+
+    return { user: userDto, refreshToken };
+  } catch (error: any) {
+    if (error instanceof NextResponse) {
+      throw error;
+    } else {
+      throw ApiError.badRequest("updateUserPersonalData error", error);
     }
   }
 };

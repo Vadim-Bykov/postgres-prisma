@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useAppPathname, useAppRouter } from "@/utils/useAppRouter";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { storeAccountEntryRoute } from "@/store/app";
+import Icon from "../../atoms/common/Icon/Icon";
 
 export function UserBadge({
   onAvatarLogoClick,
@@ -52,13 +53,18 @@ export function UserBadge({
       {loggedIn ? (
         <button
           onClick={onAvatarClick}
-          className="flex flex-col lg:flex-row items-center gap-3"
+          className="flex flex-col lg:flex-row items-center gap-3 relative"
         >
           <Image
             priority
             src={AvatarImage}
             alt="Placeholder image for user avatar depicting an piñata Max mascot"
             className="w-10 h-10"
+          />
+          <Icon
+            color="white"
+            name="account/settings-2-fill.svg"
+            className="absolute top-6 left-10 lg:left-7"
           />
           <span>{userData?.user?.name}</span>
         </button>

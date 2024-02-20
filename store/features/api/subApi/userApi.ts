@@ -1,6 +1,10 @@
 import { UserDto } from "@/server/dtos/userDto";
 import { appApi } from "../appApi";
-import { UserCreationBody, UserLoginBody } from "@/models/users";
+import {
+  UpdateUserPersonalDataBody,
+  UserCreationBody,
+  UserLoginBody,
+} from "@/models/users";
 
 export const userApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -51,6 +55,17 @@ export const userApi = appApi.injectEndpoints({
       query: () => "auth",
       providesTags: ["Auth"],
     }),
+    updateUserPersonalData: builder.mutation<
+      UserDto,
+      UpdateUserPersonalDataBody
+    >({
+      query: (userData) => ({
+        url: "users",
+        method: "PATCH",
+        body: userData,
+      }),
+      invalidatesTags: ["Auth"],
+    }),
   }),
 });
 
@@ -62,4 +77,5 @@ export const {
   useAuthenticationQuery,
   useLoginMutation,
   useLogoutMutation,
+  useUpdateUserPersonalDataMutation,
 } = userApi;

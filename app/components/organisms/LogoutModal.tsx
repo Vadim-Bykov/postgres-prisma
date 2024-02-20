@@ -31,9 +31,11 @@ export function LogoutModal({ onSuccess, ...props }: Props) {
         Ты действительно хочешь выйти из аккаунта?
       </h2>
 
-      <Button disabled={isLogouting} loading={isLogouting} onClick={onLogout}>
-        Выйти из аккаунта
-      </Button>
+      <div className="flex flex-grow justify-center">
+        <Button disabled={isLogouting} loading={isLogouting} onClick={onLogout}>
+          Выйти из аккаунта
+        </Button>
+      </div>
     </Modal>
   );
 }
