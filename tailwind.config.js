@@ -12,6 +12,7 @@ module.exports = {
       fontFamily: {
         logo: "Logotype",
         head: "HeaderType",
+        sans: ["Onest", "Helvetica", "Arial", "sans-serif"],
       },
       transitionProperty: {
         "max-height": "max-height",

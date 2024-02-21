@@ -40,12 +40,12 @@ export function HeaderContent({ className }: { className?: string }) {
             />
             <h1 className="text-3xl lg:text-6xl mb-5">{BRAND_NAME}</h1>
           </div>
-          <p className="mb-1 font-logo text-xl lg:text-2xl">
-            Tот, кто владеет астрологическими знаниями, Кто способен прочесть
-            потенциал карты и умеет ориентироваться в динамике -
+          <p className="mb-1 italic">
+            &quot;Tот, кто владеет астрологическими знаниями, Кто способен
+            прочесть потенциал карты и умеет ориентироваться в динамике -
           </p>
-          <p className="font-logo text-xl lg:text-2xl">
-            Тот имеет преимущество зрячего перед слепым.
+          <p className="italic">
+            Тот имеет преимущество зрячего перед слепым.&quot;
           </p>
         </div>
 
