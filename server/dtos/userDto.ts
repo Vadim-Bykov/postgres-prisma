@@ -6,6 +6,7 @@ export interface UserDto {
   id: User["id"];
   email: string;
   picture?: string;
+  role?: Role;
   name: string;
   emailNotification: User["emailNotification"];
   location?: UserLocation;
