@@ -8,6 +8,7 @@ export interface UserDto {
   picture?: string;
   role?: Role;
   name: string;
+  createdAt: User["createdAt"];
   emailNotification: User["emailNotification"];
   location?: UserLocation;
 }
@@ -25,6 +26,7 @@ export const getUserDto: GetUserDto = ({
   name,
   location,
   emailNotification,
+  createdAt,
 }) => {
   return {
     id,
@@ -32,6 +34,7 @@ export const getUserDto: GetUserDto = ({
     role,
     name,
     emailNotification,
+    createdAt,
     location: location
       ? {
           city: location.city,
