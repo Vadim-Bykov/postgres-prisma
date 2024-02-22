@@ -6,9 +6,8 @@ export interface UserDto {
   id: User["id"];
   email: string;
   picture?: string;
-  role?: Role;
   name: string;
-  createdAt: User["createdAt"];
+  emailNotification: User["emailNotification"];
   location?: UserLocation;
 }
 
@@ -21,17 +20,17 @@ type GetUserDto = (userData: UserDtoSource) => UserDto;
 export const getUserDto: GetUserDto = ({
   id,
   email,
-  createdAt,
   role = "USER",
   name,
   location,
+  emailNotification,
 }) => {
   return {
     id,
     email,
     role,
     name,
-    createdAt,
+    emailNotification,
     location: location
       ? {
           city: location.city,

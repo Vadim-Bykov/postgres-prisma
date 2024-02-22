@@ -19,6 +19,7 @@ export interface UserLoginBody {
 export interface UpdateUserPersonalDataBody {
   name?: User["name"];
   email?: User["email"];
-  password: User["password"];
+  password?: User["password"];
   newPassword?: User["password"];
+  emailNotification?: User["emailNotification"];
 }

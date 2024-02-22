@@ -1,10 +1,10 @@
 import { AccountNavigationLayout } from "../components/AccountNavigationLayout";
+import { Notifications } from "./components/Notifications";
 
 export default function NotificationsPage() {
   return (
     <div>
-      {/* TODO: insert component with page content */}
-      notifications{" "}
+      <Notifications />
     </div>
   );
 }

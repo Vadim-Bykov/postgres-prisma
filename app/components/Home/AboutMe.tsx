@@ -6,11 +6,11 @@ export function AboutMe() {
       <h2 className="font-head text-3xl font-semibold mb-1">Обо мне:</h2>
       <p className="text-lg mb-3">
         Меня зовут <span className="font-semibold">Татьяна</span>. Я -{" "}
-        <span className="font-semibold">астролог</span> по финансам +
+        <span className="font-semibold">астролог</span> по финансам +{" "}
         <span className="font-semibold">профориентолог</span>.
       </p>
 
-      <div className="text-lg italic">
+      <div className="text-lg">
         <p>
           Я помогаю клиенту профессионально реализовать себя и найти нишу,
           которая будет приносить деньги.

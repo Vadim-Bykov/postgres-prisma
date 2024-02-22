@@ -249,9 +249,10 @@ export const updateUserPersonalData = async ({
   name,
   password,
   newPassword,
+  emailNotification,
 }: UpdateUserPersonalDataBody) => {
   try {
-    if (!password) {
+    if ((email || newPassword) && !password) {
       throw ApiError.badRequest(`Введите пожалуйста пароль`);
     }
     const userData = await cookieService.getUserDataFromCookies();
@@ -288,6 +289,7 @@ export const updateUserPersonalData = async ({
         email,
         name,
         password: hashPassword,
+        emailNotification,
       },
     });
 

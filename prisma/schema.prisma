@@ -89,6 +89,7 @@ model Consultation {
   description   String[]
   price         Int
   currency      Currency      @default(RUB) 
+  perksTitle    String?
   perks         String[]
   status        ConsultationStatus @default(PENDING)
   primary       Boolean?      @default(false)

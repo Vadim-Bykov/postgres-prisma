@@ -34,8 +34,15 @@ export function ConsultationDetails({ id }: { id: string }) {
     return <ConsultationPlaceholder />;
   }
 
-  const { title, description, price, currency, perks, imageSource } =
-    consultation;
+  const {
+    title,
+    description,
+    price,
+    currency,
+    perks,
+    imageSource,
+    perksTitle,
+  } = consultation;
 
   return (
     <div className="flex flex-col gap-8 lg:pt-2 relative">
@@ -61,6 +68,7 @@ export function ConsultationDetails({ id }: { id: string }) {
           Стоимость консультации {formatCurrencyAmount({ price, currency })}.
         </p>
         <ul>
+          {perksTitle && <p>{perksTitle}</p>}
           {perks.map((perk) => (
             <li key={perk}>• {perk}</li>
           ))}

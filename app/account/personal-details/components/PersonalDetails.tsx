@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 type FormValues = {
   firstName?: string;
   email?: string;
-  password: string;
+  password?: string;
   newPassword?: string;
   confirmNewPassword?: string;
   changePassword?: boolean;
@@ -38,6 +38,8 @@ const isPersonalDetailsChanged = ({
   userDataEmail,
   userDataFirstName,
 }: Params) => {
+  console.log({ email, userDataEmail, password, newPassword });
+
   if (!email && !firstName && !newPassword && !confirmNewPassword) {
     return false;
   }
@@ -50,7 +52,7 @@ const isPersonalDetailsChanged = ({
     return false;
   }
 
-  if (password === newPassword) {
+  if (!!newPassword && password === newPassword) {
     return false;
   }
 
@@ -79,16 +81,19 @@ export function PersonalDetails() {
   const newPassword = watch("newPassword");
   const changePassword = watch("changePassword", false);
 
-  const userData = useAppSelector((state) => state.user.userData);
+  const userData = useAppSelector(
+    (state) => state.user.userData || { email: "", name: "" }
+  );
+  const { email, name } = userData;
+
   useEffect(() => {
-    if (userData) {
-      const { email, name } = userData;
+    if (!!email && !!name) {
       reset({
         email,
         firstName: name,
       });
     }
-  }, [reset, userData]);
+  }, [reset, email, name]);
 
   useEffect(() => {
     if (!changePassword) {
@@ -132,8 +137,6 @@ export function PersonalDetails() {
         await updateUserPersonalData(dataToChange).unwrap();
 
         reset({
-          email: "",
-          firstName: "",
           password: "",
           newPassword: "",
           confirmNewPassword: "",
@@ -160,11 +163,16 @@ export function PersonalDetails() {
         onSubmit={onSubmit}
         className="flex flex-col gap-4 w-full"
       >
-        <EmailInput error={errors.email?.message} register={register} />
+        <EmailInput
+          error={errors.email?.message}
+          register={register}
+          defaultValue={userData?.email}
+        />
         <NameInput
           variant="firstName"
           register={register}
           error={errors.firstName?.message}
+          defaultValue={userData?.name}
         />
         <PasswordInput
           autoComplete="new-password"
@@ -178,7 +186,8 @@ export function PersonalDetails() {
               message: messages.validation.minLengthPassword,
               value: PASSWORD_MIN_LENGTH,
             },
-            required: messages.validation.required,
+            // required: messages.validation.required,
+            required: false,
             onChange(event) {
               setValue("password", event?.target.value?.trim());
             },
