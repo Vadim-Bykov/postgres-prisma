@@ -54,7 +54,7 @@ export function ConsultationDetails({ id }: { id: string }) {
         height="0"
         sizes="100%"
         placeholder="empty"
-        className="self-center w-full md:w-fit"
+        className="self-center w-full lg:w-fit"
         alt="Consultation related image"
       />
 

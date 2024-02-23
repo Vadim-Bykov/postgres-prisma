@@ -28,7 +28,6 @@ export function PurchaseList() {
           ({
             consultation: {
               title,
-              subTitle,
               price,
               currency,
               createdAt,
@@ -52,7 +51,7 @@ export function PurchaseList() {
                     height="0"
                     sizes="100%"
                     placeholder="empty"
-                    className="self-center w-full h-full object-cover md:w-fit"
+                    className="self-center w-full h-full object-cover lg:w-fit"
                     alt="Consultation related image"
                   />
                 </div>
