@@ -1,14 +1,14 @@
-import { PurchaseBody } from "@/models/purchase";
+import { PurchaseBody, UserPurchase } from "@/models/purchase";
 import { Purchase } from "@prisma/client";
 import { appApi } from "../appApi";
 
 export const purchaseApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllUserPurchases: builder.query<Purchase[], void>({
+    getAllUserPurchases: builder.query<UserPurchase[], void>({
       query: () => "purchase",
       providesTags: ["Purchase"],
     }),
-    getUserPurchase: builder.query<Purchase, { consultationId: string }>({
+    getUserPurchase: builder.query<UserPurchase, { consultationId: string }>({
       query: ({ consultationId }) => `purchase/${consultationId}`,
       providesTags: ["Purchase"],
     }),
