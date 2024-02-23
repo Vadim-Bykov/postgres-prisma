@@ -36,6 +36,7 @@ export function ConsultationDetails({ id }: { id: string }) {
 
   const {
     title,
+    subTitle,
     description,
     price,
     currency,
@@ -59,6 +60,8 @@ export function ConsultationDetails({ id }: { id: string }) {
 
       <div className="flex flex-col items-start gap-5 px-5 lg:px-20">
         <h2 className="font-head text-3xl font-semibold">{title}</h2>
+        {subTitle && <p className="text-lg font-semibold">{subTitle}</p>}
+
         <div className="flex flex-col gap-2">
           {description.map((paragraph) => {
             return <Paragraph key={paragraph}>{paragraph}</Paragraph>;
@@ -69,9 +72,8 @@ export function ConsultationDetails({ id }: { id: string }) {
         </p>
         <ul>
           {perksTitle && <p>{perksTitle}</p>}
-          {perks.map((perk) => (
-            <li key={perk}>• {perk}</li>
-          ))}
+          {perks.length > 0 &&
+            perks.map((perk) => <li key={perk}>• {perk}</li>)}
         </ul>
 
         <PaymentInfo />

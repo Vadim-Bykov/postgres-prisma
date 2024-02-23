@@ -9,7 +9,7 @@ import {
 } from "./ConsultationCard";
 
 function Placeholder() {
-  return range(5).map((index) => <ConsultationCardPlaceholder key={index} />);
+  return range(6).map((index) => <ConsultationCardPlaceholder key={index} />);
 }
 
 export function ConsultationList() {
