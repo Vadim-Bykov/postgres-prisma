@@ -1,29 +1,6 @@
 import { BRAND_NAME } from "@/app/constants/brand";
-import {
-  EMAIL_ADDRESS,
-  INSTAGRAM_ACCOUNT,
-  TELEGRAM_ACCOUNT,
-} from "@/app/constants/socialConnections";
 import Image from "next/image";
-import Link from "next/link";
-
-const CONTACT_LINKS = [
-  {
-    name: "telegram",
-    logo: require("@/public/images/email/telegram.webp"),
-    href: TELEGRAM_ACCOUNT,
-  },
-  {
-    name: "instagram",
-    logo: require("@/public/images/email/instagram.png"),
-    href: INSTAGRAM_ACCOUNT,
-  },
-  {
-    name: "email",
-    logo: require("@/public/images/email/email.png"),
-    href: `mailto:${EMAIL_ADDRESS}`,
-  },
-];
+import { ContactLinks } from "./ContactLinks";
 
 export function Footer() {
   return (
@@ -36,21 +13,8 @@ export function Footer() {
         />
         <h3 className="text-3xl text-white">{BRAND_NAME}</h3>
       </div>
-      <div className="basis-1/3 flex flex-grow justify-center gap-3 lg:gap-8">
-        {CONTACT_LINKS.map(({ href, logo, name }) => {
-          return (
-            <Link target="_blank" href={href} key={name}>
-              <Image
-                priority
-                height={40}
-                width={40}
-                src={logo}
-                alt={`${logo} logo`}
-              />
-            </Link>
-          );
-        })}
-      </div>
+
+      <ContactLinks className="basis-1/3 flex flex-grow justify-center gap-3 lg:gap-8" />
 
       <div className="basis-1/3 " />
     </footer>

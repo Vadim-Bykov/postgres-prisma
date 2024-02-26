@@ -1,10 +1,5 @@
-import { AccountNavigationLayout } from "../components/AccountNavigationLayout";
+import { Support } from "./components/Support";
 
 export default function SupportPage() {
-  return (
-    <div>
-      {/* TODO: insert component with page content */}
-      support{" "}
-    </div>
-  );
+  return <Support />;
 }
