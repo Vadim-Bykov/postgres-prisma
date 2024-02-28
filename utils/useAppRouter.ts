@@ -13,7 +13,9 @@ export type Pathname =
   | "/account/support"
   | "/account/purchases"
   | "/consultation"
-  | `/consultation/${number}`;
+  | `/consultation/${number}`
+  | "/article"
+  | `/article/${number}`;
 
 interface AppRouter extends AppRouterInstance {
   push(href: Pathname, options?: NavigateOptions): void;

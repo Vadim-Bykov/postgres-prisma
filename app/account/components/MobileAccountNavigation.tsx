@@ -12,7 +12,7 @@ export function MobileAccountNavigation() {
   return (
     <section
       className={
-        "min-h-[calc(100vh-68px-112px)] flex flex-col items-center px-8"
+        "min-h-[calc(100vh-68px-112px)] flex flex-col items-center px-8 pb-5"
       }
     >
       <MobileHeader />

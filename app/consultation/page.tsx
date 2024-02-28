@@ -1,4 +1,4 @@
-import { ConsultationList } from "../components/Home/ConsultationList";
+import { ConsultationList } from "./components/ConsultationList";
 import { PageLayout } from "../components/templates/PageLayout";
 
 export const dynamic = "force-dynamic";

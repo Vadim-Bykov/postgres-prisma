@@ -4,7 +4,7 @@ import { Consultation } from "@prisma/client";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
-import Button from "../atoms/common/Button";
+import Button from "../../components/atoms/common/Button";
 
 export function ConsultationCardPlaceholder() {
   return (
