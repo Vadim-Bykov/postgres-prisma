@@ -1,21 +1,12 @@
 import { PageLayout } from "@/app/components/templates/PageLayout";
-import { ARTICLES } from "../constants/articles";
+import { ArticleContent } from "./components/ArticleContent";
 
 export const dynamic = "force-dynamic";
 
-export default function ArticlePage({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
-  const { title, subTitle, imageSourceId } = ARTICLES[+id - 1];
+export default function ArticlePage() {
   return (
     <PageLayout>
-      <div>
-        Статья {id}
-        <p>{title}</p>
-        <p>{subTitle}</p>
-      </div>
+      <ArticleContent />
     </PageLayout>
   );
 }

@@ -17,7 +17,7 @@ function ArticleCard({
 }: ArticleCardProps) {
   return (
     <>
-      <div className={"flex flex-col lg:flex-row items-center gap-5 "}>
+      <div className={"flex flex-col lg:flex-row items-center gap-5"}>
         {imageSourceId && (
           <div className="rounded-xl overflow-hidden min-w-[300px] w-full lg:w-1/3">
             <Image
@@ -32,10 +32,10 @@ function ArticleCard({
             />
           </div>
         )}
-        <div>
+        <div className="flex flex-col gap-2">
           <h3 className="font-head text-lg">{title}</h3>
           {subTitle && <p>{subTitle}</p>}
-          {summary && <p className="text-justify">{summary}</p>}
+          {summary && <p className="text-justify text-sm">{summary}</p>}
           <Link className="text-purple font-semibold" href={`/article/${id}`}>
             Читать полностью
           </Link>
