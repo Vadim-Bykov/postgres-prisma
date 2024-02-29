@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     const tokenPayload = await tokenService.validateRefreshToken(refreshToken);
 
-    if (tokenPayload instanceof NextResponse) {
+    if (!tokenPayload) {
       cookieService.removeTokensFromCookies();
 
       return NextResponse.json({ auth: false });

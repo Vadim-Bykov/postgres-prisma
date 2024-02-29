@@ -1,4 +1,4 @@
-import { formatCurrencyAmount } from "@/utils/formatiing";
+import { formatCurrencyAmount } from "@/utils/formatting";
 import { useAppRouter } from "@/utils/useAppRouter";
 import { Consultation } from "@prisma/client";
 import clsx from "clsx";

@@ -31,8 +31,8 @@ export function formatCurrencyAmount({
   return `${Currency[currency]} ${price}`;
 }
 
-export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
-  return new Intl.DateTimeFormat("en-US", options).format(new Date(date));
+export function formatDate(date: Date, options?: Intl.DateTimeFormatOptions) {
+  return new Intl.DateTimeFormat("ru", options).format(new Date(date));
 }
 
 export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {

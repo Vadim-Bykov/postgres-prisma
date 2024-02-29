@@ -129,16 +129,18 @@ enum PurchaseStatus {
 }
 
 model Purchase {
-  id                  Int             @id @unique @default(autoincrement())
-  userId              Int
-  users               Users           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  consultationId      Int             
-  consultation        Consultation    @relation(fields: [consultationId], references: [id])
-  bankRecipientId     Int           
-  banking             Banking         @relation(fields: [bankRecipientId], references: [id])
-  paymentNumber       String?  
-  status              PurchaseStatus  @default(NOT_STARTED)
-  paymentStatus       PaymentStatus   @default(CHECKING)
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime?
+  id                    Int             @id @unique @default(autoincrement())
+  userId                Int
+  users                 Users           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consultationId        Int             
+  consultation          Consultation    @relation(fields: [consultationId], references: [id])
+  bankRecipientId       Int           
+  banking               Banking         @relation(fields: [bankRecipientId], references: [id])
+  paymentNumber         String?  
+  status                PurchaseStatus  @default(NOT_STARTED)
+  paymentStatus         PaymentStatus   @default(CHECKING)
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime?
+  paymentConfirmationAt DateTime?
+  orderFulfillmentAt    DateTime?
 }

@@ -4,7 +4,7 @@ import { useGetConsultationQuery } from "@/store/features/api/subApi/consultatio
 import {
   formatCurrencyAmount,
   formatGoogleDriveImageUrl,
-} from "@/utils/formatiing";
+} from "@/utils/formatting";
 import { PaymentInfo } from "./PaymentInfo";
 import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import Skeleton from "react-loading-skeleton";

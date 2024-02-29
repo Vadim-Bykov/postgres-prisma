@@ -3,7 +3,6 @@
 import Icon from "@/app/components/atoms/common/Icon/Icon";
 import { ContactLinks } from "@/app/components/common/ContactLinks";
 import { TELEGRAM_TECHNICAL_SUPPORT } from "@/app/constants/socialConnections";
-import Image from "next/image";
 import Link from "next/link";
 
 export function Support() {

@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Banking } from "@prisma/client";
 import { IconButton } from "@/app/components/atoms/common/IconButton";
+import Link from "next/link";
 
 const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
   MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
@@ -65,16 +66,22 @@ export function PaymentInfo() {
         {messages.payments[userPurchase?.paymentStatus || "CHECKING"]}
       </span>
 
-      <AuthenticationButton
-        authenticationForActionRequired
-        onClick={getBankingData}
-        disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
-        loading={isBankingDataLoading}
-      >
-        {userPurchase?.paymentStatus
-          ? "Хочу исправить ошибку в данных об оплате"
-          : "Получить данные для оплаты"}
-      </AuthenticationButton>
+      {userPurchase?.paymentStatus === "CONFIRMED" ? (
+        <Link className="text-purple font-semibold" href={"/account/purchases"}>
+          Перейти в личный кабинет
+        </Link>
+      ) : (
+        <AuthenticationButton
+          authenticationForActionRequired
+          onClick={getBankingData}
+          disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
+          loading={isBankingDataLoading}
+        >
+          {userPurchase?.paymentStatus === "CHECKING"
+            ? "Хочу исправить ошибку в отправленных данных об оплате"
+            : "Получить данные для оплаты"}
+        </AuthenticationButton>
+      )}
 
       <span
         className={clsx(

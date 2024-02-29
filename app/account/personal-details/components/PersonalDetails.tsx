@@ -38,8 +38,6 @@ const isPersonalDetailsChanged = ({
   userDataEmail,
   userDataFirstName,
 }: Params) => {
-  console.log({ email, userDataEmail, password, newPassword });
-
   if (!email && !firstName && !newPassword && !confirmNewPassword) {
     return false;
   }

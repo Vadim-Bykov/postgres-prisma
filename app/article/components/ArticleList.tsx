@@ -1,4 +1,4 @@
-import { formatGoogleDriveImageUrl } from "@/utils/formatiing";
+import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 import Image from "next/image";
 import Link from "next/link";
 import { ARTICLES, Article } from "../constants/articles";

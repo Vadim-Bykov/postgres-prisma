@@ -3,7 +3,7 @@ import {
   useGetUsersQuery,
   useRemoveUserMutation,
 } from "@/store/features/api/subApi/userApi";
-import { timeAgo } from "@/utils/formatiing";
+import { timeAgo } from "@/utils/formatting";
 import Image from "next/image";
 import Button from "../atoms/common/Button";
 

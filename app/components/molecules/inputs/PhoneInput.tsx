@@ -3,7 +3,7 @@ import {
   Props as InputProps,
 } from "@/app/components/atoms/common/Input";
 import messages from "@/app/constants/messages.json";
-import { leaveOnlyNumbers } from "@/utils/formatiing";
+import { leaveOnlyNumbers } from "@/utils/formatting";
 // import InputMask from "@mona-health/react-input-mask";
 import UsaFlagImage from "@public/images/flag-us.png";
 import Image from "next/image";
