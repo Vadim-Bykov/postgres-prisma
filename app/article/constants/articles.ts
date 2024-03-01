@@ -1,4 +1,4 @@
-interface ArticleParagraph {
+export interface ArticleParagraph {
   paragraphTitle?: string;
   paragraphSubTitle?: string;
   imageSourceId?: string;
@@ -18,8 +18,8 @@ export interface Article {
 export const ARTICLES: Article[] = [
   {
     id: 1,
-    title: "Заголовок",
-    subTitle: "Подзаголовок необязательный",
+    title: "Заголовок статьи",
+    subTitle: "Подзаголовок статьи необязательный",
     summary:
       "Краткое содержание статьи - первые пару предложений ......... В самом общем виде астрологию невозможно фальсифицировать, но некоторые отдельные утверждения астрологов поддаются проверке",
     imageSourceId: "1ZVn3kSYa6IAe7XZiEJrWzd_SZLjdTre7",

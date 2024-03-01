@@ -19,7 +19,7 @@ function ArticleCard({
     <>
       <div className={"flex flex-col lg:flex-row items-center gap-5"}>
         {imageSourceId && (
-          <div className="rounded-xl overflow-hidden min-w-[300px] w-full lg:w-1/3">
+          <div className="rounded-xl overflow-hidden min-w-[300px] w-full lg:w-[300px]">
             <Image
               src={formatGoogleDriveImageUrl(imageSourceId)}
               priority
@@ -27,7 +27,7 @@ function ArticleCard({
               height="0"
               sizes="100%"
               placeholder="empty"
-              className="self-center w-full h-full object-cover lg:w-fit"
+              className="self-center w-full h-full object-cover lg:w-[300px]"
               alt="Consultation related image"
             />
           </div>
