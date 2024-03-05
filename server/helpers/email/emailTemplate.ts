@@ -1,9 +1,13 @@
-import { src_1 } from "./src_1";
-import { src_2 } from "./src_2";
-import { src_3 } from "./src_3";
-import { src_4 } from "./src_4";
-import { src_5 } from "./src_5";
-import { INSTAGRAM_ACCOUNT } from "@/app/constants/socialConnections";
+import {
+  EMAIL_ADDRESS,
+  INSTAGRAM_ACCOUNT,
+  TELEGRAM_ACCOUNT,
+} from "@/app/constants/socialConnections";
+import { EMAIL_BASE_64 } from "./base64/email-base-64";
+import { INSTAGRAM_BASE_64 } from "./base64/instagram-base-64";
+import { TELEGRAM_BASE_64 } from "./base64/telegram-base-64";
+import { CONTENT_IMAGE_BASE_64 } from "./base64/email-top-content-image-64";
+import { LION_BASE_64 } from "./base64/lion-base-64";
 // TODO: it's better to upload images and set src= as https link to the storage instead of base64 (since gmail service doesn't work with base64 images)
 
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
@@ -148,7 +152,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="data:image/png;base64, ${src_5}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
+      <img align="center" border="0" src="${LION_BASE_64}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
@@ -164,7 +168,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <tr>
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:'Raleway',sans-serif;" align="left">
         
-  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 3px solid #ecf0f1;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
+  <table height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 0px solid transparent;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
     <tbody>
       <tr style="vertical-align: top">
         <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
@@ -315,48 +319,36 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 <div align="center">
   <div style="display: table; max-width:187px;">
   <!--[if (mso)|(IE)]><table width="187" cellpadding="0" cellspacing="0" border="0"><tr><td style="border-collapse:collapse;" align="center"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse; mso-table-lspace: 0pt;mso-table-rspace: 0pt; width:187px;"><tr><![endif]-->
-  
     
     <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
-    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px;margin-top: 2px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.facebook.com/unlayer" title="Facebook" target="_blank">
-          <img src="data:image/png;base64, ${src_2}" alt="Facebook" title="Facebook" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        <a href="mailto:${EMAIL_ADDRESS}" title="Email" target="_blank">
+          <img src="data:image/png;base64, ${EMAIL_BASE_64}" alt="Email" title="Email" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+        </a>
+      </td></tr>
+    </tbody></table>
+    <!--[if (mso)|(IE)]></td><![endif]-->
+
+    <!--[if (mso)|(IE)]><td width="36" style="width:36px; padding-right: 15px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="36" height="36" style="width: 36px !important;height: 36px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px;margin-bottom: 4px">
+      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
+        <a href=${TELEGRAM_ACCOUNT} title="Telegram" target="_blank">
+          <img src="data:image/png;base64, ${TELEGRAM_BASE_64}" alt="Telegram" title="Telegram" width="36" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 36px !important">
         </a>
       </td></tr>
     </tbody></table>
     <!--[if (mso)|(IE)]></td><![endif]-->
     
-    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
-    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
-      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://twitter.com/unlayerapp" title="Twitter" target="_blank">
-          <img src="data:image/png;base64, ${src_1}" alt="Twitter" title="Twitter" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
-        </a>
-      </td></tr>
-    </tbody></table>
-    <!--[if (mso)|(IE)]></td><![endif]-->
-    
-    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 15px;" valign="top"><![endif]-->
-    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 15px">
-      <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-        <a href="https://www.linkedin.com/in/tatsiana-bykava-4bba1124b/" title="LinkedIn" target="_blank">
-          <img src="data:image/png;base64, ${src_4}" alt="LinkedIn" title="LinkedIn" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
-        </a>
-      </td></tr>
-    </tbody></table>
-    <!--[if (mso)|(IE)]></td><![endif]-->
-    
-    <!--[if (mso)|(IE)]><td width="32" style="width:32px; padding-right: 0px;" valign="top"><![endif]-->
-    <table align="left" border="0" cellspacing="0" cellpadding="0" width="32" height="32" style="width: 32px !important;height: 32px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px">
+    <!--[if (mso)|(IE)]><td width="28" style="width:28px; padding-right: 0px;" valign="top"><![endif]-->
+    <table align="left" border="0" cellspacing="0" cellpadding="0" width="28" height="28" style="width: 28px !important;height: 28px !important;display: inline-block;border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;margin-right: 0px;margin-top: 4px">
       <tbody><tr style="vertical-align: top"><td align="left" valign="middle" style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
         <a href=${INSTAGRAM_ACCOUNT} title="Instagram" target="_blank">
-          <img src="data:image/png;base64, ${src_3}" alt="Instagram" title="Instagram" width="32" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 32px !important">
+          <img src="data:image/png;base64, ${INSTAGRAM_BASE_64}" alt="Instagram" title="Instagram" width="28" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: none;height: auto;float: none;max-width: 28px !important">
         </a>
       </td></tr>
     </tbody></table>
-    <!--[if (mso)|(IE)]></td><![endif]-->
-    
+    <!--[if (mso)|(IE)]></td><![endif]-->    
     
     <!--[if (mso)|(IE)]></tr></table></td></tr></table><![endif]-->
   </div>
