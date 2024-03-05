@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import messages from "@/app/constants/messages.json";
 import { OptionHTMLAttributes } from "react";
+import Link from "next/link";
 
 interface FormData {
   bankRecipientId: string;
@@ -22,7 +23,12 @@ interface FormData {
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const { id: consultationId } = useParams();
-  const { register, handleSubmit } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<FormData>();
 
   const { data: userPurchase } = useGetUserPurchaseQuery({
     consultationId: consultationId as string,
@@ -58,7 +64,10 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
 
   const onSubmit = handleSubmit(
     async ({ bankRecipientId, paymentNumber }: FormData) => {
-      if (bankRecipientId === "0") return;
+      if (bankRecipientId === "0") {
+        setError("bankRecipientId", { message: messages.validation.required });
+        return;
+      }
 
       const purchase: PurchaseBody = {
         bankRecipientId: +bankRecipientId,
@@ -88,6 +97,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         <InputSelect
           defaultValue={defaultBankValue}
           label="Банк получатель"
+          error={errors.bankRecipientId?.message}
           {...register("bankRecipientId")}
           options={[
             {
@@ -138,6 +148,15 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
           ]
         }
       </span>
+      <Link
+        className={clsx(
+          "text-purple font-semibold overflow-hidden",
+          isPurchased || isUpdated ? "max-h-28" : "max-h-0"
+        )}
+        href={"/account/purchases"}
+      >
+        Перейти в личный кабинет
+      </Link>
       <span
         className={clsx(
           "overflow-hidden text-pink",

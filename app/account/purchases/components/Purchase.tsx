@@ -33,6 +33,7 @@ export function PurchaseCardPlaceholder() {
 export function Purchase({
   consultation: {
     title,
+    subTitle,
     price,
     currency,
     createdAt,
@@ -59,7 +60,8 @@ export function Purchase({
         />
       </div>
       <div className="p-3 lg:self-center">
-        <h3 className="font-semibold">{title}</h3>
+        <h3 className="text-lg font-semibold">{title}</h3>
+        {subTitle && <p className="text-sm font-semibold">{subTitle}</p>}
         <p>{formatCurrencyAmount({ currency, price })}</p>
         <p className="text-sm">
           Оплата произведена - {/* @ts-ignore */}

@@ -32,29 +32,31 @@ export default function ResetPasswordPage({
   }, [isSuccess, goHome, isError]);
 
   return (
-    <Modal
-      className={{
-        base: clsx(
-          "p-10 lg:p-20 sm:w-[390px]",
-          "w-[70%] box-content overflow-hidden"
-        ),
-      }}
-      open={open}
-      withCloseIcon
-      onAfterClose={goHome}
-      onRequestClose={goHome}
-    >
-      <div className="flex flex-col basis-full gap-6 w-ful">
-        <div>
-          <h1 className="font-head text-3xl font-semibold mb-2">
-            Мы сбросили ваш пароль.
-          </h1>
-          <p>Войдите в аккаунт с паролем, который выслан на почту.</p>
+    <div className="min-h-[calc(100vh-68px-112px)] lg:min-h-[calc(100vh-88px-80px)]">
+      <Modal
+        className={{
+          base: clsx(
+            "p-10 lg:p-20 sm:w-[390px]",
+            "w-[70%] box-content overflow-hidden"
+          ),
+        }}
+        open={open}
+        withCloseIcon
+        onAfterClose={goHome}
+        onRequestClose={goHome}
+      >
+        <div className="flex flex-col basis-full gap-6 w-ful">
+          <div>
+            <h1 className="font-head text-3xl font-semibold mb-2">
+              Мы сбросили ваш пароль.
+            </h1>
+            <p>Войдите в аккаунт с паролем, который выслан на почту.</p>
+          </div>
+          <Button size="large" onClick={goHome}>
+            Понял
+          </Button>
         </div>
-        <Button size="large" onClick={goHome}>
-          Okay!
-        </Button>
-      </div>
-    </Modal>
+      </Modal>
+    </div>
   );
 }

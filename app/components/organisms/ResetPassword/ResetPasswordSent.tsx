@@ -21,7 +21,7 @@ export function ResetPasswordSent({ onButtonClick, style }: Props) {
       </div>
 
       <Button size="large" onClick={onButtonClick}>
-        Okay!
+        Понял
       </Button>
     </animated.div>
   );

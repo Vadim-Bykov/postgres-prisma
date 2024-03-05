@@ -1,4 +1,3 @@
-import messages from "@/app/constants/messages.json";
 import { src_1 } from "./src_1";
 import { src_2 } from "./src_2";
 import { src_3 } from "./src_3";
@@ -8,25 +7,17 @@ import { INSTAGRAM_ACCOUNT } from "@/app/constants/socialConnections";
 // TODO: it's better to upload images and set src= as https link to the storage instead of base64 (since gmail service doesn't work with base64 images)
 
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
-const API_URL = "https://pro-it-schhol.vercel.app/";
+const API_URL = "https://astrology-yin.vercel.app/";
 
-export const getPurchaseEmailHtml = ({
+export const getEmailHtml = ({
   name,
-  consultation,
-  isProvidedDataUpdate,
+  text,
+  extraMessage,
 }: {
   name: string;
-  consultation?: string;
-  isProvidedDataUpdate?: boolean;
+  text: string;
+  extraMessage?: string;
 }) => {
-  const text = isProvidedDataUpdate
-    ? `Вы обновили данные об оплате за консультацию${
-        consultation ? " на тему " + consultation : ""
-      }.`
-    : `Рады, что Вы обратились к нам за консультацией${
-        consultation ? " на тему " + consultation : ""
-      }.`;
-
   return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -232,7 +223,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
         
   <div style="font-size: 14px; line-height: 140%; text-align: center; word-wrap: break-word;">
     <p style="line-height: 140%;">${text}</p>
-    <p style="line-height: 140%;">${messages.payments.CHECKING}</p>
+    ${extraMessage ? `<p style="line-height: 140%;">${extraMessage}</p>` : ""}
   </div>
 
       </td>
@@ -416,8 +407,8 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   <!--[if (mso)|(IE)]><td style="padding:5px 15px"><![endif]-->
   
-    <a href="${API_URL}" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
-      О мне
+    <a href="${API_URL}account" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
+      Личный кабинет
     </a>
   
   <!--[if (mso)|(IE)]></td><![endif]-->

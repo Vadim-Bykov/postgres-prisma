@@ -1,15 +1,15 @@
 import nodemailer from "nodemailer";
-import { getRegistrationEmailHtml } from "../helpers/email/registrationEmail";
-import { getPurchaseEmailHtml } from "../helpers/email/purchaseEmail";
 import * as consultationService from "./consultationService";
 import { ApiError } from "../error/ApiError";
 import { BRAND_NAME_STRING } from "@/app/constants/brand";
+import { getEmailHtml } from "../helpers/email/emailTemplate";
 
 const SMTP_HOST = process.env.VERCEL_SMTP_HOST!;
 const SMTP_PORT = Number(process.env.VERCEL_SMTP_PORT)!;
 const SMTP_USER = process.env.VERCEL_SMTP_USER!;
 const SMTP_PASSWORD = process.env.VERCEL_SMTP_PASSWORD;
 const API_URL = process.env.VERCEL_URL!;
+import messages from "@/app/constants/messages.json";
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -36,14 +36,19 @@ export const sendActivationMail = async ({
     to: email,
     bcc: SMTP_USER,
     subject: `Регистрация на ${BRAND_NAME_STRING}`,
-    html: getRegistrationEmailHtml({ name }),
+    html: getEmailHtml({
+      name,
+      text: "Рады тебя видеть частью нашей большой команды интересующейся астрологией.",
+    }),
   });
 };
 
 export const sendResetPasswordLinkMail = async ({
+  name,
   link,
   email,
 }: {
+  name: string;
   link: string;
   email: string;
 }) => {
@@ -54,17 +59,17 @@ export const sendResetPasswordLinkMail = async ({
     to: email,
     bcc: SMTP_USER,
     subject: "Reset password link",
-    html: `
-         <div>
-            <h1>Hello ${email}!</h1>
-            <h3>You've requested to reset your password for ${email}!</h3>
-            <h2>To reset the password click the link: ${urlLink}</h2>
-            <h2>If you haven't requested to reset the password, do not click the link</h2>
-            <h2>After resetting, your password will be ${process.env
-              .VERCEL_DEFAULT_RESET_PASSWORD!}</h2>
-            <h2>You will be able to update this on your account page</h2>
-         </div>
-       `,
+    html: getEmailHtml({
+      name,
+      text: `
+        <p style="line-height: 140%;">Вы запросили сброс пароля в к вашему аккаунту ${email}!</p>
+         <p style="line-height: 140%;">Чтобы сбросить пароль нажмите на ссылку: ${urlLink}</p>
+         <p style="line-height: 140%;">Если вы не запрашивали сброс пароля - не нажимайте на ссылку выше</p>
+         <p style="line-height: 140%;">После сброса, ваш пароль будет ${process
+           .env.VERCEL_DEFAULT_RESET_PASSWORD!}</p>
+         <h2>Вы сможете сменить ваш пароль на странице своего профиля</h2>
+    `,
+    }),
   });
 };
 
@@ -84,15 +89,23 @@ export const sendCheckingPurchaseMail = async ({
       consultationId
     );
 
+    const text = isProvidedDataUpdate
+      ? `Вы обновили данные об оплате за консультацию${
+          consultation ? " на тему " + consultation.title : ""
+        }.`
+      : `Рады, что Вы обратились к нам за консультацией${
+          consultation ? " на тему " + consultation.title : ""
+        }.`;
+
     await transporter.sendMail({
       from: { address: SMTP_USER, name: BRAND_NAME_STRING },
       to: email,
       bcc: SMTP_USER,
       subject: "Проверка оплаты консультации",
-      html: getPurchaseEmailHtml({
+      html: getEmailHtml({
         name,
-        consultation: consultation?.title,
-        isProvidedDataUpdate,
+        text,
+        extraMessage: messages.payments.CHECKING,
       }),
     });
   } catch (error: any) {

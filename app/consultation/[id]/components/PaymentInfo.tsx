@@ -71,16 +71,28 @@ export function PaymentInfo() {
           Перейти в личный кабинет
         </Link>
       ) : (
-        <AuthenticationButton
-          authenticationForActionRequired
-          onClick={getBankingData}
-          disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
-          loading={isBankingDataLoading}
-        >
-          {userPurchase?.paymentStatus === "CHECKING"
-            ? "Хочу исправить ошибку в отправленных данных об оплате"
-            : "Получить данные для оплаты"}
-        </AuthenticationButton>
+        <>
+          {!!userPurchase?.paymentStatus && (
+            <Link
+              className="text-purple font-semibold"
+              href={"/account/purchases"}
+            >
+              Перейти в личный кабинет
+            </Link>
+          )}
+          <AuthenticationButton
+            authenticationForActionRequired
+            onClick={getBankingData}
+            disabled={
+              isBankingDataLoading || isUserPurchaseChecking || !!banking
+            }
+            loading={isBankingDataLoading}
+          >
+            {userPurchase?.paymentStatus === "CHECKING"
+              ? "Хочу исправить ошибку в отправленных данных об оплате"
+              : "Получить данные для оплаты"}
+          </AuthenticationButton>
+        </>
       )}
 
       <span

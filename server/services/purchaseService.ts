@@ -12,6 +12,7 @@ export const getAllUserPurchases = async () => {
 
     const purchases = await prisma.purchase.findMany({
       where: { userId: userData.id },
+      orderBy: { createdAt: "desc" },
       include: { consultation: true },
     });
 

@@ -187,6 +187,7 @@ export const getResetPasswordLink = async (email: string) => {
     }
 
     await mailService.sendResetPasswordLinkMail({
+      name: user.name,
       email,
       link: resetPasswordLink,
     });
