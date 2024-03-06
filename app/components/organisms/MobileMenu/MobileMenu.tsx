@@ -1,12 +1,13 @@
-import clsx from "clsx";
-import { useEffect, useState } from "react";
-import { MobileNavbar } from "./MobileNavbar";
-import { UserBadge } from "../../molecules/header/UserBadge";
-import { BurgerMenuButton } from "./BurgerMenuButton";
-import { NavbarItem } from "../Header";
-import { useAppPathname } from "@/utils/useAppRouter";
 import { BRAND_NAME } from "@/app/constants/brand";
+import { useAppPathname } from "@/utils/useAppRouter";
+import clsx from "clsx";
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { UserBadge } from "../../molecules/header/UserBadge";
+import { NavbarItem } from "../Header";
+import { BurgerMenuButton } from "./BurgerMenuButton";
+import { MobileNavbar } from "./MobileNavbar";
 
 export const BURGER_TRANSITION_CLASSNAMES = "ease-in duration-300";
 
@@ -47,14 +48,14 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
       <div className="absolute w-[calc(100vw-20px)] h-[68px] flex justify-between items-center text-center gap-5 pl-5">
         <BurgerMenuButton isOpen={isOpen} onClick={toggleMenu} />
 
-        <div className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <h1 className="text-3xl">{BRAND_NAME}</h1>
           <Image
             src={require("@/public/lion.svg")}
             className="w-11 h-10"
             alt="Lion image"
           />
-        </div>
+        </Link>
       </div>
 
       <section
