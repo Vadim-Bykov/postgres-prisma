@@ -39,6 +39,7 @@ export const sendActivationMail = async ({
     html: getEmailHtml({
       name,
       text: "Рады тебя видеть частью нашей большой команды интересующейся астрологией.",
+      emailPurpose: "REGISTRATION",
     }),
   });
 };
@@ -69,6 +70,7 @@ export const sendResetPasswordLinkMail = async ({
            .env.VERCEL_DEFAULT_RESET_PASSWORD!}</p>
          <h2>Вы сможете сменить ваш пароль на странице своего профиля</h2>
     `,
+      emailPurpose: "PASSWORD_RESET",
     }),
   });
 };
@@ -91,10 +93,14 @@ export const sendCheckingPurchaseMail = async ({
 
     const text = isProvidedDataUpdate
       ? `Вы обновили данные об оплате за консультацию${
-          consultation ? " на тему " + consultation.title : ""
+          consultation
+            ? " на тему " + consultation.subTitle || consultation.title
+            : ""
         }.`
       : `Рады, что Вы обратились к нам за консультацией${
-          consultation ? " на тему " + consultation.title : ""
+          consultation
+            ? " на тему " + consultation.subTitle || consultation.title
+            : ""
         }.`;
 
     await transporter.sendMail({
@@ -106,6 +112,7 @@ export const sendCheckingPurchaseMail = async ({
         name,
         text,
         extraMessage: messages.payments.CHECKING,
+        emailPurpose: "PURCHASE",
       }),
     });
   } catch (error: any) {

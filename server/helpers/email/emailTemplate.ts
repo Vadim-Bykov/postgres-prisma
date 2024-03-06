@@ -13,14 +13,25 @@ import { LION_BASE_64 } from "./base64/lion-base-64";
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
 const API_URL = "https://astrology-yin.vercel.app/";
 
+type EmailPurpose = "REGISTRATION" | "PURCHASE" | "NEWS" | "PASSWORD_RESET";
+
+const CONTENT_IMAGE: { [key in EmailPurpose]: string } = {
+  REGISTRATION: CONTENT_IMAGE_BASE_64,
+  PURCHASE: CONTENT_IMAGE_BASE_64,
+  NEWS: LION_BASE_64,
+  PASSWORD_RESET: LION_BASE_64,
+};
+
 export const getEmailHtml = ({
   name,
   text,
   extraMessage,
+  emailPurpose = "NEWS",
 }: {
   name: string;
   text: string;
   extraMessage?: string;
+  emailPurpose: EmailPurpose;
 }) => {
   return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -152,7 +163,9 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
   <tr>
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="${LION_BASE_64}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
+      <img align="center" border="0" src="${[
+        CONTENT_IMAGE[emailPurpose],
+      ]}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
       
     </td>
   </tr>
