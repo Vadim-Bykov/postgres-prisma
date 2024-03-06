@@ -2,8 +2,14 @@
 
 import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
+import clsx from "clsx";
 import { useParams } from "next/navigation";
-import { ARTICLES, ArticleParagraph } from "../../constants/articles";
+import {
+  ARTICLES,
+  ArticleParagraph,
+  colorVariants,
+} from "../../constants/articles";
+import { ParagraphList } from "./ParagraphList";
 
 export function ArticleContent() {
   const { id } = useParams();
@@ -30,8 +36,11 @@ export function ArticleContent() {
         </div>
 
         <div className="flex flex-col gap-4 lg:gap-5">
-          {paragraphs.map((paragraph) => (
-            <ArticleParagraphComponent key={paragraph.text} {...paragraph} />
+          {paragraphs.map((paragraph, index) => (
+            <ArticleParagraphComponent
+              key={`${paragraph.text}-${index}`}
+              {...paragraph}
+            />
           ))}
         </div>
 
@@ -50,9 +59,16 @@ function ArticleParagraphComponent({
   paragraphTitle,
   paragraphSubTitle,
   imageSourceId: paragraphImageSourceId,
+  backgroundColor,
+  list,
 }: ArticleParagraph) {
   return (
-    <div className="flex flex-col gap-1 lg:gap-2">
+    <div
+      className={clsx(
+        "flex flex-col gap-1 lg:gap-2 rounded-3xl",
+        backgroundColor && `${colorVariants[backgroundColor]} p-5`
+      )}
+    >
       <div>
         {paragraphTitle && (
           <p className="font-semibold italic">{paragraphTitle}</p>
@@ -72,10 +88,14 @@ function ArticleParagraphComponent({
             className="self-center w-full lg:w-1/3"
             alt="Article related image"
           />
-          <p className="indent-3 lg:indent-0 text-justify">{text}</p>
+          {text && <p className="indent-3 lg:indent-0 text-justify">{text}</p>}
+          {list && <ParagraphList {...list} />}
         </div>
       ) : (
-        <p className="indent-3 text-justify">{text}</p>
+        <>
+          {text && <p className="indent-3 text-justify">{text}</p>}
+          {list && <ParagraphList {...list} />}
+        </>
       )}
     </div>
   );

@@ -1,8 +1,38 @@
+export type ColorVariant =
+  | "purple-dark"
+  | "purple-light"
+  | "purple"
+  | "white"
+  | "pink"
+  | "yellow"
+  | "gray"
+  | "red"
+  | "green";
+
+export const colorVariants: Record<ColorVariant, string> = {
+  "purple-dark": "bg-purple-dark",
+  "purple-light": "bg-purple-light",
+  purple: "bg-purple",
+  white: "bg-white",
+  pink: "bg-pink",
+  yellow: "bg-yellow",
+  gray: "bg-gray",
+  red: "bg-red",
+  green: "bg-[#02C57E]",
+};
+
+export interface ParagraphList {
+  listTitle: string;
+  listItems: string[];
+  numericList?: boolean;
+}
 export interface ArticleParagraph {
   paragraphTitle?: string;
   paragraphSubTitle?: string;
   imageSourceId?: string;
   text: string;
+  list?: ParagraphList;
+  backgroundColor?: ColorVariant;
 }
 
 export interface Article {
@@ -29,6 +59,12 @@ export const ARTICLES: Article[] = [
         paragraphTitle: "",
         paragraphSubTitle: "",
         imageSourceId: "",
+        backgroundColor: "green",
+        list: {
+          listTitle: "",
+          numericList: true,
+          listItems: ["", "", ""],
+        },
       },
       {
         text: "",
