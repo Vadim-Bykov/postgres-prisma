@@ -22,6 +22,9 @@ export const authMiddleware = async (req: NextRequest) => {
       return userData;
     }
   } catch (error: any) {
-    return ApiError.internal("Some internal error occurred in auth", error);
+    return ApiError.internal(
+      "Произошла внутрення ошибка системы на уровне авторизации",
+      error
+    );
   }
 };

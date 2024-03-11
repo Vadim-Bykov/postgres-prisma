@@ -1,6 +1,4 @@
-import prisma from "@/lib/prisma";
 import { ApiError } from "@/server/error/ApiError";
-import { removeTokensFromCookies } from "@/server/services/cookieService";
 import * as purchaseService from "@/server/services/purchaseService";
 import { NextResponse } from "next/server";
 
@@ -20,7 +18,10 @@ export async function GET(
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Get user data error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении покупки пользователя",
+        error
+      );
     }
   }
 }

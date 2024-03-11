@@ -8,7 +8,7 @@ export async function PUT(request: NextRequest) {
     const refreshToken = cookieService.getTokensFromCookies();
 
     if (!refreshToken) {
-      return ApiError.badRequest("User has already unauthorized");
+      return ApiError.unauthorized();
     }
 
     cookieService.removeTokensFromCookies();
@@ -20,7 +20,10 @@ export async function PUT(request: NextRequest) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Logout error", error);
+      return ApiError.badRequest(
+        "Ошибка при выходе из аккаунта пользователя",
+        error
+      );
     }
   }
 }

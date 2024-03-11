@@ -19,7 +19,10 @@ export async function POST(request: NextRequest) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Login error", error);
+      return ApiError.badRequest(
+        "Ошибка при входе в аккаунт пользователя",
+        error
+      );
     }
   }
 }

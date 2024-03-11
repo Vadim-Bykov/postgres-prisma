@@ -28,8 +28,6 @@ export function ResetPasswordForm({
 }: Props) {
   const [processingRequest, setProcessingRequest] = useState(false);
 
-  // const [checkEmailStatus] = useCheckEmailStatusMutation();
-
   const [resetPassword, { isError, error }] = useResetPasswordMutation<{
     isError: boolean;
     error?: { data: { message: string; success: boolean } };
@@ -37,13 +35,10 @@ export function ResetPasswordForm({
 
   const defaultValues = useMemo(() => ({ email }), [email]);
 
-  // const [sendRecoveryEmail] = useSendRecoveryEmailMutation();
-
   const {
     register,
     reset,
     handleSubmit,
-    setError,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues,
@@ -55,25 +50,7 @@ export function ResetPasswordForm({
     try {
       setProcessingRequest(true);
       await resetPassword({ email: trimmedEmail }).unwrap();
-
-      // const emailStatusData = await checkEmailStatus({
-      //   email: trimmedEmail,
-      // }).unwrap();
-
-      // if (emailStatusData.emailStatus === "NEVER_USED") {
-      //   setError("email", {
-      //     type: "custom",
-      //     message: messages.registration.emailNeverUsed,
-      //   });
-      // } else if (emailStatusData.emailStatus === "BLACKLISTED") {
-      //   setError("email", {
-      //     type: "custom",
-      //     message: messages.registration.emailBlacklisted,
-      //   });
-      // } else {
-      //   await sendRecoveryEmail({ email: trimmedEmail }).unwrap();
       onRequestResetLink();
-      // }
     } finally {
       setProcessingRequest(false);
     }

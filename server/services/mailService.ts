@@ -53,26 +53,33 @@ export const sendResetPasswordLinkMail = async ({
   link: string;
   email: string;
 }) => {
-  const urlLink = `${API_URL}/reset-password/${link}`;
+  try {
+    const urlLink = `${API_URL}/reset-password/${link}`;
 
-  await transporter.sendMail({
-    from: { address: SMTP_USER, name: BRAND_NAME_STRING },
-    to: email,
-    bcc: SMTP_USER,
-    subject: "Reset password link",
-    html: getEmailHtml({
-      name,
-      text: `
-        <p style="line-height: 140%;">Вы запросили сброс пароля в к вашему аккаунту ${email}!</p>
-         <p style="line-height: 140%;">Чтобы сбросить пароль нажмите на ссылку: ${urlLink}</p>
-         <p style="line-height: 140%;">Если вы не запрашивали сброс пароля - не нажимайте на ссылку выше</p>
-         <p style="line-height: 140%;">После сброса, ваш пароль будет ${process
-           .env.VERCEL_DEFAULT_RESET_PASSWORD!}</p>
-         <h2>Вы сможете сменить ваш пароль на странице своего профиля</h2>
-    `,
-      emailPurpose: "PASSWORD_RESET",
-    }),
-  });
+    await transporter.sendMail({
+      from: { address: SMTP_USER, name: BRAND_NAME_STRING },
+      to: email,
+      bcc: SMTP_USER,
+      subject: "Reset password link",
+      html: getEmailHtml({
+        name,
+        text: `
+          <p style="line-height: 140%;">Вы запросили сброс пароля в к вашему аккаунту ${email}!</p>
+           <p style="line-height: 140%;">Чтобы сбросить пароль нажмите на ссылку: ${urlLink}</p>
+           <p style="line-height: 140%;">Если вы не запрашивали сброс пароля - не нажимайте на ссылку выше</p>
+           <p style="line-height: 140%;">После сброса, ваш пароль будет ${process
+             .env.VERCEL_DEFAULT_RESET_PASSWORD!}</p>
+           <h2>Вы сможете сменить ваш пароль на странице своего профиля</h2>
+      `,
+        emailPurpose: "PASSWORD_RESET",
+      }),
+    });
+  } catch (error) {
+    throw ApiError.badRequest(
+      "Ошибка при отправке и-мэйла со ссылкой для сброса пароля",
+      error
+    );
+  }
 };
 
 export const sendCheckingPurchaseMail = async ({
@@ -116,6 +123,6 @@ export const sendCheckingPurchaseMail = async ({
       }),
     });
   } catch (error: any) {
-    throw ApiError.badRequest("Sending email error", error);
+    throw ApiError.badRequest("Ошибка при отправке и-мэйла", error);
   }
 };

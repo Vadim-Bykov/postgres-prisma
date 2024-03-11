@@ -18,7 +18,7 @@ export async function GET(
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Get consultation data error", error);
+      throw ApiError.badRequest("Ошибка при получении консультации", error);
     }
   }
 }
@@ -37,7 +37,7 @@ export async function PATCH(
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Delete consultation error", error);
+      throw ApiError.badRequest("Ошибка при удалении консультации", error);
     }
   }
 }

@@ -12,7 +12,10 @@ export async function GET() {
 
     return NextResponse.json(users);
   } catch (error) {
-    Promise.reject(error);
+    return ApiError.badRequest(
+      "Ошибка при получении данных пользователей",
+      error
+    );
   }
 }
 
@@ -30,7 +33,7 @@ export async function POST(request: Request) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Registration error", error);
+      return ApiError.badRequest("Ошибка при регистрации пользователя", error);
     }
   }
 }
@@ -49,7 +52,10 @@ export async function PATCH(request: Request) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Purchase update error", error);
+      return ApiError.badRequest(
+        "Ошибка при обновлении данных пользователя",
+        error
+      );
     }
   }
 }

@@ -13,7 +13,10 @@ export async function GET() {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Get banking data error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении банковских данных",
+        error
+      );
     }
   }
 }

@@ -21,7 +21,10 @@ export const getAllUserPurchases = async () => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("getAllUserPurchases error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении покупок пользователя из базы",
+        error
+      );
     }
   }
 };
@@ -72,7 +75,10 @@ export const createPurchase = async ({
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("createPurchase error", error);
+      throw ApiError.badRequest(
+        "Ошибка при создании покупки пользователя в базе",
+        error
+      );
     }
   }
 };
@@ -91,7 +97,10 @@ export const getUserPurchase = async (consultationId: number) => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("getUserPurchase error", error);
+      throw ApiError.badRequest(
+        "Ошибка при обновлении данных покупки пользователя из базы",
+        error
+      );
     }
   }
 };
@@ -154,7 +163,10 @@ export const updateUserPurchase = async ({
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("updateUserPurchase error", error);
+      throw ApiError.badRequest(
+        "Ошибка при обновлении данных покупки пользователя в базе",
+        error
+      );
     }
   }
 };

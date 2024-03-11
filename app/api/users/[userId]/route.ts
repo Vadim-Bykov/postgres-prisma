@@ -20,7 +20,10 @@ export async function GET(
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Get user data error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении данных пользователя",
+        error
+      );
     }
   }
 }
@@ -42,7 +45,7 @@ export async function DELETE(
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Delete user error", error);
+      throw ApiError.badRequest("Ошибка при удалении пользователя", error);
     }
   }
 }

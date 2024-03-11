@@ -19,7 +19,7 @@ export class ApiError extends Error {
     // return new ApiError(400, message, error);
   }
 
-  static internal(message = "Some internal error occurred", error?: any) {
+  static internal(message = "Произошла внутрення ошибка системы", error?: any) {
     return NextResponse.json(
       { success: false, message, error: { ...error, message: error?.message } },
       { status: 500 }
@@ -34,7 +34,11 @@ export class ApiError extends Error {
 
   static unauthorized() {
     return NextResponse.json(
-      { success: false, message: "User is unauthorized" },
+      {
+        success: false,
+        message:
+          "Пользователь не авторизован. Войдите в свой аккаунт, используя адрес электронной почты и пароль.",
+      },
       { status: 401 }
     );
     // return new ApiError(401, 'User is unauthorized');

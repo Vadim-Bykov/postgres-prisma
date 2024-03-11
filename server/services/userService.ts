@@ -74,7 +74,10 @@ UserCreationBody) => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("Registration error", error);
+      throw ApiError.badRequest(
+        "Ошибка при регистрации пользователя в базе",
+        error
+      );
     }
   }
 };
@@ -106,7 +109,10 @@ export const login = async ({ email, password }: UserLoginBody) => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("Login error", error);
+      throw ApiError.badRequest(
+        "Ошибка в базе при входе в аккаунт пользователя",
+        error
+      );
     }
   }
 };
@@ -120,7 +126,10 @@ export const logout = async (refreshToken: string) => {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Logout error", error);
+      throw ApiError.badRequest(
+        "Ошибка в базе при выходе из аккаунта пользователя",
+        error
+      );
     }
   }
 };
@@ -131,7 +140,10 @@ export const getAllUsers = async () => {
 
     return users.map((user) => getUserDto(user));
   } catch (error) {
-    throw ApiError.badRequest("getAllUsers error", error);
+    throw ApiError.badRequest(
+      "Ошибка при получении данных пользователей из базы.",
+      error
+    );
   }
 };
 
@@ -141,7 +153,10 @@ export const getUser = async (userId: number) => {
 
     return user;
   } catch (error) {
-    throw ApiError.badRequest("Get User error", error);
+    throw ApiError.badRequest(
+      "Ошибка при получении данных пользователя из базы",
+      error
+    );
   }
 };
 
@@ -152,7 +167,7 @@ export const deleteUser = async (userId: number) => {
 
     return userDto;
   } catch (error) {
-    throw ApiError.badRequest("Remove User error", error);
+    throw ApiError.badRequest("Ошибка при удалении пользователя в базе", error);
   }
 };
 
@@ -164,7 +179,9 @@ export const getResetPasswordLink = async (email: string) => {
     const user = await prisma.users.findUnique({ where: { email } });
 
     if (!user) {
-      throw ApiError.badRequest(`User with email ${email} doesn't exist`);
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${email} не зарегистрирован в базе`
+      );
     }
 
     const previousLinkData = await prisma.passwordResetLink.findUnique({
@@ -197,7 +214,10 @@ export const getResetPasswordLink = async (email: string) => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("Getting reset password link error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении ссылки для сброса пароля",
+        error
+      );
     }
   }
 };
@@ -209,11 +229,11 @@ export const resetUserPassword = async (link: string) => {
     });
 
     if (!resetLinkData) {
-      throw ApiError.badRequest("Link is incorrect");
+      throw ApiError.badRequest("Не корректная ссылка");
     }
 
     if (resetLinkData.state === "USED") {
-      throw ApiError.badRequest("The password has already been reset!");
+      throw ApiError.badRequest("Пароль уже был сброшен ранее");
     }
 
     const hashPassword = await bcrypt.hash(
@@ -240,7 +260,10 @@ export const resetUserPassword = async (link: string) => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("Reset User password", error);
+      throw ApiError.badRequest(
+        "Ошибка в базе при сбросе пароля пользователя",
+        error
+      );
     }
   }
 };
@@ -313,7 +336,10 @@ export const updateUserPersonalData = async ({
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("updateUserPersonalData error", error);
+      throw ApiError.badRequest(
+        "Ошибка при обновлении данных пользователя в базе",
+        error
+      );
     }
   }
 };

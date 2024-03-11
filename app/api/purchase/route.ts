@@ -14,7 +14,10 @@ export async function POST(request: Request) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Purchase creation error", error);
+      return ApiError.badRequest(
+        "Ошибка при создании покупки пользователя",
+        error
+      );
     }
   }
 }
@@ -28,7 +31,10 @@ export async function GET() {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Getting all user purchases error", error);
+      return ApiError.badRequest(
+        "Ошибка при получении покупок пользователя",
+        error
+      );
     }
   }
 }
@@ -44,7 +50,10 @@ export async function PATCH(request: Request) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Purchase update error", error);
+      return ApiError.badRequest(
+        "Ошибка при обновлении данных покупки пользователя",
+        error
+      );
     }
   }
 }

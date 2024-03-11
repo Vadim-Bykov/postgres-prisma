@@ -71,7 +71,7 @@ export function PersonalDetails() {
   const [formError, setFormError] = useState("");
   const [showFormError, setShowFormError] = useState(false);
 
-  const [updateUserPersonalData, { isLoading: isUserCreating, error }] =
+  const [updateUserPersonalData, { isLoading: isUserCreating }] =
     useUpdateUserPersonalDataMutation();
   const [showPasswordConfirmationError, setShowPasswordConfirmationError] =
     useState(false);

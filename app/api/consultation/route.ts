@@ -13,7 +13,7 @@ export async function GET() {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      throw ApiError.badRequest("Get all consultations data error", error);
+      throw ApiError.badRequest("Ошибка при получении консультаций", error);
     }
   }
 }

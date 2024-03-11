@@ -10,7 +10,7 @@ export const getBankingData = async () => {
     const refreshToken = cookieService.getTokensFromCookies();
 
     if (!refreshToken) {
-      throw ApiError.badRequest("No refreshToken in Banking request");
+      throw ApiError.unauthorized();
     }
     const userData = await tokenService.validateRefreshToken(refreshToken);
 
@@ -23,7 +23,7 @@ export const getBankingData = async () => {
 
     if (!user) {
       throw ApiError.badRequest(
-        `User with email ${userData.email} doesn't exist`
+        `Пользователь с адресом эл.почты ${userData.email} не зарегистрирован в базе`
       );
     }
 
@@ -41,7 +41,10 @@ export const getBankingData = async () => {
     if (error instanceof NextResponse) {
       throw error;
     } else {
-      throw ApiError.badRequest("getBankingData error", error);
+      throw ApiError.badRequest(
+        "Ошибка при получении банковских данных",
+        error
+      );
     }
   }
 };

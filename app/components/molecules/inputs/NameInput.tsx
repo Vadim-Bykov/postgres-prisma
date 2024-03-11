@@ -23,6 +23,12 @@ export function NameInput({ variant, register, ...props }: Props) {
       {...props}
       {...register(variant, {
         required: messages.validation.required,
+        pattern: {
+          value: NAME_REGEX,
+          message: firstName
+            ? messages.validation.firstName
+            : messages.validation.lastName,
+        },
       })}
     />
   );

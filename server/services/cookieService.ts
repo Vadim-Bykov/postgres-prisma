@@ -36,7 +36,7 @@ export const getUserDataFromCookies = async () => {
   const refreshToken = getTokensFromCookies();
 
   if (!refreshToken) {
-    throw ApiError.badRequest("No refreshToken in Purchase request");
+    throw ApiError.unauthorized();
   }
   const userData = await tokenService.validateRefreshToken(refreshToken);
 

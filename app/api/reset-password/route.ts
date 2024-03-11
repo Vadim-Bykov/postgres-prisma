@@ -15,14 +15,17 @@ export async function PATCH(request: NextRequest) {
       await userService.getResetPasswordLink(email);
 
     return NextResponse.json({
-      message: "Link to reset password is sent",
+      message: "Ссылка для сброса пароля отправлена на эл.почту",
       ...passwordData,
     });
   } catch (error) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Reset password request error", error);
+      return ApiError.badRequest(
+        "Ошибка при запросе на сброс пароля пользователя",
+        error
+      );
     }
   }
 }

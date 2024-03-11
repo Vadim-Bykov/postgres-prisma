@@ -10,7 +10,10 @@ export const getAllConsultations = async () => {
 
     return consultations;
   } catch (error) {
-    throw ApiError.badRequest("getAllConsultations error", error);
+    throw ApiError.badRequest(
+      "Ошибка при получении данных консультаций",
+      error
+    );
   }
 };
 
@@ -22,7 +25,10 @@ export const getConsultation = async (id: number) => {
 
     return consultation;
   } catch (error) {
-    throw ApiError.badRequest("getConsultation error", error);
+    throw ApiError.badRequest(
+      "Ошибка при получении данных консультации",
+      error
+    );
   }
 };
 

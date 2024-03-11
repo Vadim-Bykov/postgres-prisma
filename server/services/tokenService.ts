@@ -69,7 +69,7 @@ export const validateRefreshToken = async (refreshToken: string) => {
     if (error.code === "ERR_JWT_EXPIRED") {
       removeRefreshToken(refreshToken);
     }
-    throw ApiError.badRequest("Your token has expired.", error);
+    throw ApiError.unauthorized();
   }
 };
 
@@ -78,7 +78,7 @@ export const removeRefreshToken = async (refreshToken: string) => {
     const tokenData = await prisma.token.delete({ where: { refreshToken } });
 
     if (!tokenData) {
-      return { warning: `This user was logged out earlier` };
+      return { warning: "Пользователь уже вышел из аккаунта" };
     }
 
     return tokenData;
@@ -92,7 +92,7 @@ export const removeAllRefreshToken = async (userId: number) => {
     const tokenData = await prisma.token.deleteMany({ where: { userId } });
 
     if (!tokenData) {
-      return { warning: `This user was logged out earlier` };
+      return { warning: "Пользователь уже вышел из аккаунта" };
     }
 
     return { numberOfRemovedTokens: tokenData.count };
@@ -109,7 +109,7 @@ export const findRefreshToken = async (refreshToken: string) => {
 
     return tokenData;
   } catch (error: any) {
-    throw ApiError.badRequest(error?.message, error);
+    throw ApiError.badRequest("Авторизационный токен не найден в базе.", error);
   }
 };
 
@@ -122,22 +122,26 @@ export const updateRefreshToken = async ({
   newRefreshToken: string;
   oldRefreshToken?: string;
 }) => {
-  const tokenData = oldRefreshToken
-    ? await findRefreshToken(oldRefreshToken)
-    : await findRefreshTokenByUserId(userId);
+  try {
+    const tokenData = oldRefreshToken
+      ? await findRefreshToken(oldRefreshToken)
+      : await findRefreshTokenByUserId(userId);
 
-  if (tokenData) {
-    const updatedTokenData = await prisma.token.update({
-      where: { refreshToken: tokenData.refreshToken },
-      data: { refreshToken: newRefreshToken },
-    });
+    if (tokenData) {
+      const updatedTokenData = await prisma.token.update({
+        where: { refreshToken: tokenData.refreshToken },
+        data: { refreshToken: newRefreshToken },
+      });
 
-    return updatedTokenData;
-  } else {
-    const createdTokenData = await prisma.token.create({
-      data: { refreshToken: newRefreshToken, userId },
-    });
-    return createdTokenData;
+      return updatedTokenData;
+    } else {
+      const createdTokenData = await prisma.token.create({
+        data: { refreshToken: newRefreshToken, userId },
+      });
+      return createdTokenData;
+    }
+  } catch (error) {
+    throw ApiError.badRequest("Ошибка при обновлении токена в базе.", error);
   }
 };
 
@@ -149,7 +153,7 @@ export const findRefreshTokenByUserId = async (userId: number) => {
 
     return tokenData;
   } catch (error: any) {
-    throw ApiError.badRequest(error?.message, error);
+    throw ApiError.badRequest("Ошибка при поиске токена в базе.", error);
   }
 };
 
@@ -181,6 +185,6 @@ export const compareRefreshTokenWithSavedInDb = async (
 
     return false;
   } catch (error: any) {
-    throw ApiError.badRequest(error?.message, error);
+    throw ApiError.badRequest("Ошибка при валидации токена в базе.", error);
   }
 };

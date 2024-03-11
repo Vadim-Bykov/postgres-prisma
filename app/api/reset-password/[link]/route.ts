@@ -1,9 +1,6 @@
-import { User } from "@/models/users";
 import { ApiError } from "@/server/error/ApiError";
 import * as userService from "@/server/services/userService";
-import { NextRequest, NextResponse } from "next/server";
-
-const url = process.env.VERCEL_URL!;
+import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
@@ -14,13 +11,15 @@ export async function GET(
 
     const passwordData = await userService.resetUserPassword(link);
 
-    // return NextResponse.redirect(url);
     return NextResponse.json(passwordData);
   } catch (error) {
     if (error instanceof NextResponse) {
       return error;
     } else {
-      return ApiError.badRequest("Reset link request error", error);
+      return ApiError.badRequest(
+        "Ошибка при сбросе пароля пользователя",
+        error
+      );
     }
   }
 }
