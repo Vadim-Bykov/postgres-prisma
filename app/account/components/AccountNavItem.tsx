@@ -41,18 +41,22 @@ export function LogoutNavItem({ isTablet }: { isTablet?: boolean }) {
   };
   return (
     <div
-      className={clsx("flex flex-col", !isTablet && "flex-grow justify-end")}
+      className={clsx(
+        "flex flex-col text-red",
+        !isTablet && "flex-grow justify-end"
+      )}
     >
       <button className="flex gap-3 items-center" onClick={openLogoutModal}>
-        <Icon inline name="account/logout-box-r-line.svg" className="top-px" />
-        <span>Log out</span>
+        <Icon
+          inline
+          name="account/logout-box-r-line.svg"
+          className="top-px"
+          color="red"
+        />
+        <span>Выйти из аккаунта</span>
         {isTablet && (
           <span className="flex flex-grow justify-end">
-            <Icon
-              name="arrow-right-s-line.svg"
-              size={24}
-              color="purple-light"
-            />
+            <Icon name="arrow-right-s-line.svg" size={24} color="red" />
           </span>
         )}
       </button>
