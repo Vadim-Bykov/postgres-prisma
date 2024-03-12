@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/store/store";
 import { toggleLogoutModal } from "@/store/authentication";
 
 interface NavItemProps extends AccountNavItem {
+  isActive: boolean;
   isTablet?: boolean;
 }
 
@@ -15,12 +16,16 @@ export function NavItem({
   href,
   target,
   isTablet,
+  isActive,
 }: NavItemProps) {
   return (
     <Link
       href={href}
       target={target}
-      className="flex gap-3 items-center relative"
+      className={clsx(
+        "flex gap-3 items-center relative px-6 py-2 rounded-[10px]",
+        isActive && "bg-gray-light"
+      )}
     >
       <Icon name={iconSource} className="relative top-px" />
       <span>{text}</span>
@@ -42,7 +47,7 @@ export function LogoutNavItem({ isTablet }: { isTablet?: boolean }) {
   return (
     <div
       className={clsx(
-        "flex flex-col text-red",
+        "flex flex-col text-red px-6 py-2",
         !isTablet && "flex-grow justify-end"
       )}
     >

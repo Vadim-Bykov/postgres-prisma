@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { LogoutNavItem, NavItem } from "./AccountNavItem";
-import { Pathname } from "@/utils/useAppRouter";
+import { Pathname, useAppPathname } from "@/utils/useAppRouter";
 
 export interface AccountNavItem {
   text: string;
@@ -38,17 +38,32 @@ export function AccountNavigation({
 }: {
   isTablet?: boolean;
 }) {
+  const pathname = useAppPathname();
+
   return (
     <nav
-      className={clsx(
-        "flex flex-col flex-grow gap-4",
-        isTablet && "w-full max-w-lg"
-      )}
+      className={clsx("flex flex-col flex-grow", isTablet && "w-full max-w-lg")}
     >
-      <NavItem isTablet={isTablet} {...ACCOUNT_NAV_ITEMS[0]} />
-      <NavItem isTablet={isTablet} {...ACCOUNT_NAV_ITEMS[1]} />
-      <NavItem isTablet={isTablet} {...ACCOUNT_NAV_ITEMS[2]} />
-      <NavItem isTablet={isTablet} {...ACCOUNT_NAV_ITEMS[3]} />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[0]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[0].href}
+      />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[1]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[1].href}
+      />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[2]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[2].href}
+      />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[3]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[3].href}
+      />
       <LogoutNavItem isTablet={isTablet} />
     </nav>
   );
