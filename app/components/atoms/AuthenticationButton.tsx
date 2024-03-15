@@ -11,7 +11,7 @@ interface Props extends ButtonProps {
 }
 
 export function AuthenticationButton({
-  children = "Log in / Sign up",
+  children = "Войти",
   authenticationForActionRequired,
   onClick,
   disabled,

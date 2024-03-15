@@ -52,7 +52,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   const [showPasswordConfirmationError, setShowPasswordConfirmationError] =
     useState(false);
   const password = watch("password");
-  const { location } = useAppSelector((state) => state.user);
+  const location = useAppSelector((state) => state.user.currentLocation);
 
   const onSubmit = handleSubmit(async ({ email, firstName, password }) => {
     try {
