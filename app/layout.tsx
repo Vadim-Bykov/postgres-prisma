@@ -3,13 +3,13 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
+import { BRAND_NAME_STRING } from "./constants/brand";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://postgres-prisma.vercel.app"),
-  title: "Vercel Postgres Demo with Prisma",
-  description:
-    "A simple Next.js app with Vercel Postgres as the database and Prisma as the ORM",
+  title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,
+  description: "Я помогу Вам найти себя в этой жизни",
   themeColor: "#141024",
+  keywords: "астрология, прогнозирование, помощь",
 };
 
 const inter = Inter({
