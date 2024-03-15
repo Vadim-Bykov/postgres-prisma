@@ -50,7 +50,7 @@ export function PaymentInfo() {
 
   const getBankingData = () => {
     if (
-      (currentUserLocationCountry || userLocationCountry) === "BY" &&
+      (userLocationCountry === "BY" || currentUserLocationCountry === "BY") &&
       !isAdmin
     ) {
       setLocationError(messages.location);
