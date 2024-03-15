@@ -7,7 +7,7 @@ import { UserLocation } from "@/models/location";
 interface UserState {
   userData?: UserDto;
   isAuthorized?: boolean;
-  location?: UserLocation;
+  currentLocation?: UserLocation;
 }
 
 const initialState: UserState = {
@@ -21,15 +21,6 @@ export const userSlice = createSlice({
   reducers: {
     setUserData: (state, action: PayloadAction<UserState>) => {
       state = action.payload;
-    },
-    // setIsAuthorized: (
-    //   state,
-    //   action: PayloadAction<UserState["isAuthorized"]>
-    // ) => {
-    //   state.isAuthorized = action.payload;
-    // },
-    setLocation: (state, action: PayloadAction<UserLocation>) => {
-      state.location = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -67,7 +58,7 @@ export const userSlice = createSlice({
     builder.addMatcher(
       appApi.endpoints.getLocation.matchFulfilled,
       (state, { payload }) => {
-        state.location = payload;
+        state.currentLocation = payload;
       }
     );
   },

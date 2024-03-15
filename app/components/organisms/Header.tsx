@@ -1,4 +1,4 @@
-import { appApi } from "@/store/features/api/appApi";
+import { useGetLocationQuery } from "@/store/features/api/appApi";
 import { useAuthenticationQuery } from "@/store/features/api/subApi/userApi";
 import { Pathname, useAppPathname } from "@/utils/useAppRouter";
 import clsx from "clsx";
@@ -50,14 +50,7 @@ export function Header({}) {
 
   const { data: userData } = useAuthenticationQuery();
 
-  const [trigger, { data: location }] =
-    appApi.endpoints.getLocation.useLazyQuery();
-
-  useEffect(() => {
-    if (!!userData && (!userData.user?.location || !userData.auth)) {
-      trigger();
-    }
-  }, [userData, trigger]);
+  useGetLocationQuery();
 
   const loggedIn = !!userData?.auth;
 

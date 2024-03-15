@@ -149,7 +149,10 @@ export const getAllUsers = async () => {
 
 export const getUser = async (userId: number) => {
   try {
-    const user = await prisma.users.findUnique({ where: { id: userId } });
+    const user = await prisma.users.findUnique({
+      where: { id: userId },
+      include: { location: true },
+    });
 
     return user;
   } catch (error) {

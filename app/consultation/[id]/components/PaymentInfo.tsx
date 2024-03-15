@@ -25,8 +25,11 @@ export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
   const [locationError, setLocationError] = useState("");
   const userData = useAppSelector((state) => state.user.userData);
-
+  const currentUserLocationCountry = useAppSelector(
+    (state) => state.user.currentLocation?.country
+  );
   const userLocationCountry = userData?.location?.country;
+
   const isAdmin = userData?.role === "ADMIN";
 
   const { id: consultationId } = useParams();
@@ -46,7 +49,10 @@ export function PaymentInfo() {
   });
 
   const getBankingData = () => {
-    if (userLocationCountry === "BY" && !isAdmin) {
+    if (
+      (currentUserLocationCountry || userLocationCountry) === "BY" &&
+      !isAdmin
+    ) {
       setLocationError(messages.location);
       return;
     } else {
