@@ -9,22 +9,22 @@ datasource db {
 }
 
 model Users {
-  id          Int         @id @unique @default(autoincrement())
+  id          Int           @id @unique @default(autoincrement())
   name        String
-  email       String      @unique
+  email       String        @unique
   password    String
-  role        Role        @default(USER)
+  role        Role          @default(USER)
   image       String?
   emailNotification Boolean @default(true)
-  project     Project     @default(ASTRO)
-  environment Environment @default(production)
+  project     Project       @default(ASTRO)
+  environment Environment   @default(production)
   location    Location?
   Token       Token[]
-  passwordResetLink PasswordResetLink[]
+  passwordResetLink         PasswordResetLink[]
   purchase    Purchase[]
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime      @default(now())
   updatedAt   DateTime?
-
+  lastVisitAt DateTime      @default(now())
 }
 
 model Token {

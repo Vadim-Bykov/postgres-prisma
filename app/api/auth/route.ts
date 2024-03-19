@@ -6,6 +6,7 @@ import * as tokenService from "@/server/services/tokenService";
 import * as userService from "@/server/services/userService";
 import { NextRequest, NextResponse } from "next/server";
 import { getUserDto } from "@/server/dtos/userDto";
+import { apiCatchErrorHandler, catchErrorHandler } from "@/utils/errorHandler";
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +26,11 @@ export async function GET(request: NextRequest) {
         userService.getUser(tokenPayload.id),
         tokenService.findRefreshToken(refreshToken),
       ]);
+
       if (!userData || !tokenData) {
         cookieService.removeTokensFromCookies();
+        tokenService.removeRefreshToken(refreshToken);
+
         return NextResponse.json({ auth: false });
       }
 
@@ -43,12 +47,17 @@ export async function GET(request: NextRequest) {
 
       setTokensToCookies({ refreshToken: tokeData.refreshToken });
 
+      await userService.updateUserLastVisit(tokenPayload.id);
+
       return NextResponse.json({
         user: userDto,
         auth: true,
       });
     }
   } catch (error) {
-    throw ApiError.internal();
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при при идентификации юзера",
+    });
   }
 }

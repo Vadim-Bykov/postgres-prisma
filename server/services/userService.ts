@@ -13,6 +13,7 @@ import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
 import * as cookieService from "@/server/services/cookieService";
+import { catchErrorHandler } from "@/utils/errorHandler";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -71,14 +72,10 @@ UserCreationBody) => {
 
     return { user: userDto, refreshToken };
   } catch (error: any) {
-    if (error instanceof NextResponse) {
-      throw error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка при регистрации пользователя в базе",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при регистрации пользователя в базе",
+    });
   }
 };
 
@@ -106,14 +103,10 @@ export const login = async ({ email, password }: UserLoginBody) => {
 
     return { user: userDto, refreshToken };
   } catch (error) {
-    if (error instanceof NextResponse) {
-      throw error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка в базе при входе в аккаунт пользователя",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при входе в аккаунт пользователя",
+    });
   }
 };
 
@@ -123,14 +116,10 @@ export const logout = async (refreshToken: string) => {
 
     return tokenData;
   } catch (error: any) {
-    if (error instanceof NextResponse) {
-      return error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка в базе при выходе из аккаунта пользователя",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при выходе из аккаунта пользователя",
+    });
   }
 };
 
@@ -140,10 +129,10 @@ export const getAllUsers = async () => {
 
     return users.map((user) => getUserDto(user));
   } catch (error) {
-    throw ApiError.badRequest(
-      "Ошибка при получении данных пользователей из базы.",
-      error
-    );
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при получении данных пользователей из базы.",
+    });
   }
 };
 
@@ -156,10 +145,10 @@ export const getUser = async (userId: number) => {
 
     return user;
   } catch (error) {
-    throw ApiError.badRequest(
-      "Ошибка при получении данных пользователя из базы",
-      error
-    );
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при получении данных пользователя из базы",
+    });
   }
 };
 
@@ -170,7 +159,10 @@ export const deleteUser = async (userId: number) => {
 
     return userDto;
   } catch (error) {
-    throw ApiError.badRequest("Ошибка при удалении пользователя в базе", error);
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при удалении пользователя в базе",
+    });
   }
 };
 
@@ -214,14 +206,10 @@ export const getResetPasswordLink = async (email: string) => {
 
     return { link: linkData.link };
   } catch (error) {
-    if (error instanceof NextResponse) {
-      throw error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка при получении ссылки для сброса пароля",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при получении ссылки для сброса пароля",
+    });
   }
 };
 
@@ -260,14 +248,10 @@ export const resetUserPassword = async (link: string) => {
 
     return { numberOfRemovedTokens };
   } catch (error) {
-    if (error instanceof NextResponse) {
-      throw error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка в базе при сбросе пароля пользователя",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при сбросе пароля пользователя",
+    });
   }
 };
 
@@ -317,6 +301,7 @@ export const updateUserPersonalData = async ({
         name,
         password: hashPassword,
         emailNotification,
+        updatedAt: new Date().toISOString(),
       },
     });
 
@@ -336,13 +321,25 @@ export const updateUserPersonalData = async ({
 
     return { user: userDto, refreshToken };
   } catch (error: any) {
-    if (error instanceof NextResponse) {
-      throw error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка при обновлении данных пользователя в базе",
-        error
-      );
-    }
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при обновлении данных пользователя в базе",
+    });
+  }
+};
+
+export const updateUserLastVisit = async (userId: number) => {
+  try {
+    await prisma.users.update({
+      where: { id: userId },
+      data: { lastVisitAt: new Date().toISOString() },
+    });
+
+    return;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при обновлении даты последнего визита пользователя",
+    });
   }
 };
