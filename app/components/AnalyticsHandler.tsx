@@ -12,17 +12,5 @@ export function AnalyticsHandler() {
     (isAuthorized && !isAdmin) ||
     (typeof isAuthorized === "boolean" && !isAuthorized);
 
-  return (
-    <Analytics
-      mode="production"
-      debug={false}
-      beforeSend={(event) => {
-        if (sentAnalytics) {
-          return event;
-        } else {
-          return null;
-        }
-      }}
-    />
-  );
+  return sentAnalytics ? <Analytics mode="production" /> : null;
 }
