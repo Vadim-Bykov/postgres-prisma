@@ -8,6 +8,7 @@ import { AuthenticationFlow } from "./organisms/AuthenticationFlow";
 import { Header } from "./organisms/Header";
 import { Footer } from "./common/Footer";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         <AuthenticationFlow />
         {children}
         <Footer />
+        <Analytics mode="production" />;
       </SkeletonTheme>
     </Provider>
   );
