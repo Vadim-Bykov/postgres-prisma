@@ -22,6 +22,7 @@ model Users {
   Token       Token[]
   passwordResetLink         PasswordResetLink[]
   purchase    Purchase[]
+  articleEmails ArticleEmail[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime?
   lastVisitAt DateTime      @default(now())
@@ -143,4 +144,12 @@ model Purchase {
   updatedAt             DateTime?
   paymentConfirmationAt DateTime?
   orderFulfillmentAt    DateTime?
+}
+
+model ArticleEmail {
+  id                    Int             @id @unique @default(autoincrement())
+  articleId             Int             @unique
+  title                 String
+  createdAt             DateTime        @default(now())
+  usersGotEmail         Users[]        
 }

@@ -4,16 +4,16 @@ import {
   UserCreationBody,
   UserLoginBody,
 } from "@/models/users";
+import * as cookieService from "@/server/services/cookieService";
+import { catchErrorHandler } from "@/utils/errorHandler";
+import { ArticleEmail } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
 import { v4 } from "uuid";
 import { getUserDto } from "../dtos/userDto";
 import { ApiError } from "../error/ApiError";
 import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
-import * as cookieService from "@/server/services/cookieService";
-import { catchErrorHandler } from "@/utils/errorHandler";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -128,6 +128,21 @@ export const getAllUsers = async () => {
     const users = await prisma.users.findMany();
 
     return users.map((user) => getUserDto(user));
+  } catch (error) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при получении данных пользователей из базы.",
+    });
+  }
+};
+
+export const getAllUsersWithArticleEmailsData = async () => {
+  try {
+    const users = await prisma.users.findMany({
+      include: { articleEmails: true },
+    });
+
+    return users;
   } catch (error) {
     throw catchErrorHandler({
       error,
@@ -340,6 +355,30 @@ export const updateUserLastVisit = async (userId: number) => {
     throw catchErrorHandler({
       error,
       message: "Ошибка при обновлении даты последнего визита пользователя",
+    });
+  }
+};
+
+export const addArticleEmailsToUserData = async ({
+  userId,
+  articleEmailData,
+}: {
+  userId: number;
+  articleEmailData: ArticleEmail;
+}) => {
+  const { id, articleId, createdAt, title } = articleEmailData;
+
+  try {
+    await prisma.users.update({
+      where: { id: userId },
+      data: { articleEmails: { connect: { id, articleId, createdAt, title } } },
+    });
+
+    return;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: `Ошибка при обновлении данных об отосланных и-мэйлах у пользователя с ID: ${userId}`,
     });
   }
 };

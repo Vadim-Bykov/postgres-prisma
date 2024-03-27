@@ -10,6 +10,7 @@ import {
   colorVariants,
 } from "../../constants/articles";
 import { ParagraphList } from "./ParagraphList";
+import { SendEmailButton } from "./SendEmailButton";
 
 export function ArticleContent() {
   const { id } = useParams();
@@ -49,6 +50,7 @@ export function ArticleContent() {
             <span className="font-semibold">PS:</span> {ps}
           </p>
         )}
+        <SendEmailButton />
       </div>
     </div>
   );

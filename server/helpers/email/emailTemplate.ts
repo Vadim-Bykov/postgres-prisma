@@ -8,10 +8,11 @@ import { INSTAGRAM_BASE_64 } from "./base64/instagram-base-64";
 import { TELEGRAM_BASE_64 } from "./base64/telegram-base-64";
 import { CONTENT_IMAGE_BASE_64 } from "./base64/email-top-content-image-64";
 import { LION_BASE_64 } from "./base64/lion-base-64";
+import { Pathname } from "@/utils/useAppRouter";
 // TODO: it's better to upload images and set src= as https link to the storage instead of base64 (since gmail service doesn't work with base64 images)
 
 // TODO: update "https://pro-it-schhol.vercel.app/" after the major job is done
-const API_URL = "https://astrology-yin.vercel.app/";
+const API_URL = "https://astrology-yin.vercel.app";
 
 type EmailPurpose = "REGISTRATION" | "PURCHASE" | "NEWS" | "PASSWORD_RESET";
 
@@ -27,11 +28,15 @@ export const getEmailHtml = ({
   text,
   extraMessage,
   emailPurpose = "NEWS",
+  imageSourceUrl,
+  pageUrlForButton = "/",
 }: {
   name: string;
   text: string;
   extraMessage?: string;
   emailPurpose: EmailPurpose;
+  imageSourceUrl?: string;
+  pageUrlForButton?: Pathname;
 }) => {
   return `<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -164,7 +169,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
       <img align="center" border="0" src="${[
-        CONTENT_IMAGE[emailPurpose],
+        imageSourceUrl || CONTENT_IMAGE[emailPurpose],
       ]}" alt="image" title="image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 74%;max-width: 444px;" width="444" class="v-src-width v-src-max-width"/>
       
     </td>
@@ -225,7 +230,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
       <td class="v-container-padding-padding" style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 5px;font-family:'Raleway',sans-serif;" align="left">
         
   <!--[if mso]><table width="100%"><tr><td><![endif]-->
-    <h1 style="margin: 0px; color: #f35900; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Playfair Display',serif; font-size: 26px; font-weight: 400;"><strong>Привет ${name}!</strong></h1>
+    <h1 style="margin: 0px; color: #FF3B30; line-height: 140%; text-align: center; word-wrap: break-word; font-family: 'Playfair Display',serif; font-size: 26px; font-weight: 400;"><strong>Привет ${name}!</strong></h1>
   <!--[if mso]></td></tr></table><![endif]-->
 
       </td>
@@ -255,9 +260,9 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
         
   <!--[if mso]><style>.v-button {background: transparent !important;}</style><![endif]-->
 <div align="center">
-  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unlayer.com" style="height:37px; v-text-anchor:middle; width:162px;" arcsize="11%"  stroke="f" fillcolor="#f35900"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
-    <a href=${API_URL} target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #f35900; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
-      <span class="v-padding" style="display:block;padding:10px 20px;line-height:120%;"><span style="line-height: 16.8px;">Вернуться на сайт</span></span>
+  <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href=${API_URL} style="height:37px; v-text-anchor:middle; width:162px;" arcsize="11%"  stroke="f" fillcolor="#FF3B30"><w:anchorlock/><center style="color:#FFFFFF;"><![endif]-->
+    <a href=${API_URL}${pageUrlForButton} target="_blank" class="v-button" style="box-sizing: border-box;display: inline-block;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #FF3B30; border-radius: 4px;-webkit-border-radius: 4px; -moz-border-radius: 4px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;font-size: 14px;">
+      <span class="v-padding" style="display:block;padding:10px 20px;line-height:120%;"><span style="line-height: 16.8px;">Перейти на сайт</span></span>
     </a>
     <!--[if mso]></center></v:roundrect><![endif]-->
 </div>
@@ -397,7 +402,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   <!--[if (mso)|(IE)]><td style="padding:5px 15px"><![endif]-->
   
-    <a href="${API_URL}consultation" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
+    <a href="${API_URL}/consultation" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
       Консультации
     </a>
   
@@ -412,7 +417,7 @@ table, td { color: #000000; } #u_body a { color: #0000ee; text-decoration: under
 
   <!--[if (mso)|(IE)]><td style="padding:5px 15px"><![endif]-->
   
-    <a href="${API_URL}account" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
+    <a href="${API_URL}/account" target="_self" style="padding:5px 15px;display:inline-block;color:#000000;font-size:14px;text-decoration:none"  class="v-padding">
       Личный кабинет
     </a>
   

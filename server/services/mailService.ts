@@ -10,6 +10,14 @@ const SMTP_USER = process.env.VERCEL_SMTP_USER!;
 const SMTP_PASSWORD = process.env.VERCEL_SMTP_PASSWORD;
 const API_URL = process.env.VERCEL_URL!;
 import messages from "@/app/constants/messages.json";
+import { ARTICLES, Article } from "@/app/article/constants/articles";
+import * as userService from "./userService";
+import { catchErrorHandler } from "@/utils/errorHandler";
+import * as cookieService from "./cookieService";
+import { ArticleEmailBody } from "@/models/email";
+import { ArticleEmail } from "@prisma/client";
+import * as articleService from "./articleService";
+import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
@@ -124,5 +132,100 @@ export const sendCheckingPurchaseMail = async ({
     });
   } catch (error: any) {
     throw ApiError.badRequest("Ошибка при отправке и-мэйла", error);
+  }
+};
+
+export const sendArticleMailToAllUsers = async ({
+  articleId,
+}: ArticleEmailBody) => {
+  try {
+    const user = await cookieService.getUserDataFromCookies();
+    if (user.role !== "ADMIN") {
+      throw ApiError.badRequest("У вас нет прав для отправки и-мэйла");
+    }
+
+    const users = await userService.getAllUsersWithArticleEmailsData();
+
+    const storedArticle = await articleService.getArticle(articleId);
+
+    let numberOfEmailedUser = 0;
+
+    await Promise.all(
+      users.map(
+        async ({
+          name,
+          email,
+          emailNotification,
+          id: userId,
+          articleEmails,
+        }) => {
+          const userGotArticleEmail = articleEmails?.some(
+            (articleEmail) => articleEmail.articleId === articleId
+          );
+
+          if (emailNotification && !userGotArticleEmail) {
+            await sendArticleMail({ name, email, articleId });
+            try {
+              await userService.addArticleEmailsToUserData({
+                userId,
+                articleEmailData: storedArticle,
+              });
+
+              numberOfEmailedUser = numberOfEmailedUser + 1;
+            } catch (error) {
+              throw catchErrorHandler({
+                error,
+                message:
+                  "Ошибка в цикле при отправке и-мэйла всем пользователям",
+              });
+            }
+          }
+        }
+      )
+    );
+
+    return numberOfEmailedUser;
+  } catch (error) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при отправке и-мэйла всем пользователям",
+    });
+  }
+};
+
+export const sendArticleMail = async ({
+  name,
+  email,
+  articleId,
+}: {
+  name: string;
+  email: string;
+  articleId: number;
+}) => {
+  const { title, summary, imageSourceId } = ARTICLES.find(
+    (article) => article.id === articleId
+  ) as Article;
+
+  try {
+    const { accepted, rejected, pending } = await transporter.sendMail({
+      from: { address: SMTP_USER, name: BRAND_NAME_STRING },
+      to: email,
+      bcc: SMTP_USER,
+      subject: "Новая интересная статья",
+      html: getEmailHtml({
+        name,
+        extraMessage: summary,
+        text: `Мы выпустили интересную статью для тебя - "${title}". Ты можешь прочесть ее полностью на сайте. Поверь, это будет очень полезно для тебя.`,
+        emailPurpose: "NEWS",
+        pageUrlForButton: `/article/${articleId}`,
+        imageSourceUrl: imageSourceId
+          ? formatGoogleDriveImageUrl(imageSourceId)
+          : undefined,
+      }),
+    });
+
+    return { accepted, rejected, pending };
+  } catch (error: any) {
+    throw catchErrorHandler({ error, message: "Ошибка при отправке и-мэйла" });
   }
 };
