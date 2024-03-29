@@ -1,3 +1,4 @@
+import { NewConsultationEmailBody } from "./../../models/email";
 import nodemailer from "nodemailer";
 import * as consultationService from "./consultationService";
 import { ApiError } from "../error/ApiError";
@@ -15,7 +16,7 @@ import * as userService from "./userService";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import * as cookieService from "./cookieService";
 import { ArticleEmailBody } from "@/models/email";
-import { ArticleEmail } from "@prisma/client";
+import { Consultation } from "@prisma/client";
 import * as articleService from "./articleService";
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 
@@ -144,9 +145,9 @@ export const sendArticleMailToAllUsers = async ({
       throw ApiError.badRequest("У вас нет прав для отправки и-мэйла");
     }
 
-    const users = await userService.getAllUsersWithArticleEmailsData();
+    const users = await userService.getAllUsersWithEmailsData();
 
-    const storedArticle = await articleService.getArticle(articleId);
+    const storedArticle = await articleService.getArticleEmail(articleId);
 
     let numberOfEmailedUser = 0;
 
@@ -220,6 +221,106 @@ export const sendArticleMail = async ({
         pageUrlForButton: `/article/${articleId}`,
         imageSourceUrl: imageSourceId
           ? formatGoogleDriveImageUrl(imageSourceId)
+          : undefined,
+      }),
+    });
+
+    return { accepted, rejected, pending };
+  } catch (error: any) {
+    throw catchErrorHandler({ error, message: "Ошибка при отправке и-мэйла" });
+  }
+};
+
+export const sendNewConsultationEmailToAllUsers = async ({
+  consultationId,
+}: NewConsultationEmailBody) => {
+  try {
+    const user = await cookieService.getUserDataFromCookies();
+    if (user.role !== "ADMIN") {
+      throw ApiError.badRequest("У вас нет прав для отправки и-мэйла");
+    }
+
+    const users = await userService.getAllUsersWithEmailsData();
+
+    const { consultation, consultationEmail } =
+      await consultationService.getConsultationEmail(consultationId);
+
+    let numberOfEmailedUser = 0;
+
+    await Promise.all(
+      users.map(
+        async ({
+          name,
+          email,
+          emailNotification,
+          id: userId,
+          consultationEmails,
+        }) => {
+          const userGotArticleEmail = consultationEmails?.some(
+            (consultationEmail) =>
+              consultationEmail.consultationId === consultationId
+          );
+
+          if (emailNotification && !userGotArticleEmail) {
+            await sendConsultationEmail({
+              name,
+              email,
+              consultation,
+            });
+
+            try {
+              await userService.addConsultationEmailsToUserData({
+                userId,
+                consultationEmail,
+              });
+
+              numberOfEmailedUser = numberOfEmailedUser + 1;
+            } catch (error) {
+              throw catchErrorHandler({
+                error,
+                message:
+                  "Ошибка в цикле при отправке и-мэйла всем пользователям",
+              });
+            }
+          }
+        }
+      )
+    );
+
+    return numberOfEmailedUser;
+  } catch (error) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка при отправке и-мэйла всем пользователям",
+    });
+  }
+};
+
+export const sendConsultationEmail = async ({
+  name,
+  email,
+  consultation,
+}: {
+  name: string;
+  email: string;
+  consultation: Consultation;
+}) => {
+  const { title, subTitle, imageSource, id } = consultation;
+
+  try {
+    const { accepted, rejected, pending } = await transporter.sendMail({
+      from: { address: SMTP_USER, name: BRAND_NAME_STRING },
+      to: email,
+      bcc: SMTP_USER,
+      subject: "Новый вид консультации",
+      html: getEmailHtml({
+        name,
+        extraMessage: subTitle ? subTitle : undefined,
+        text: `Мы выпустили новый вид консультации для тебя - "${title}". Ты можешь просмотреть ее полностью на сайте. Поверь, это будет очень полезно для тебя.`,
+        emailPurpose: "NEWS",
+        pageUrlForButton: `/consultation/${id}`,
+        imageSourceUrl: imageSource
+          ? formatGoogleDriveImageUrl(imageSource)
           : undefined,
       }),
     });

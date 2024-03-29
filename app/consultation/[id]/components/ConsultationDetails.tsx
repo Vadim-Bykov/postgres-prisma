@@ -10,6 +10,7 @@ import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import Skeleton from "react-loading-skeleton";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { Paragraph } from "@/app/components/common/Paragraph";
+import { SendEmailButton } from "@/app/components/common/SendEmailButton";
 
 export function ConsultationPlaceholder() {
   const { isMobile, width } = useWindowDimensions();
@@ -77,6 +78,8 @@ export function ConsultationDetails({ id }: { id: string }) {
         </ul>
 
         <PaymentInfo />
+
+        <SendEmailButton target="newConsultation" />
       </div>
     </div>
   );

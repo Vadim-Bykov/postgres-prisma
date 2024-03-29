@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { ApiError } from "../error/ApiError";
 
-export const createArticle = async (articleId: number) => {
+export const createArticleEmail = async (articleId: number) => {
   const articleData = ARTICLES.find((article) => article.id === articleId);
   if (!articleData) {
     throw ApiError.badRequest(
@@ -25,7 +25,7 @@ export const createArticle = async (articleId: number) => {
   }
 };
 
-export const getArticle = async (articleId: number) => {
+export const getArticleEmail = async (articleId: number) => {
   try {
     const existedArticleEmailData = await prisma.articleEmail.findUnique({
       where: { articleId },
@@ -34,7 +34,7 @@ export const getArticle = async (articleId: number) => {
     if (existedArticleEmailData) {
       return existedArticleEmailData;
     } else {
-      const createdArticleEmailData = await createArticle(articleId);
+      const createdArticleEmailData = await createArticleEmail(articleId);
 
       return createdArticleEmailData;
     }

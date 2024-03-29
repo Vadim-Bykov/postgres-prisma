@@ -1,4 +1,4 @@
-import { ArticleEmailBody } from "@/models/email";
+import { ArticleEmailBody, NewConsultationEmailBody } from "@/models/email";
 import { appApi } from "../appApi";
 
 export const emailApi = appApi.injectEndpoints({
@@ -10,7 +10,18 @@ export const emailApi = appApi.injectEndpoints({
         body,
       }),
     }),
+    sendConsultationEmail: builder.mutation<
+      { message: string },
+      NewConsultationEmailBody
+    >({
+      query: (body) => ({
+        url: "email/consultation",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { useSendArticleEmailMutation } = emailApi;
+export const { useSendArticleEmailMutation, useSendConsultationEmailMutation } =
+  emailApi;

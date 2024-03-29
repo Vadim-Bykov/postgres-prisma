@@ -9,23 +9,26 @@ datasource db {
 }
 
 model Users {
-  id          Int           @id @unique @default(autoincrement())
-  name        String
-  email       String        @unique
-  password    String
-  role        Role          @default(USER)
-  image       String?
-  emailNotification Boolean @default(true)
-  project     Project       @default(ASTRO)
-  environment Environment   @default(production)
-  location    Location?
-  Token       Token[]
-  passwordResetLink         PasswordResetLink[]
-  purchase    Purchase[]
-  articleEmails ArticleEmail[]
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime?
-  lastVisitAt DateTime      @default(now())
+  id                 Int                 @id @unique @default(autoincrement())
+  name               String
+  email              String              @unique
+  password           String
+  role               Role                @default(USER)
+  image              String?
+  emailNotification  Boolean             @default(true)
+  project            Project             @default(ASTRO)
+  environment        Environment         @default(production)
+  location           Location?
+  Token              Token[]
+  passwordResetLink  PasswordResetLink[]
+  purchase           Purchase[]
+  articleEmails      ArticleEmail[]
+  consultationEmails ConsultationEmail[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime?
+  lastVisitAt        DateTime            @default(now())
+  Consultation       Consultation?       @relation(fields: [consultationId], references: [id])
+  consultationId     Int?
 }
 
 model Token {
@@ -43,12 +46,12 @@ model Location {
 }
 
 model PasswordResetLink {
-  link        String?
-  state       PasswordResetLinkState  @default(PENDING)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime?
-  userId      Int     @unique
-  Users       Users   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  link      String?
+  state     PasswordResetLinkState @default(PENDING)
+  createdAt DateTime               @default(now())
+  updatedAt DateTime?
+  userId    Int                    @unique
+  Users     Users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -78,28 +81,31 @@ enum ConsultationStatus {
   PENDING
   DEPRECATED
 }
+
 enum Currency {
   RUB @map("₽")
   USD @map("$")
-  BYN  @map("Br")
+  BYN @map("Br")
 }
 
 model Consultation {
-  id            Int            @id @unique @default(autoincrement())
-  title         String
-  subTitle      String?
-  description   String[]
-  price         Int
-  currency      Currency      @default(RUB) 
-  perksTitle    String?
-  perks         String[]
-  status        ConsultationStatus @default(PENDING)
-  primary       Boolean?      @default(false)
-  removedAt     DateTime?
-  purchase      Purchase[]
-  imageSource   String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?
+  id                Int                 @id @unique @default(autoincrement())
+  title             String
+  subTitle          String?
+  description       String[]
+  price             Int
+  currency          Currency            @default(RUB)
+  perksTitle        String?
+  perks             String[]
+  status            ConsultationStatus  @default(PENDING)
+  primary           Boolean?            @default(false)
+  removedAt         DateTime?
+  purchase          Purchase[]
+  consultationEmail ConsultationEmail[]
+  imageSource       String
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime?
+  usersGotEmail     Users[]
 }
 
 enum PaymentSystem {
@@ -109,9 +115,9 @@ enum PaymentSystem {
 }
 
 model Banking {
-  id            Int            @id @unique @default(autoincrement())
+  id            Int           @id @unique @default(autoincrement())
   bankName      String
-  currency      Currency      @default(BYN) 
+  currency      Currency      @default(BYN)
   number        String
   ownerName     String?
   paymentSystem PaymentSystem @default(VISA)
@@ -130,26 +136,35 @@ enum PurchaseStatus {
 }
 
 model Purchase {
-  id                    Int             @id @unique @default(autoincrement())
+  id                    Int            @id @unique @default(autoincrement())
   userId                Int
-  users                 Users           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  consultationId        Int             
-  consultation          Consultation    @relation(fields: [consultationId], references: [id])
-  bankRecipientId       Int           
-  banking               Banking         @relation(fields: [bankRecipientId], references: [id])
-  paymentNumber         String?  
-  status                PurchaseStatus  @default(NOT_STARTED)
-  paymentStatus         PaymentStatus   @default(CHECKING)
-  createdAt             DateTime        @default(now())
+  users                 Users          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  consultationId        Int
+  consultation          Consultation   @relation(fields: [consultationId], references: [id])
+  bankRecipientId       Int
+  banking               Banking        @relation(fields: [bankRecipientId], references: [id])
+  paymentNumber         String?
+  status                PurchaseStatus @default(NOT_STARTED)
+  paymentStatus         PaymentStatus  @default(CHECKING)
+  createdAt             DateTime       @default(now())
   updatedAt             DateTime?
   paymentConfirmationAt DateTime?
   orderFulfillmentAt    DateTime?
 }
 
 model ArticleEmail {
-  id                    Int             @id @unique @default(autoincrement())
-  articleId             Int             @unique
-  title                 String
-  createdAt             DateTime        @default(now())
-  usersGotEmail         Users[]        
+  id            Int      @id @unique @default(autoincrement())
+  title         String
+  articleId     Int      @unique
+  usersGotEmail Users[]
+  createdAt     DateTime @default(now())
+}
+
+model ConsultationEmail {
+  id             Int          @id @unique @default(autoincrement())
+  title          String
+  consultationId Int          @unique
+  consultation   Consultation @relation(fields: [consultationId], references: [id])
+  usersGotEmail  Users[]
+  createdAt      DateTime     @default(now())
 }

@@ -6,7 +6,7 @@ import {
 } from "@/models/users";
 import * as cookieService from "@/server/services/cookieService";
 import { catchErrorHandler } from "@/utils/errorHandler";
-import { ArticleEmail } from "@prisma/client";
+import { ArticleEmail, ConsultationEmail } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import { getUserDto } from "../dtos/userDto";
@@ -136,10 +136,10 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getAllUsersWithArticleEmailsData = async () => {
+export const getAllUsersWithEmailsData = async () => {
   try {
     const users = await prisma.users.findMany({
-      include: { articleEmails: true },
+      include: { articleEmails: true, consultationEmails: true },
     });
 
     return users;
@@ -372,6 +372,32 @@ export const addArticleEmailsToUserData = async ({
     await prisma.users.update({
       where: { id: userId },
       data: { articleEmails: { connect: { id, articleId, createdAt, title } } },
+    });
+
+    return;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: `Ошибка при обновлении данных об отосланных и-мэйлах у пользователя с ID: ${userId}`,
+    });
+  }
+};
+
+export const addConsultationEmailsToUserData = async ({
+  userId,
+  consultationEmail,
+}: {
+  userId: number;
+  consultationEmail: ConsultationEmail;
+}) => {
+  try {
+    await prisma.users.update({
+      where: { id: userId },
+      data: {
+        consultationEmails: {
+          connect: consultationEmail,
+        },
+      },
     });
 
     return;
