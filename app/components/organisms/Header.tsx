@@ -5,6 +5,8 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { MobileMenu } from "./MobileMenu/MobileMenu";
 import { Navbar } from "./Navbar";
+import { useAppSelector } from "@/store/store";
+import { useIsLoggedIn } from "@/utils/authorization";
 
 export interface NavbarItem {
   route: Pathname;
@@ -48,18 +50,19 @@ export function Header({}) {
     runAnimation(true);
   }, [pathname]);
 
-  const { data: userData } = useAuthenticationQuery();
-
+  useAuthenticationQuery();
   useGetLocationQuery();
 
-  const loggedIn = !!userData?.auth;
+  const userData = useAppSelector((state) => state.user.userData);
+  const loggedIn = useIsLoggedIn();
+  const isUserDataLoading = typeof loggedIn !== "boolean";
 
   const filteredNavbarItems = loggedIn
     ? NAVBAR_ITEMS
     : NAVBAR_ITEMS.filter(({ authenticationRequired, route }) => {
         return (
           !authenticationRequired ||
-          (route === "/admin" && userData?.user?.role === "ADMIN")
+          (route === "/admin" && userData?.role === "ADMIN")
         );
       });
 

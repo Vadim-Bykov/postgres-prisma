@@ -1,16 +1,13 @@
-import { toggleLogoutModal } from "@/store/authentication";
-import { appApi } from "@/store/features/api/appApi";
-import { useAuthenticationQuery } from "@/store/features/api/subApi/userApi";
-import { useAppDispatch } from "@/store/store";
-import clsx from "clsx";
-import { HTMLAttributes, useEffect } from "react";
-import { AuthenticationButton } from "../../atoms/AuthenticationButton";
-import Button from "../../atoms/common/Button";
 import AvatarImage from "@/public/icons/avatar.svg";
-import Image from "next/image";
+import { storeAccountEntryRoute } from "@/store/app";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useIsLoggedIn } from "@/utils/authorization";
 import { useAppPathname, useAppRouter } from "@/utils/useAppRouter";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
-import { storeAccountEntryRoute } from "@/store/app";
+import clsx from "clsx";
+import Image from "next/image";
+import { HTMLAttributes } from "react";
+import { AuthenticationButton } from "../../atoms/AuthenticationButton";
 import Icon from "../../atoms/common/Icon/Icon";
 
 export function UserBadge({
@@ -20,18 +17,10 @@ export function UserBadge({
   onAvatarLogoClick?: () => void;
   className?: HTMLAttributes<HTMLDivElement>["className"];
 }) {
-  const { data: userData, isLoading: isUserDataLoading } =
-    useAuthenticationQuery();
-  const [trigger, { data: location }] =
-    appApi.endpoints.getLocation.useLazyQuery();
+  const userData = useAppSelector((state) => state.user.userData);
+  const loggedIn = useIsLoggedIn();
 
-  const loggedIn = !!userData?.auth;
-
-  useEffect(() => {
-    if (!!userData && (!userData.user?.location || !userData.auth)) {
-      trigger();
-    }
-  }, [userData, trigger]);
+  const isUserDataLoading = typeof loggedIn !== "boolean";
 
   const dispatch = useAppDispatch();
 
@@ -66,7 +55,7 @@ export function UserBadge({
             name="account/settings-2-fill.svg"
             className="absolute top-6 left-10 lg:left-7"
           />
-          <span>{userData?.user?.name}</span>
+          <span>{userData?.name}</span>
         </button>
       ) : (
         <AuthenticationButton
