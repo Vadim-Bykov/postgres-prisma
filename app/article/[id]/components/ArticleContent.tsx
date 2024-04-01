@@ -17,7 +17,7 @@ export function ArticleContent() {
   const { title, subTitle, imageSourceId, paragraphs, ps } = ARTICLES[+id - 1];
 
   return (
-    <div className="flex flex-col gap-8 lg:pt-2">
+    <div className="lg:max-w-5xl self-center flex flex-col gap-8 lg:pt-2 lg:px-5">
       {imageSourceId && (
         <ImageWithLoader
           src={formatGoogleDriveImageUrl(imageSourceId)}
@@ -30,7 +30,7 @@ export function ArticleContent() {
           alt="Article related image"
         />
       )}
-      <div className="flex flex-col items-start gap-2 px-5 lg:px-20">
+      <div className="flex flex-col items-start gap-2 px-5 lg:px-0">
         <div className="self-center text-center">
           <h3 className="font-head text-2xl font-semibold">{title}</h3>
           <p className="font-head text-lg">{subTitle}</p>
