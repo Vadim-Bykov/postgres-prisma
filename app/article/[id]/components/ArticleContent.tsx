@@ -26,14 +26,14 @@ export function ArticleContent() {
           height="0"
           sizes="100%"
           placeholder="empty"
-          className="self-center w-full lg:w-fit"
+          className="self-center w-full max-h-[70vh] object-contain"
           alt="Article related image"
         />
       )}
-      <div className="flex flex-col items-start gap-2 px-5 lg:px-0">
+      <div className="flex flex-col items-start gap-2 px-5 lg:px-0 lg:text-lg">
         <div className="self-center text-center">
           <h3 className="font-head text-2xl font-semibold">{title}</h3>
-          <p className="font-head text-lg">{subTitle}</p>
+          <p className="font-head text-lg lg:text-xl">{subTitle}</p>
         </div>
 
         <div className="flex flex-col gap-4 lg:gap-5">

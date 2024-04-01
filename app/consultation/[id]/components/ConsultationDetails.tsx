@@ -12,17 +12,22 @@ import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { Paragraph } from "@/app/components/common/Paragraph";
 import { SendEmailButton } from "@/app/components/common/SendEmailButton";
 
+const MAX_WIDTH = 1024;
+
 export function ConsultationPlaceholder() {
-  const { isMobile, width } = useWindowDimensions();
+  const { isMobile, width: windowWidth } = useWindowDimensions();
+  const width = isMobile ? windowWidth : MAX_WIDTH;
+  const padding = isMobile ? 20 : 0;
+
   return (
     <div className="flex flex-col gap-8 items-center">
-      <Skeleton width={isMobile ? width : 768} className="aspect-video" />
-      <Skeleton width={width - 60} height={32} />
-      <Skeleton width={width - 60} height={200} />
+      <Skeleton width={width} className="aspect-video" />
+      <Skeleton width={width - padding} height={32} />
+      <Skeleton width={width - padding} height={200} />
       <div>
-        <Skeleton width={width - 60} height={18} />
-        <Skeleton width={width - 60} height={18} />
-        <Skeleton width={width - 60} height={18} />
+        <Skeleton width={width - padding} height={18} />
+        <Skeleton width={width - padding} height={18} />
+        <Skeleton width={width - padding} height={18} />
       </div>
     </div>
   );
@@ -47,7 +52,7 @@ export function ConsultationDetails({ id }: { id: string }) {
   } = consultation;
 
   return (
-    <div className="flex flex-col gap-8 lg:pt-2 relative">
+    <div className="lg:max-w-5xl self-center flex flex-col gap-8 lg:pt-2 lg:px-5 relative">
       <ImageWithLoader
         src={formatGoogleDriveImageUrl(imageSource)}
         priority
@@ -55,13 +60,15 @@ export function ConsultationDetails({ id }: { id: string }) {
         height="0"
         sizes="100%"
         placeholder="empty"
-        className="self-center w-full lg:w-fit"
+        className="self-center w-full max-h-[70vh] object-contain"
         alt="Consultation related image"
       />
 
-      <div className="flex flex-col items-start gap-5 px-5 lg:px-20">
+      <div className="flex flex-col items-start gap-5 px-5 lg:px-0 lg:text-lg">
         <h2 className="font-head text-3xl font-semibold">{title}</h2>
-        {subTitle && <p className="text-lg font-semibold">{subTitle}</p>}
+        {subTitle && (
+          <p className="text-lg lg:text-xl font-semibold">{subTitle}</p>
+        )}
 
         <div className="flex flex-col gap-2">
           {description.map((paragraph) => {
