@@ -21,35 +21,33 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({ auth: false });
     } else {
-      const [userData, tokenData] = await Promise.all([
-        userService.getUser(tokenPayload.id),
-        tokenService.findRefreshToken(refreshToken),
-      ]);
+      const tokenData = tokenService.findRefreshToken(refreshToken);
 
-      if (!userData || !tokenData) {
+      if (!tokenData) {
         cookieService.removeTokensFromCookies();
         tokenService.removeRefreshToken(refreshToken);
 
         return NextResponse.json({ auth: false });
       }
 
-      const userDto = getUserDto(userData);
-
       const { refreshToken: updatedRefreshToken } =
-        await tokenService.generateToken(userDto);
+        await tokenService.generateToken(tokenPayload);
 
-      const tokeData = await tokenService.saveRefreshToken({
-        userId: userData.id,
-        refreshToken,
-        updatedRefreshToken,
-      });
+      const [tokeData] = await Promise.all([
+        tokenService.saveRefreshToken({
+          userId: tokenPayload.id,
+          refreshToken,
+          updatedRefreshToken,
+        }),
+        userService.updateUserLastVisit(tokenPayload.id),
+      ]);
 
       setTokensToCookies({ refreshToken: tokeData.refreshToken });
 
-      await userService.updateUserLastVisit(tokenPayload.id);
+      // await userService.updateUserLastVisit(tokenPayload.id);
 
       return NextResponse.json({
-        user: userDto,
+        user: tokenPayload,
         auth: true,
       });
     }
