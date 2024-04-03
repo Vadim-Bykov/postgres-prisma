@@ -20,7 +20,7 @@ export function UserBadge({
   const userData = useAppSelector((state) => state.user.userData);
   const loggedIn = useIsLoggedIn();
 
-  const isUserDataLoading = typeof loggedIn !== "boolean";
+  const isUserDataLoading = loggedIn === undefined;
 
   const dispatch = useAppDispatch();
 
@@ -29,6 +29,8 @@ export function UserBadge({
   const { isTablet } = useWindowDimensions();
 
   const onAvatarClick = () => {
+    if (isUserDataLoading) return;
+
     onAvatarLogoClick?.();
     const isAccountRoute = asPath.includes("/account");
     if (!isAccountRoute) {
@@ -39,7 +41,7 @@ export function UserBadge({
 
   return (
     <div className={clsx(className)}>
-      {loggedIn ? (
+      {loggedIn || isUserDataLoading ? (
         <button
           onClick={onAvatarClick}
           className="flex flex-col lg:flex-row items-center gap-3 relative"
@@ -55,7 +57,14 @@ export function UserBadge({
             name="account/settings-2-fill.svg"
             className="absolute top-6 left-10 lg:left-7"
           />
-          <span>{userData?.name}</span>
+          <span
+            className={clsx(
+              "transition-all duration-300",
+              isUserDataLoading ? "max-w-0" : "max-w-xs"
+            )}
+          >
+            {userData?.name || ""}
+          </span>
         </button>
       ) : (
         <AuthenticationButton

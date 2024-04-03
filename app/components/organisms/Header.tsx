@@ -55,7 +55,6 @@ export function Header({}) {
 
   const userData = useAppSelector((state) => state.user.userData);
   const loggedIn = useIsLoggedIn();
-  const isUserDataLoading = typeof loggedIn !== "boolean";
 
   const filteredNavbarItems = loggedIn
     ? NAVBAR_ITEMS
