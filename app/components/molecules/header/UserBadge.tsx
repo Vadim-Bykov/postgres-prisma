@@ -57,7 +57,14 @@ export function UserBadge({
             name="account/settings-2-fill.svg"
             className="absolute top-6 left-10 lg:left-7"
           />
-          <span>{userData?.name || ""}</span>
+          <span
+            className={clsx(
+              "transition-all duration-300",
+              isUserDataLoading ? "max-w-0" : "max-w-xs"
+            )}
+          >
+            {userData?.name || ""}
+          </span>
         </button>
       ) : (
         <AuthenticationButton

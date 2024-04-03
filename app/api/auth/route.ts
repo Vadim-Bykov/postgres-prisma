@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json({ auth: false });
     } else {
-      const tokenData = tokenService.findRefreshToken(refreshToken);
+      const tokenData = await tokenService.findRefreshToken(refreshToken);
 
       if (!tokenData) {
         cookieService.removeTokensFromCookies();
