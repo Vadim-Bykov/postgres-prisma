@@ -1,12 +1,11 @@
-import { ApiError } from "@/server/error/ApiError";
-import * as cookieService from "./../../../server/services/cookieService";
 import { REFRESH_TOKEN_COOKIE } from "@/app/constants/constants";
+import { getUserDto } from "@/server/dtos/userDto";
 import { setTokensToCookies } from "@/server/services/cookieService";
 import * as tokenService from "@/server/services/tokenService";
 import * as userService from "@/server/services/userService";
+import { apiCatchErrorHandler } from "@/utils/errorHandler";
 import { NextRequest, NextResponse } from "next/server";
-import { getUserDto } from "@/server/dtos/userDto";
-import { apiCatchErrorHandler, catchErrorHandler } from "@/utils/errorHandler";
+import * as cookieService from "./../../../server/services/cookieService";
 
 export const dynamic = "force-dynamic";
 
@@ -21,36 +20,39 @@ export async function GET(request: NextRequest) {
       cookieService.removeTokensFromCookies();
 
       return NextResponse.json({ auth: false });
-    }
+    } else {
+      const [userData, tokenData] = await Promise.all([
+        userService.getUser(tokenPayload.id),
+        tokenService.findRefreshToken(refreshToken),
+      ]);
 
-    const tokenData = await tokenService.findRefreshToken(refreshToken);
+      if (!userData || !tokenData) {
+        cookieService.removeTokensFromCookies();
+        tokenService.removeRefreshToken(refreshToken);
 
-    if (!tokenData) {
-      cookieService.removeTokensFromCookies();
-      tokenService.removeRefreshToken(refreshToken);
+        return NextResponse.json({ auth: false });
+      }
 
-      return NextResponse.json({ auth: false });
-    }
+      const userDto = getUserDto(userData);
 
-    const { refreshToken: updatedRefreshToken } =
-      await tokenService.generateToken(tokenPayload);
+      const { refreshToken: updatedRefreshToken } =
+        await tokenService.generateToken(userDto);
 
-    setTokensToCookies({ refreshToken: updatedRefreshToken });
-
-    // we don't wait for the responses below since it takes significant time and causes issues with multiple page reload (a new token can be missed)
-    Promise.all([
-      tokenService.saveRefreshToken({
-        userId: tokenPayload.id,
+      const tokeData = await tokenService.saveRefreshToken({
+        userId: userData.id,
         refreshToken,
         updatedRefreshToken,
-      }),
-      userService.updateUserLastVisit(tokenPayload.id),
-    ]);
+      });
 
-    return NextResponse.json({
-      user: tokenPayload,
-      auth: true,
-    });
+      setTokensToCookies({ refreshToken: tokeData.refreshToken });
+
+      await userService.updateUserLastVisit(tokenPayload.id);
+
+      return NextResponse.json({
+        user: userDto,
+        auth: true,
+      });
+    }
   } catch (error) {
     return apiCatchErrorHandler({
       error,
