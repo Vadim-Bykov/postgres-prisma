@@ -33,6 +33,13 @@ export const userSlice = createSlice({
     );
 
     builder.addMatcher(
+      userApi.endpoints.authentication.matchRejected,
+      (state) => {
+        state.isAuthorized = false;
+      }
+    );
+
+    builder.addMatcher(
       userApi.endpoints.createUser.matchFulfilled,
       (state, { payload }) => {
         state.userData = payload;

@@ -3,13 +3,11 @@ import prisma from "@/lib/prisma";
 import { ApiError } from "../error/ApiError";
 import { SignJWT, jwtVerify } from "jose";
 import { nanoid } from "@reduxjs/toolkit";
-import {
-  getJwtAccessSecretKey,
-  getJwtRefreshSecretKey,
-} from "../helpers/token";
+import { getJwtRefreshSecretKey } from "../helpers/token";
 import { Token } from "@prisma/client";
+import * as cookieService from "./cookieService";
 
-const JWT_ACCESS_SECRET = getJwtAccessSecretKey();
+// const JWT_ACCESS_SECRET = getJwtAccessSecretKey();
 const JWT_REFRESH_SECRET = getJwtRefreshSecretKey();
 
 export const generateToken = async (payload: UserDto) => {
@@ -18,7 +16,7 @@ export const generateToken = async (payload: UserDto) => {
     .setJti(nanoid())
     .setIssuer(JSON.stringify(payload))
     .setIssuedAt()
-    .setExpirationTime("30d")
+    .setExpirationTime("180d")
     .sign(new TextEncoder().encode(JWT_REFRESH_SECRET));
 
   return { refreshToken };
@@ -50,11 +48,6 @@ export const saveRefreshToken = async ({
   }
 };
 
-// export const findRefreshToken = async (refreshToken: string) => {
-//   const tokenData = await prisma.token.findUnique({ where: { refreshToken } });
-//   return tokenData;
-// };
-
 export const validateRefreshToken = async (refreshToken: string) => {
   try {
     const { payload } = await jwtVerify(
@@ -75,6 +68,8 @@ export const validateRefreshToken = async (refreshToken: string) => {
 
 export const removeRefreshToken = async (refreshToken: string) => {
   try {
+    cookieService.removeTokensFromCookies();
+
     const tokenData = await prisma.token.delete({ where: { refreshToken } });
 
     if (!tokenData) {
@@ -109,7 +104,7 @@ export const findRefreshToken = async (refreshToken: string) => {
 
     return tokenData;
   } catch (error: any) {
-    throw ApiError.badRequest("Авторизационный токен не найден в базе.", error);
+    throw ApiError.badRequest("Ошибка при поиске токена в базе.", error);
   }
 };
 
