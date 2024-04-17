@@ -11,10 +11,19 @@ import {
 } from "../../constants/articles";
 import { ParagraphList } from "./ParagraphList";
 import { SendEmailButton } from "@/app/components/common/SendEmailButton";
+import { useAppRouter } from "@/utils/useAppRouter";
 
 export function ArticleContent() {
   const { id } = useParams();
-  const { title, subTitle, imageSourceId, paragraphs, ps } = ARTICLES[+id - 1];
+  const { back } = useAppRouter();
+  const article = ARTICLES.find((item) => item.id === +id);
+
+  if (!article) {
+    back();
+    return;
+  }
+
+  const { title, subTitle, imageSourceId, paragraphs, ps } = article;
 
   return (
     <div className="lg:max-w-5xl self-center flex flex-col gap-8 lg:pt-2 lg:px-5">
@@ -67,15 +76,20 @@ function ArticleParagraphComponent({
   return (
     <div
       className={clsx(
-        "flex flex-col gap-1 lg:gap-2 rounded-3xl",
-        backgroundColor && `${colorVariants[backgroundColor]} p-5`
+        "flex flex-col gap-1 lg:gap-2 rounded-xl lg:rounded-2xl",
+        backgroundColor &&
+          `${colorVariants[backgroundColor]} px-4 pt-2 pb-4 lg:px-5 lg:pt-3 lg:pb-5`
       )}
     >
       <div>
         {paragraphTitle && (
-          <p className="font-semibold italic">{paragraphTitle}</p>
+          <p className="text-lg lg:text-xl font-semibold italic">
+            {paragraphTitle}
+          </p>
         )}
-        {paragraphSubTitle && <p className="italic">{paragraphSubTitle}</p>}
+        {paragraphSubTitle && (
+          <p className="font-semibold italic">{paragraphSubTitle}</p>
+        )}
       </div>
 
       {paragraphImageSourceId ? (
@@ -90,12 +104,12 @@ function ArticleParagraphComponent({
             className="self-center w-full lg:w-1/3"
             alt="Article related image"
           />
-          {text && <p className="indent-3 lg:indent-0 text-justify">{text}</p>}
+          {text && <p className="text-justify">{text}</p>}
           {list && <ParagraphList {...list} />}
         </div>
       ) : (
         <>
-          {text && <p className="indent-3 text-justify">{text}</p>}
+          {text && <p className="text-justify">{text}</p>}
           {list && <ParagraphList {...list} />}
         </>
       )}

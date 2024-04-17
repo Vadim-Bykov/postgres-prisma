@@ -1,7 +1,10 @@
+"use client";
+
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 import Image from "next/image";
 import Link from "next/link";
 import { ARTICLES, Article } from "../constants/articles";
+import { useAppSelector } from "@/store/store";
 
 interface ArticleCardProps extends Article {
   showDivider: boolean;
@@ -47,10 +50,14 @@ function ArticleCard({
 }
 
 export function ArticleList() {
+  const isAdmin = useAppSelector(
+    (state) => state.user.userData?.role === "ADMIN"
+  );
+
   return (
     <div className="flex flex-col gap-5 max-w-md lg:max-w-full self-center">
       {ARTICLES.map((article, index) => {
-        return (
+        return article.status === "EXAMPLE" && !isAdmin ? null : (
           <ArticleCard
             key={article.id}
             {...article}
