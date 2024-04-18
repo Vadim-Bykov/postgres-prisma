@@ -27,12 +27,12 @@ export const getBankingData = async () => {
       );
     }
 
-    if (
-      (!userData.location || userData.location?.country === "BY") &&
-      userData.role !== "ADMIN"
-    ) {
-      throw ApiError.badRequest(messages.location);
-    }
+    // if (
+    //   (!userData.location || userData.location?.country === "BY") &&
+    //   userData.role !== "ADMIN"
+    // ) {
+    //   throw ApiError.badRequest(messages.location);
+    // }
 
     const banking = await prisma.banking.findMany();
 

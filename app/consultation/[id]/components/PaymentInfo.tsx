@@ -49,15 +49,15 @@ export function PaymentInfo() {
   });
 
   const getBankingData = () => {
-    if (
-      (userLocationCountry === "BY" || currentUserLocationCountry === "BY") &&
-      !isAdmin
-    ) {
-      setLocationError(messages.location);
-      return;
-    } else {
-      setShowBanking(true);
-    }
+    // if (
+    //   (userLocationCountry === "BY" || currentUserLocationCountry === "BY") &&
+    //   !isAdmin
+    // ) {
+    //   setLocationError(messages.location);
+    //   return;
+    // } else {
+    setShowBanking(true);
+    // }
   };
   return (
     <>
