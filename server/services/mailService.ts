@@ -110,12 +110,12 @@ export const sendCheckingPurchaseMail = async ({
     const text = isProvidedDataUpdate
       ? `Вы обновили данные об оплате за консультацию${
           consultation
-            ? " на тему " + consultation.subTitle || consultation.title
+            ? " на тему " + (consultation.subTitle || consultation.title)
             : ""
         }.`
       : `Рады, что Вы обратились к нам за консультацией${
           consultation
-            ? " на тему " + consultation.subTitle || consultation.title
+            ? " на тему " + (consultation.subTitle || consultation.title)
             : ""
         }.`;
 
