@@ -1,12 +1,12 @@
 import React from "react";
-import { ParagraphList } from "../../constants/articles";
+import { ParagraphList as ParagraphListType } from "../../constants/articles";
 import clsx from "clsx";
 
 export function ParagraphList({
   listTitle,
   listItems,
   numericList,
-}: ParagraphList) {
+}: ParagraphListType) {
   return (
     <ul
       className={clsx(

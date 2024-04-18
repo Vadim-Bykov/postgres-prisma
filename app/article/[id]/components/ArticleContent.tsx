@@ -59,7 +59,9 @@ export function ArticleContent() {
             <span className="font-semibold">PS:</span> {ps}
           </p>
         )}
-        <SendEmailButton target="newArticle" />
+        {article.status === "PUBLISHED" && (
+          <SendEmailButton target="newArticle" />
+        )}
       </div>
     </div>
   );

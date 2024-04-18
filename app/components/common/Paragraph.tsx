@@ -16,6 +16,7 @@ export function Paragraph({
 
   useEffect(() => {
     const paragraphHeight = ref.current?.clientHeight || 24;
+    console.log({ paragraphHeight, lineHeight });
 
     if (paragraphHeight > (lineHeight || 24)) {
       setIsMoreThenTwoLines(true);

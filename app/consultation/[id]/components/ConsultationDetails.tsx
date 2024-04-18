@@ -49,6 +49,7 @@ export function ConsultationDetails({ id }: { id: string }) {
     perks,
     imageSource,
     perksTitle,
+    status,
   } = consultation;
 
   return (
@@ -72,7 +73,11 @@ export function ConsultationDetails({ id }: { id: string }) {
 
         <div className="flex flex-col gap-2">
           {description.map((paragraph) => {
-            return <Paragraph key={paragraph}>{paragraph}</Paragraph>;
+            return (
+              <Paragraph key={paragraph} lineHeight={28}>
+                {paragraph}
+              </Paragraph>
+            );
           })}
         </div>
         <p>
@@ -81,12 +86,12 @@ export function ConsultationDetails({ id }: { id: string }) {
         <ul>
           {perksTitle && <p>{perksTitle}</p>}
           {perks.length > 0 &&
-            perks.map((perk) => <li key={perk}>• {perk}</li>)}
+            perks.map((perk) => (perk ? <li key={perk}>• {perk}</li> : null))}
         </ul>
 
         <PaymentInfo />
 
-        <SendEmailButton target="newConsultation" />
+        {status === "PUBLISHED" && <SendEmailButton target="newConsultation" />}
       </div>
     </div>
   );
