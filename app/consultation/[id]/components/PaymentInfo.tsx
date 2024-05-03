@@ -1,19 +1,19 @@
 "use client";
 
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
-import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
-import clsx from "clsx";
-import { useState } from "react";
-import { PaymentCheckRequest } from "./PaymentCheckRequest";
-import { useAppSelector } from "@/store/store";
-import messages from "@/app/constants/messages.json";
-import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import { Banking } from "@prisma/client";
+import Button from "@/app/components/atoms/common/Button";
 import { IconButton } from "@/app/components/atoms/common/IconButton";
+import messages from "@/app/constants/messages.json";
+import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
+import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
+import { useAppSelector } from "@/store/store";
+import { Banking } from "@prisma/client";
+import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { PaymentCheckRequest } from "./PaymentCheckRequest";
 
 const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
   MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
@@ -25,19 +25,25 @@ export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
   const [locationError, setLocationError] = useState("");
   const userData = useAppSelector((state) => state.user.userData);
-  const currentUserLocationCountry = useAppSelector(
-    (state) => state.user.currentLocation?.country
-  );
-  const userLocationCountry = userData?.location?.country;
 
-  const isAdmin = userData?.role === "ADMIN";
+  // TODO: uncomment if we want BY users to be restricted
+  // const currentUserLocationCountry = useAppSelector(
+  //   (state) => state.user.currentLocation?.country
+  // );
+  // const userLocationCountry = userData?.location?.country;
+
+  // const isAdmin = userData?.role === "ADMIN";
 
   const { id: consultationId } = useParams();
-  const { data: userPurchase, isLoading: isUserPurchaseChecking } =
-    useGetUserPurchaseQuery(
-      { consultationId: consultationId as string },
-      { skip: !userData }
-    );
+  const {
+    data: userPurchase,
+    isLoading: isUserPurchaseChecking,
+    isError,
+  } = useGetUserPurchaseQuery(
+    { consultationId: consultationId as string },
+    { skip: !userData }
+  );
+  console.log({ userData, userPurchase, isError });
 
   const {
     data: banking,
@@ -49,6 +55,7 @@ export function PaymentInfo() {
   });
 
   const getBankingData = () => {
+    // TODO: uncomment if we want BY users to be restricted
     // if (
     //   (userLocationCountry === "BY" || currentUserLocationCountry === "BY") &&
     //   !isAdmin
@@ -86,8 +93,7 @@ export function PaymentInfo() {
               Перейти в личный кабинет
             </Link>
           )}
-          <AuthenticationButton
-            authenticationForActionRequired
+          <Button
             onClick={getBankingData}
             disabled={
               isBankingDataLoading || isUserPurchaseChecking || !!banking
@@ -97,7 +103,7 @@ export function PaymentInfo() {
             {userPurchase?.paymentStatus === "CHECKING"
               ? "Хочу исправить ошибку в отправленных данных об оплате"
               : "Получить данные для оплаты"}
-          </AuthenticationButton>
+          </Button>
         </>
       )}
 

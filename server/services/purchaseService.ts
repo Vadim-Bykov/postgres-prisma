@@ -2,6 +2,7 @@ import messages from "@/app/constants/messages.json";
 import prisma from "@/lib/prisma";
 import { PurchaseBody } from "@/models/purchase";
 import * as cookieService from "@/server/services/cookieService";
+import * as tokenService from "@/server/services/tokenService";
 import { NextResponse } from "next/server";
 import { ApiError } from "../error/ApiError";
 import * as mailService from "./mailService";
@@ -36,6 +37,16 @@ export const createPurchase = async ({
 }: PurchaseBody) => {
   try {
     const userData = await cookieService.getUserDataFromCookies();
+
+    const user = await prisma.users.findUnique({
+      where: { email: userData.email },
+    });
+
+    if (!user) {
+      throw ApiError.badRequest(
+        `Пользователь с адресом эл.почты ${userData.email} не зарегистрирован в базе`
+      );
+    }
 
     const boughtPreviouslyPurchase = await prisma.purchase.findFirst({
       where: {

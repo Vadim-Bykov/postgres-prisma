@@ -1,7 +1,8 @@
-import Button from "@/app/components/atoms/common/Button";
+import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
 import { Input } from "@/app/components/atoms/common/Input";
 import { InputSelect } from "@/app/components/atoms/common/InputSelect";
 import { Form } from "@/app/components/common/Form";
+import messages from "@/app/constants/messages.json";
 import { PurchaseBody } from "@/models/purchase";
 import {
   useCreatePurchaseMutation,
@@ -10,11 +11,10 @@ import {
 } from "@/store/features/api/subApi/purchase";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import messages from "@/app/constants/messages.json";
-import { OptionHTMLAttributes } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { OptionHTMLAttributes } from "react";
+import { useForm } from "react-hook-form";
 
 interface FormData {
   bankRecipientId: string;
@@ -29,14 +29,19 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
     setError,
     formState: { errors },
   } = useForm<FormData>();
-
   const { data: userPurchase } = useGetUserPurchaseQuery({
     consultationId: consultationId as string,
   });
 
   const [
     purchaseConsultation,
-    { data: createdPurchase, isSuccess: isPurchased, isLoading: isPurchasing },
+    {
+      data: createdPurchase,
+      isSuccess: isPurchased,
+      isLoading: isPurchasing,
+      isError: isCreatePurchaseError,
+      error: createPurchaseError,
+    },
   ] = useCreatePurchaseMutation();
   const [
     updatePurchase,
@@ -44,8 +49,8 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
       data: updatedPurchase,
       isSuccess: isUpdated,
       isLoading: isUpdating,
-      isError,
-      error,
+      isError: isUpdatePurchaseError,
+      error: updatePurchaseError,
     },
   ] = useUpdatePurchaseMutation();
 
@@ -125,14 +130,15 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         />
       </div>
 
-      <Button
+      <AuthenticationButton
+        authenticationForActionRequired
         type="submit"
         className="self-start"
         disabled={isPurchasing || isUpdating}
         loading={isPurchasing || isUpdating}
       >
         {userHasPurchase ? "Исправить данные об оплате" : "Проверить оплату"}
-      </Button>
+      </AuthenticationButton>
       <span
         className={clsx(
           "overflow-hidden text-green-600",
@@ -161,11 +167,15 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         className={clsx(
           "overflow-hidden text-pink",
           "transition-max-height duration-500 ease-in-out",
-          isError ? "max-h-28" : "max-h-0"
+          isCreatePurchaseError || isUpdatePurchaseError
+            ? "max-h-28"
+            : "max-h-0"
         )}
       >
         {/* @ts-ignore */}
-        {error?.data?.message}
+        {createPurchaseError?.data?.message ||
+          // @ts-ignore
+          updatePurchaseError?.data?.message}
       </span>
     </Form>
   );

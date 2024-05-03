@@ -5,8 +5,9 @@ import { authMiddleware } from "./server/middlewares/auth";
 export async function middleware(request: NextRequest) {
   try {
     if (
-      (request.nextUrl.pathname.includes("/banking") ||
-        request.nextUrl.pathname.includes("/users/")) &&
+      // TODO: uncomment if we want BY users to be restricted
+      // (request.nextUrl.pathname.includes("/banking") ||
+      request.nextUrl.pathname.includes("/users/") &&
       request.method === "GET"
     ) {
       const response = await authMiddleware(request);

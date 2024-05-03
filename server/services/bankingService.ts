@@ -7,26 +7,25 @@ import { ApiError } from "../error/ApiError";
 
 export const getBankingData = async () => {
   try {
-    const refreshToken = cookieService.getTokensFromCookies();
+    // TODO: uncomment if we want only authorized users to get bank data
+    // const refreshToken = cookieService.getTokensFromCookies();
 
-    if (!refreshToken) {
-      throw ApiError.unauthorized();
-    }
-    const userData = await tokenService.validateRefreshToken(refreshToken);
+    // if (!refreshToken) {
+    //   throw ApiError.unauthorized();
+    // }
+    // const userData = await tokenService.validateRefreshToken(refreshToken);
 
-    if (userData instanceof NextResponse) {
-      throw userData;
-    }
-    const user = await prisma.users.findUnique({
-      where: { email: userData.email },
-    });
+    // const user = await prisma.users.findUnique({
+    //   where: { email: userData.email },
+    // });
 
-    if (!user) {
-      throw ApiError.badRequest(
-        `Пользователь с адресом эл.почты ${userData.email} не зарегистрирован в базе`
-      );
-    }
+    // if (!user) {
+    //   throw ApiError.badRequest(
+    //     `Пользователь с адресом эл.почты ${userData.email} не зарегистрирован в базе`
+    //   );
+    // }
 
+    // TODO: uncomment if we want BY users to be restricted
     // if (
     //   (!userData.location || userData.location?.country === "BY") &&
     //   userData.role !== "ADMIN"
