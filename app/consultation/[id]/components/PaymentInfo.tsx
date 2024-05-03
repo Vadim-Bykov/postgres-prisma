@@ -43,7 +43,6 @@ export function PaymentInfo() {
     { consultationId: consultationId as string },
     { skip: !userData }
   );
-  console.log({ userData, userPurchase, isError });
 
   const {
     data: banking,
