@@ -92,7 +92,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       className={{
         base: clsx(
           "px-5 py-10 lg:px-20 lg:py-20 sm:w-[390px]",
-          "w-[70%] box-content overflow-hidden"
+          "w-[70%] box-content max-h-[calc(100vh-100px)] overflow-y-auto"
         ),
       }}
       withCloseIcon
