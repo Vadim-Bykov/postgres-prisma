@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes } from "react";
 import { UseFormRegister } from "react-hook-form";
 
 interface Props
@@ -8,14 +8,23 @@ interface Props
     "type" | "className"
   > {
   label?: string;
+  labelClassName?: HTMLAttributes<HTMLLabelElement>["className"];
   // TODO: figure out proper type
   register?: UseFormRegister<any>;
 }
 
-export function ToggleInput({ label, name, register, ...props }: Props) {
+export function ToggleInput({
+  label,
+  name,
+  register,
+  labelClassName,
+  ...props
+}: Props) {
   return (
     <label className="relative flex items-center justify-between cursor-pointer">
-      {label && <span className="font-medium">{label}</span>}
+      {label && (
+        <span className={clsx("font-medium", labelClassName)}>{label}</span>
+      )}
       <input
         type="checkbox"
         className="sr-only peer"

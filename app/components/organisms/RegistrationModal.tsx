@@ -17,12 +17,15 @@ import { Modal, ModalProps } from "../common/Modal/Modal";
 import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
+import { ToggleInput } from "../molecules/inputs/ToggleInput";
 
 type FormValues = {
   firstName: string;
   email: string;
   password: string;
   confirmPassword: string;
+  showFriendEmail?: boolean;
+  invitedByFriendEmail?: string;
 };
 
 interface Props extends ModalProps {
@@ -32,7 +35,6 @@ interface Props extends ModalProps {
 
 export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   const dispatch = useAppDispatch();
-  const defaultValues = useMemo(() => ({ email }), [email]);
 
   const {
     register,
@@ -53,25 +55,37 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
     useState(false);
   const password = watch("password");
   const location = useAppSelector((state) => state.user.currentLocation);
+  const showFriendEmail = watch("showFriendEmail", false);
 
-  const onSubmit = handleSubmit(async ({ email, firstName, password }) => {
-    try {
-      await createUser({
-        email,
-        name: firstName,
-        password,
-        location,
-      }).unwrap();
+  const onSubmit = handleSubmit(
+    async ({
+      email,
+      firstName,
+      password,
+      invitedByFriendEmail,
+      showFriendEmail,
+    }) => {
+      try {
+        await createUser({
+          email,
+          name: firstName,
+          password,
+          location,
+          invitedByFriendEmail: showFriendEmail
+            ? invitedByFriendEmail
+            : undefined,
+        }).unwrap();
 
-      reset();
-      dispatch(toggleRegistrationModal(false));
-    } catch (error: any) {
-      if (typeof error?.data?.message === "string") {
-        setFormError(error?.data?.message);
-        setShowFormError(true);
+        reset();
+        dispatch(toggleRegistrationModal(false));
+      } catch (error: any) {
+        if (typeof error?.data?.message === "string") {
+          setFormError(error?.data?.message);
+          setShowFormError(true);
+        }
       }
     }
-  });
+  );
 
   return (
     <Modal
@@ -145,6 +159,24 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
               : undefined
           }
         />
+
+        <div className="flex flex-col gap-4">
+          <ToggleInput
+            label="Меня пригласил друг (получаешь дополнительный бонус 200 баллов)"
+            name="showFriendEmail"
+            register={register}
+            labelClassName="text-xs lg:text-sm basis-3/4"
+          />
+          {showFriendEmail && (
+            <EmailInput
+              label="Электронная почта друга"
+              name="invitedByFriendEmail"
+              error={errors.invitedByFriendEmail?.message}
+              register={register}
+              required={false}
+            />
+          )}
+        </div>
 
         <span
           className={clsx(

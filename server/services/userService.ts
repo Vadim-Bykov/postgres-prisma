@@ -14,6 +14,7 @@ import { ApiError } from "../error/ApiError";
 import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
+import * as walletService from "./walletService";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -29,14 +30,27 @@ export const registration = async ({
   password,
   location,
   imageFormData,
+  invitedByFriendEmail,
 }: // picture,
 UserCreationBody) => {
   try {
-    const candidate = await prisma.users.findFirst({ where: { email } });
+    const candidate = await prisma.users.findUnique({ where: { email } });
 
     if (candidate) {
       throw ApiError.badRequest(
         `Пользователь с адресом эл.почты ${email} уже зарегистрирован в базе`
+      );
+    }
+
+    const friend =
+      invitedByFriendEmail &&
+      (await prisma.users.findUnique({
+        where: { email: invitedByFriendEmail },
+      }));
+
+    if (invitedByFriendEmail && !friend) {
+      throw ApiError.badRequest(
+        `Пользователь (ваш друг) с адресом эл.почты ${invitedByFriendEmail} не зарегистрирован в базе. Пожалуйста уточните адрес эл.почты у своего друга.`
       );
     }
 
@@ -57,10 +71,16 @@ UserCreationBody) => {
         //  activationLink,
         //  picture: fileName,
         name,
+        invitedByFriendEmail,
       },
     });
 
-    await mailService.sendActivationMail({ name, email });
+    await walletService.createWallet({
+      userId: user.id,
+      invitedByFriend: !!invitedByFriendEmail,
+    });
+
+    // await mailService.sendActivationMail({ name, email });
 
     await prisma.location.create({
       data: { ...location, userId: user.id },

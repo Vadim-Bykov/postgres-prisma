@@ -9,6 +9,7 @@ export interface UserCreationBody {
   password: User["password"];
   imageFormData?: FormData;
   location?: UserLocation;
+  invitedByFriendEmail?: User["invitedByFriendEmail"];
 }
 
 export interface UserLoginBody {

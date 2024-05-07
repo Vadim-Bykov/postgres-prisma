@@ -9,6 +9,7 @@
     "prisma-studio": "npx prisma studio",
     "prisma-db-push": "npx prisma db push",
     "prisma-db-pull": "npx prisma db pull",
+    "prisma-format": "npx prisma format",
     "build": "prisma generate && prisma db push && prisma db seed && next build",
     "start": "next start",
     "lint": "next lint"

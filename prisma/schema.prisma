@@ -9,26 +9,29 @@ datasource db {
 }
 
 model Users {
-  id                 Int                 @id @unique @default(autoincrement())
-  name               String
-  email              String              @unique
-  password           String
-  role               Role                @default(USER)
-  image              String?
-  emailNotification  Boolean             @default(true)
-  project            Project             @default(ASTRO)
-  environment        Environment         @default(production)
-  location           Location?
-  Token              Token[]
-  passwordResetLink  PasswordResetLink[]
-  purchase           Purchase[]
-  articleEmails      ArticleEmail[]
-  consultationEmails ConsultationEmail[]
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime?
-  lastVisitAt        DateTime            @default(now())
-  Consultation       Consultation?       @relation(fields: [consultationId], references: [id])
-  consultationId     Int?
+  id                   Int                 @id @unique @default(autoincrement())
+  name                 String
+  email                String              @unique
+  password             String
+  role                 Role                @default(USER)
+  invitedByFriendEmail String?
+  image                String?
+  emailNotification    Boolean             @default(true)
+  project              Project             @default(ASTRO)
+  environment          Environment         @default(production)
+  location             Location?
+  Token                Token[]
+  passwordResetLink    PasswordResetLink[]
+  purchase             Purchase[]
+  articleEmails        ArticleEmail[]
+  consultationEmails   ConsultationEmail[]
+  wallet               Wallet?
+  Bonus                Bonus[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime?
+  lastVisitAt          DateTime            @default(now())
+  Consultation         Consultation?       @relation(fields: [consultationId], references: [id])
+  consultationId       Int?
 }
 
 model Token {
@@ -150,6 +153,7 @@ model Purchase {
   updatedAt             DateTime?
   paymentConfirmationAt DateTime?
   orderFulfillmentAt    DateTime?
+  Bonus                 Bonus[]
 }
 
 model ArticleEmail {
@@ -167,4 +171,36 @@ model ConsultationEmail {
   consultation   Consultation @relation(fields: [consultationId], references: [id])
   usersGotEmail  Users[]
   createdAt      DateTime     @default(now())
+}
+
+model Wallet {
+  id     Int   @id @unique @default(autoincrement())
+  userId Int   @unique
+  users  Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bonusAmount Int?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+}
+
+enum BonusType {
+  REGISTRATION
+  REGISTRATION_WITH_REFERRAL_EMAIL
+  FRIEND_S_PURCHASE
+}
+
+model Bonus {
+  id     Int   @id @unique @default(autoincrement())
+  userId Int
+  users  Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type          BonusType
+  amount        Int?
+  purchasePrice Int?
+  purchaseId    Int?
+  purchase      Purchase? @relation(fields: [purchaseId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
 }
