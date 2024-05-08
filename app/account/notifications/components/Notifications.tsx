@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/app/components/atoms/common/Button";
+import { ErrorMessage } from "@/app/components/atoms/common/ErrorMessage";
 import { Form } from "@/app/components/common/Form";
 import { ToggleInput } from "@/app/components/molecules/inputs/ToggleInput";
 import { useUpdateUserPersonalDataMutation } from "@/store/features/api/subApi/userApi";
@@ -102,15 +103,7 @@ export function Notifications() {
           register={register}
         />
 
-        <span
-          className={clsx(
-            "overflow-hidden text-pink inline-block",
-            "transition-max-height duration-500 ease-in-out",
-            showFormError ? "max-h-28" : "max-h-0"
-          )}
-        >
-          {formError}
-        </span>
+        <ErrorMessage visible={showFormError}>{formError}</ErrorMessage>
 
         <Button
           type="submit"

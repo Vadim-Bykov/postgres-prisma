@@ -4,13 +4,15 @@ import { PropsWithChildren } from "react";
 export function ErrorMessage({
   children,
   visible,
-}: PropsWithChildren<{ visible: boolean }>) {
+  className,
+}: PropsWithChildren<{ visible: boolean; className?: string }>) {
   return (
     <p
       className={clsx(
-        "overflow-hidden ml-2 text-pink h-fit",
+        "overflow-hidden text-pink h-fit",
         "transition-max-height duration-500 ease-in-out",
-        visible ? "max-h-28" : "max-h-0"
+        visible ? "max-h-32" : "max-h-0",
+        className
       )}
     >
       {children}

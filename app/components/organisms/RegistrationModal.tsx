@@ -18,6 +18,8 @@ import { EmailInput } from "../molecules/inputs/EmailInput";
 import { NameInput } from "../molecules/inputs/NameInput";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
 import { ToggleInput } from "../molecules/inputs/ToggleInput";
+import { ErrorMessage } from "../atoms/common/ErrorMessage";
+import { REGISTRATION_WITH_REFERRAL_EMAIL_BONUS } from "@/app/constants/constants";
 
 type FormValues = {
   firstName: string;
@@ -162,7 +164,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
 
         <div className="flex flex-col gap-4">
           <ToggleInput
-            label="Меня пригласил друг (получаешь дополнительный бонус 200 баллов)"
+            label={`Меня пригласил друг (получаешь дополнительный бонус ${REGISTRATION_WITH_REFERRAL_EMAIL_BONUS} баллов)`}
             name="showFriendEmail"
             register={register}
             labelClassName="text-xs lg:text-sm basis-3/4"
@@ -178,15 +180,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           )}
         </div>
 
-        <span
-          className={clsx(
-            "overflow-hidden text-pink inline-block",
-            "transition-max-height duration-500 ease-in-out",
-            showFormError ? "max-h-28" : "max-h-0"
-          )}
-        >
-          {formError}
-        </span>
+        <ErrorMessage visible={showFormError}>{formError}</ErrorMessage>
 
         <Button
           type="submit"

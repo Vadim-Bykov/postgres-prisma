@@ -84,7 +84,9 @@ export const InputSelect = forwardRef<HTMLSelectElement, Props>(function Input(
         )}
         {renderRight?.({})}
       </div>
-      <ErrorMessage visible={!!error}>{storedErrorRef.current}</ErrorMessage>
+      <ErrorMessage visible={!!error} className="ml-2">
+        {storedErrorRef.current}
+      </ErrorMessage>
     </div>
   );
 });
