@@ -15,6 +15,7 @@ import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
 import * as walletService from "./walletService";
+import * as friendService from "./friendService";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -75,16 +76,21 @@ UserCreationBody) => {
       },
     });
 
-    await walletService.createWallet({
-      userId: user.id,
-      invitedByFriend: !!invitedByFriendEmail,
-    });
-
-    // await mailService.sendActivationMail({ name, email });
-
-    await prisma.location.create({
-      data: { ...location, userId: user.id },
-    });
+    Promise.all([
+      await walletService.createWallet({
+        userId: user.id,
+        invitedByFriend: !!invitedByFriendEmail,
+      }),
+      await prisma.location.create({
+        data: { ...location, userId: user.id },
+      }),
+      !!invitedByFriendEmail &&
+        (await friendService.createFriend({
+          invitedByFriendEmail,
+          userId: user.id,
+        })),
+      // await mailService.sendActivationMail({ name, email });
+    ]);
 
     const userDto = getUserDto({ ...user, location });
     const { refreshToken } = await tokenService.generateToken(userDto);

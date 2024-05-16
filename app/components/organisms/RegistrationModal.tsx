@@ -97,6 +97,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           "w-[70%] box-content max-h-[calc(100vh-100px)] overflow-y-auto"
         ),
       }}
+      shouldCloseOnOverlayClick={false}
       withCloseIcon
       {...props}
     >
