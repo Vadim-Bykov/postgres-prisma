@@ -19,7 +19,10 @@ import { NameInput } from "../molecules/inputs/NameInput";
 import { PasswordInput } from "../molecules/inputs/PasswordInput";
 import { ToggleInput } from "../molecules/inputs/ToggleInput";
 import { ErrorMessage } from "../atoms/common/ErrorMessage";
-import { REGISTRATION_WITH_REFERRAL_EMAIL_BONUS } from "@/app/constants/constants";
+import {
+  REGISTRATION_BONUS,
+  REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+} from "@/app/constants/constants";
 
 type FormValues = {
   firstName: string;
@@ -101,9 +104,16 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
       withCloseIcon
       {...props}
     >
-      <h1 className="font-head text-3xl font-semibold mb-6">
-        Давай создадим тебе аккаунт
-      </h1>
+      <div className="mb-6">
+        <h1 className="font-head text-2xl sm:text-3xl font-semibold ">
+          Давай создадим тебе аккаунт
+        </h1>
+        <p>
+          Ты получишь бонус{" "}
+          <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов.
+        </p>
+        <p>1 балл = 1 RUB</p>
+      </div>
 
       <Form
         preventSubmission={isUserCreating}

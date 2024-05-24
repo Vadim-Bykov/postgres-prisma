@@ -10,10 +10,14 @@ import { useIsLoggedIn } from "@/utils/authorization";
 function Content({ openModal }: { openModal: () => void }) {
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="">
-        Зарегистрируйся на <span className="text-xl">{BRAND_NAME}</span> и
-        получи бонус {REGISTRATION_BONUS} баллов
-      </h2>
+      <div className="flex flex-col gap-2">
+        <h2>
+          Зарегистрируйся на <span className="text-xl">{BRAND_NAME}</span> и
+          получи бонус{" "}
+          <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов.
+        </h2>
+        <p>1 балл = 1 RUB</p>
+      </div>
       <Button onClick={openModal}>Зарегистрироваться</Button>
     </div>
   );
@@ -36,10 +40,13 @@ export function SignUpPromptToast() {
     dispatch(toggleRegistrationModal(true));
     setShowToast(false);
   };
+  if (!showToast) return null;
 
   return (
     <Toast
       show={showToast}
+      autoClose={20000}
+      className="lg:w-96"
       ToastContent={() => <Content openModal={openModal} />}
     />
   );

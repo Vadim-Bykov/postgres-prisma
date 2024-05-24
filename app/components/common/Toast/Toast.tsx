@@ -21,11 +21,5 @@ export function Toast({ show, ToastContent, ...props }: Props) {
     }
   }, [show, ToastContent]);
 
-  return (
-    <ToastContainer
-      className="w-11/12 max-w-sm"
-      toastClassName="rounded-lg"
-      {...props}
-    />
-  );
+  return <ToastContainer toastClassName="rounded-lg" {...props} />;
 }
