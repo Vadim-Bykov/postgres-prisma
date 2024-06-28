@@ -1,18 +1,13 @@
 import prisma from "@/lib/prisma";
-import { ApiError } from "../error/ApiError";
 import { catchErrorHandler } from "@/utils/errorHandler";
-import * as bonusService from "./bonusService";
-import {
-  REGISTRATION_BONUS,
-  REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
-} from "@/app/constants/constants";
+import { ApiError } from "../error/ApiError";
 
 export const createWallet = async ({
   userId,
-  invitedByFriend,
 }: {
   userId: number;
-  invitedByFriend: boolean;
+  invitedByFriend?: boolean;
+  registrationFlow?: boolean;
 }) => {
   try {
     const candidate = await prisma.wallet.findUnique({ where: { userId } });
@@ -27,21 +22,6 @@ export const createWallet = async ({
       data: { userId },
     });
 
-    await bonusService.createBonus({
-      userId,
-      bonusType: "REGISTRATION",
-      amount: REGISTRATION_BONUS,
-    });
-
-    {
-      invitedByFriend &&
-        (await bonusService.createBonus({
-          userId,
-          bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
-          amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
-        }));
-    }
-
     return wallet;
   } catch (error: any) {
     throw catchErrorHandler({
@@ -54,10 +34,6 @@ export const createWallet = async ({
 export const getWallet = async ({ userId }: { userId: number }) => {
   try {
     const wallet = await prisma.wallet.findUnique({ where: { userId } });
-
-    if (!wallet) {
-      throw ApiError.badRequest("Кошелек не зарегистрирован в базе");
-    }
 
     return wallet;
   } catch (error: any) {
@@ -76,10 +52,10 @@ export const addBonusAmountToWallet = async ({
   amount: number;
 }) => {
   try {
-    const wallet = await getWallet({ userId });
+    let wallet = await getWallet({ userId });
 
     if (!wallet) {
-      throw ApiError.badRequest("Кошелек не зарегистрирован в базе");
+      wallet = await createWallet({ userId });
     }
 
     await prisma.wallet.update({

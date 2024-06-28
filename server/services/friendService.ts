@@ -37,3 +37,25 @@ export const getAllFriends = async ({ email }: { email: string }) => {
     });
   }
 };
+
+export const getFriendObject = async ({
+  userId,
+  invitedByFriendEmail,
+}: {
+  userId: number;
+  invitedByFriendEmail: string;
+}) => {
+  try {
+    const friends = await prisma.friend.findUnique({
+      where: { userId, invitedByFriendEmail },
+      include: { friend: true },
+    });
+
+    return friends;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при поиске друга в в базе",
+    });
+  }
+};

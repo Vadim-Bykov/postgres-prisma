@@ -16,6 +16,11 @@ import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
 import * as walletService from "./walletService";
 import * as friendService from "./friendService";
+import * as bonusService from "./bonusService";
+import {
+  REGISTRATION_BONUS,
+  REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+} from "@/app/constants/constants";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -76,20 +81,34 @@ UserCreationBody) => {
       },
     });
 
-    Promise.all([
-      await walletService.createWallet({
+    await Promise.all([
+      walletService.createWallet({
         userId: user.id,
         invitedByFriend: !!invitedByFriendEmail,
       }),
-      await prisma.location.create({
+      prisma.location.create({
         data: { ...location, userId: user.id },
       }),
       !!invitedByFriendEmail &&
-        (await friendService.createFriend({
+        friendService.createFriend({
           invitedByFriendEmail,
           userId: user.id,
-        })),
+        }),
       // await mailService.sendActivationMail({ name, email });
+    ]);
+
+    await Promise.all([
+      bonusService.createBonus({
+        userId: user.id,
+        bonusType: "REGISTRATION",
+        amount: REGISTRATION_BONUS,
+      }),
+      invitedByFriendEmail &&
+        bonusService.createBonus({
+          userId: user.id,
+          bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
+          amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+        }),
     ]);
 
     const userDto = getUserDto({ ...user, location });

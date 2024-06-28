@@ -2,9 +2,9 @@ import messages from "@/app/constants/messages.json";
 import prisma from "@/lib/prisma";
 import { PurchaseBody } from "@/models/purchase";
 import * as cookieService from "@/server/services/cookieService";
-import * as tokenService from "@/server/services/tokenService";
 import { NextResponse } from "next/server";
 import { ApiError } from "../error/ApiError";
+import * as bonusService from "./bonusService";
 import * as mailService from "./mailService";
 
 export const getAllUserPurchases = async () => {
@@ -73,13 +73,23 @@ export const createPurchase = async ({
           bankRecipientId,
           paymentNumber,
         },
+        include: { consultation: true },
       }),
-      await mailService.sendCheckingPurchaseMail({
+      mailService.sendCheckingPurchaseMail({
         name: userData.name,
         email: userData.email,
         consultationId,
       }),
     ]);
+
+    !!user.invitedByFriendEmail &&
+      purchase.consultation.price &&
+      (await bonusService.createPurchaseBonusForFriend({
+        purchasePrice: purchase.consultation.price,
+        purchaseId: purchase.id,
+        userId: user.id,
+        invitedByFriendEmail: user.invitedByFriendEmail,
+      }));
 
     return purchase;
   } catch (error: any) {

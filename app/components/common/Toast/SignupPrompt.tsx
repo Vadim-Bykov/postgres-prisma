@@ -25,16 +25,22 @@ function Content({ openModal }: { openModal: () => void }) {
 
 export function SignUpPromptToast() {
   const [showToast, setShowToast] = useState(false);
+  const [toastShown, setToastShown] = useState(false);
   const loggedIn = useIsLoggedIn();
   const isUserDataLoading = loggedIn === undefined;
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!loggedIn && !isUserDataLoading) {
+    if (!loggedIn && !isUserDataLoading && !toastShown) {
       setShowToast(true);
+      setToastShown(true);
     }
-  }, [loggedIn, isUserDataLoading]);
+    if (loggedIn) {
+      //  no need to show toast
+      setToastShown(true);
+    }
+  }, [loggedIn, isUserDataLoading, toastShown]);
 
   const openModal = () => {
     dispatch(toggleRegistrationModal(true));
