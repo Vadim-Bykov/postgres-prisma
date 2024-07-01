@@ -25,6 +25,10 @@ export const getConsultation = async (id: number) => {
       where: { id },
     });
 
+    if (!consultation) {
+      throw ApiError.badRequest(`Консультация с ID: ${id} не сохранена в базе`);
+    }
+
     return consultation;
   } catch (error) {
     throw ApiError.badRequest(

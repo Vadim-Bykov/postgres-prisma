@@ -58,12 +58,48 @@ export const addBonusAmountToWallet = async ({
       wallet = await createWallet({ userId });
     }
 
-    await prisma.wallet.update({
+    const updatedWallet = await prisma.wallet.update({
       where: { userId },
       data: { bonusAmount: (wallet.bonusAmount || 0) + amount },
     });
 
-    return wallet;
+    return updatedWallet;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при добавлении бонуса в кошелек пользователя",
+    });
+  }
+};
+
+export const subtractAmountFromWallet = async ({
+  userId,
+  amount,
+}: {
+  userId: number;
+  amount: number;
+}) => {
+  try {
+    let wallet = await getWallet({ userId });
+
+    if (!wallet) {
+      throw ApiError.badRequest(
+        "Кошелек не зарегистрирован в базе. Чтобы списать бонусные баллы у вас должен быть кошелек."
+      );
+    }
+
+    if (!wallet.bonusAmount || wallet.bonusAmount < amount) {
+      throw ApiError.badRequest(
+        `На вашем счету меньше баллов чем вы предлагаете к списанию. У вас на счету ${wallet.bonusAmount} баллов, а вы предлагаете списать ${amount}. `
+      );
+    }
+
+    const updatedWallet = await prisma.wallet.update({
+      where: { userId },
+      data: { bonusAmount: wallet.bonusAmount - amount },
+    });
+
+    return updatedWallet;
   } catch (error: any) {
     throw catchErrorHandler({
       error,

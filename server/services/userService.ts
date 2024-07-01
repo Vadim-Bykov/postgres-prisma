@@ -98,17 +98,17 @@ UserCreationBody) => {
     ]);
 
     await Promise.all([
-      bonusService.createBonus({
+      await bonusService.createBonus({
         userId: user.id,
         bonusType: "REGISTRATION",
         amount: REGISTRATION_BONUS,
       }),
-      invitedByFriendEmail &&
-        bonusService.createBonus({
+      !!invitedByFriendEmail &&
+        (await bonusService.createBonus({
           userId: user.id,
           bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
           amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
-        }),
+        })),
     ]);
 
     const userDto = getUserDto({ ...user, location });

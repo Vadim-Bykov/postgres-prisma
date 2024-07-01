@@ -162,6 +162,8 @@ model Purchase {
   paymentConfirmationAt DateTime?
   orderFulfillmentAt    DateTime?
   Bonus                 Bonus[]
+  paidByMoney           Int            @default(0)
+  paidByBonus           Int?
 }
 
 model ArticleEmail {

@@ -78,6 +78,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         bankRecipientId: +bankRecipientId,
         consultationId: +consultationId,
         paymentNumber,
+        paidByBonus: 100,
       };
 
       userHasPurchase
