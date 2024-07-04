@@ -60,7 +60,10 @@ export const addBonusAmountToWallet = async ({
 
     const updatedWallet = await prisma.wallet.update({
       where: { userId },
-      data: { bonusAmount: (wallet.bonusAmount || 0) + amount },
+      data: {
+        bonusAmount: (wallet.bonusAmount || 0) + amount,
+        updatedAt: new Date().toISOString(),
+      },
     });
 
     return updatedWallet;
@@ -96,7 +99,10 @@ export const subtractAmountFromWallet = async ({
 
     const updatedWallet = await prisma.wallet.update({
       where: { userId },
-      data: { bonusAmount: wallet.bonusAmount - amount },
+      data: {
+        bonusAmount: wallet.bonusAmount - amount,
+        updatedAt: new Date().toISOString(),
+      },
     });
 
     return updatedWallet;

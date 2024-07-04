@@ -11,6 +11,9 @@ import Skeleton from "react-loading-skeleton";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { Paragraph } from "@/app/components/common/Paragraph";
 import { SendEmailButton } from "@/app/components/common/SendEmailButton";
+import { PERCENTAGE_TO_PAY_BY_BONUS } from "@/app/constants/constants";
+import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
+import clsx from "clsx";
 
 const MAX_WIDTH = 1024;
 
@@ -35,6 +38,8 @@ export function ConsultationPlaceholder() {
 
 export function ConsultationDetails({ id }: { id: string }) {
   const { data: consultation } = useGetConsultationQuery({ id });
+  const { walletBallance, sumToPayByBonus, sumToPayByMoney } =
+    useBonusToPayConsultation(id);
 
   if (!consultation) {
     return <ConsultationPlaceholder />;
@@ -80,9 +85,45 @@ export function ConsultationDetails({ id }: { id: string }) {
             );
           })}
         </div>
-        <p>
-          Стоимость консультации {formatCurrencyAmount({ price, currency })}.
-        </p>
+        <div>
+          <p>
+            Стоимость консультации{" "}
+            <span
+              className={clsx(
+                walletBallance &&
+                  sumToPayByBonus &&
+                  "line-through text-red font-semibold"
+              )}
+            >
+              {formatCurrencyAmount({ price, currency })}
+            </span>
+            {walletBallance && sumToPayByMoney && (
+              <>
+                {" "}
+                - для вас{" "}
+                <span className="text-purple font-semibold">
+                  {formatCurrencyAmount({ price: sumToPayByMoney, currency })}
+                </span>
+              </>
+            )}
+            .
+          </p>
+          {walletBallance > 0 && (
+            <p className="text-sm">
+              У вас на счету{" "}
+              <span className="text-red font-semibold">{walletBallance}</span>{" "}
+              баллов. Вы можете воспользоваться ими для оплаты.{" "}
+              <span className="text-red font-semibold">
+                {PERCENTAGE_TO_PAY_BY_BONUS}%
+              </span>{" "}
+              от стоимости консультации можно оплачивать баллами (
+              <span className="text-red font-semibold">{sumToPayByBonus}</span>{" "}
+              можете оплатить баллами и{" "}
+              <span className="text-red font-semibold">{sumToPayByMoney}</span>{" "}
+              деньгами).
+            </p>
+          )}
+        </div>
         <ul>
           {perksTitle && <p>{perksTitle}</p>}
           {perks.length > 0 &&

@@ -12,12 +12,14 @@ export const createBonus = async ({
   bonusType,
   purchasePrice,
   purchaseId,
+  friendId,
 }: {
   userId: number;
   amount: number;
   bonusType: BonusType;
   purchasePrice?: number;
   purchaseId?: number;
+  friendId?: number;
 }) => {
   try {
     const bonus = await prisma.bonus.create({
@@ -27,6 +29,7 @@ export const createBonus = async ({
         type: bonusType,
         purchasePrice,
         purchaseId,
+        friendId,
       },
     });
 
@@ -68,6 +71,7 @@ export const createPurchaseBonusForFriend = async ({
       amount: (purchasePrice * PERCENTAGE_FROM_FRIEND_PURCHASE) / 100,
       purchaseId,
       purchasePrice,
+      friendId: friend.id,
     });
 
     return bonus;

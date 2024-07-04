@@ -9,6 +9,7 @@ import {
   useGetUserPurchaseQuery,
   useUpdatePurchaseMutation,
 } from "@/store/features/api/subApi/purchase";
+import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
 import Link from "next/link";
@@ -19,6 +20,7 @@ import { useForm } from "react-hook-form";
 interface FormData {
   bankRecipientId: string;
   paymentNumber?: string | null;
+  paidByBonus?: number;
 }
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
@@ -32,6 +34,9 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const { data: userPurchase } = useGetUserPurchaseQuery({
     consultationId: consultationId as string,
   });
+  const { walletBallance, sumToPayByBonus } = useBonusToPayConsultation(
+    consultationId as string
+  );
 
   const [
     purchaseConsultation,
@@ -68,7 +73,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
     : 0;
 
   const onSubmit = handleSubmit(
-    async ({ bankRecipientId, paymentNumber }: FormData) => {
+    async ({ bankRecipientId, paymentNumber, paidByBonus }: FormData) => {
       if (bankRecipientId === "0") {
         setError("bankRecipientId", { message: messages.validation.required });
         return;
@@ -78,7 +83,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         bankRecipientId: +bankRecipientId,
         consultationId: +consultationId,
         paymentNumber,
-        paidByBonus: 100,
+        paidByBonus: paidByBonus ? +paidByBonus : undefined,
       };
 
       userHasPurchase
@@ -130,6 +135,29 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
           }
         />
       </div>
+
+      {walletBallance > 0 && (
+        <div className="flex flex-col gap-1 text-xs">
+          <p>
+            Укажите пожалуйста количество бонусных баллов, которыми хотите
+            оплатить консультацию (не более {sumToPayByBonus}).
+          </p>
+          <Input
+            label="Количество бонусных баллов для оплаты"
+            error={errors.paidByBonus?.message}
+            {...register("paidByBonus", {
+              validate: (sum) => {
+                if (sumToPayByBonus && sum) {
+                  return (
+                    sumToPayByBonus >= +sum ||
+                    `Вы можете оплатить бонусными баллами только  ${sumToPayByBonus}.`
+                  );
+                }
+              },
+            })}
+          />
+        </div>
+      )}
 
       <AuthenticationButton
         authenticationForActionRequired
