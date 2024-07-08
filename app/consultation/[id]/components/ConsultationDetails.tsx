@@ -2,6 +2,7 @@
 
 import { useGetConsultationQuery } from "@/store/features/api/subApi/consultationApi";
 import {
+  formatBonusStringEnding,
   formatCurrencyAmount,
   formatGoogleDriveImageUrl,
 } from "@/utils/formatting";
@@ -112,7 +113,8 @@ export function ConsultationDetails({ id }: { id: string }) {
             <p className="text-sm">
               У вас на счету{" "}
               <span className="text-red font-semibold">{walletBallance}</span>{" "}
-              баллов. Вы можете воспользоваться ими для оплаты.{" "}
+              {formatBonusStringEnding(walletBallance)}. Вы можете
+              воспользоваться ими для оплаты.{" "}
               <span className="text-red font-semibold">
                 {PERCENTAGE_TO_PAY_BY_BONUS}%
               </span>{" "}

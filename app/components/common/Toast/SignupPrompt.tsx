@@ -14,7 +14,8 @@ function Content({ openModal }: { openModal: () => void }) {
         <h2>
           Зарегистрируйся на <span className="text-xl">{BRAND_NAME}</span> и
           получи бонус{" "}
-          <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов.
+          <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов и
+          оплачивай ими консультации.
         </h2>
         <p>1 балл = 1 RUB</p>
       </div>
