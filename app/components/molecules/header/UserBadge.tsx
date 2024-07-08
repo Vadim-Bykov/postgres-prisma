@@ -9,6 +9,8 @@ import Image from "next/image";
 import { HTMLAttributes } from "react";
 import { AuthenticationButton } from "../../atoms/AuthenticationButton";
 import Icon from "../../atoms/common/Icon/Icon";
+import { useWalletQuery } from "@/store/features/api/subApi/wallet";
+import { Coin } from "@/public/icons/Coin";
 
 export function UserBadge({
   onAvatarLogoClick,
@@ -27,6 +29,8 @@ export function UserBadge({
   const asPath = useAppPathname();
   const { push } = useAppRouter();
   const { isTablet } = useWindowDimensions();
+  const { data: wallet } = useWalletQuery();
+  const walletBallance = wallet?.bonusAmount ?? "--";
 
   const onAvatarClick = () => {
     if (isUserDataLoading) return;
@@ -57,13 +61,18 @@ export function UserBadge({
             name="account/settings-2-fill.svg"
             className="absolute top-6 left-10 lg:left-7"
           />
-          <span
-            className={clsx(
-              "transition-all duration-300",
-              isUserDataLoading ? "max-w-0" : "max-w-xs"
-            )}
-          >
-            {userData?.name || ""}
+          <span>
+            <span
+              className={clsx(
+                "transition-all duration-300",
+                isUserDataLoading ? "max-w-0" : "max-w-xs"
+              )}
+            >
+              {userData?.name || ""}
+            </span>
+            <br />
+            <Coin />{" "}
+            <span className="text-pink font-semibold">{walletBallance}</span>
           </span>
         </button>
       ) : (

@@ -8,6 +8,8 @@ import Image from "next/image";
 import { PropsWithChildren } from "react";
 import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
+import { useWalletQuery } from "@/store/features/api/subApi/wallet";
+import { Coin } from "@/public/icons/Coin";
 
 export function AccountNavigationLayout({
   children,
@@ -17,6 +19,8 @@ export function AccountNavigationLayout({
   const { userData } = useAppSelector((state) => state.user);
   const userName = userData?.name ?? "";
   const userEmail = userData?.email ?? "";
+  const { data: wallet } = useWalletQuery();
+  const walletBallance = wallet?.bonusAmount ?? "--";
 
   return (
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-68px-112px)] lg:min-h-[calc(100vh-88px-80px)]">
@@ -37,6 +41,10 @@ export function AccountNavigationLayout({
           </div>
           <h1 className="font-head text-2xl font-semibold">{userName}</h1>
           <p className="text-sm">{userEmail}</p>
+          <p>
+            Бонусы: <Coin />{" "}
+            <span className="text-pink font-semibold">{walletBallance}</span>
+          </p>
         </div>
 
         <AccountNavigation />

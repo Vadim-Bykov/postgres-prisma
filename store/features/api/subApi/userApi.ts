@@ -21,7 +21,7 @@ export const userApi = appApi.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      invalidatesTags: ["Users", "Auth"],
+      invalidatesTags: ["Users", "Auth", "Wallet"],
     }),
     login: builder.mutation<UserDto, UserLoginBody>({
       query: ({ email, password }) => ({
@@ -29,7 +29,7 @@ export const userApi = appApi.injectEndpoints({
         method: "POST",
         body: { email, password },
       }),
-      invalidatesTags: ["Auth"],
+      invalidatesTags: ["Auth", "Wallet"],
     }),
     logout: builder.mutation<void, void>({
       query: () => ({

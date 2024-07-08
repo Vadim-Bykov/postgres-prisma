@@ -3,11 +3,15 @@ import { useAppSelector } from "@/store/store";
 import Image from "next/image";
 import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
+import { useWalletQuery } from "@/store/features/api/subApi/wallet";
+import { Coin } from "@/public/icons/Coin";
 
 export function MobileAccountNavigation() {
   const { userData } = useAppSelector((state) => state.user);
   const userName = userData?.name ?? "";
   const userEmail = userData?.email ?? "";
+  const { data: wallet } = useWalletQuery();
+  const walletBallance = wallet?.bonusAmount ?? "--";
 
   return (
     <section
@@ -28,6 +32,10 @@ export function MobileAccountNavigation() {
         </div>
         <h1 className="text-2xl font-semibold font-head">{userName}</h1>
         <p className="text-sm">{userEmail}</p>
+        <p>
+          Бонусы: <Coin />{" "}
+          <span className="text-pink font-semibold">{walletBallance}</span>
+        </p>
       </div>
 
       <AccountNavigation isTablet />

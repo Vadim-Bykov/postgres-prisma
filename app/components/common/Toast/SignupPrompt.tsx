@@ -6,6 +6,7 @@ import Button from "../../atoms/common/Button";
 import { useAppDispatch } from "@/store/store";
 import { toggleRegistrationModal } from "@/store/authentication";
 import { useIsLoggedIn } from "@/utils/authorization";
+import { Coin } from "@/public/icons/Coin";
 
 function Content({ openModal }: { openModal: () => void }) {
   return (
@@ -17,7 +18,9 @@ function Content({ openModal }: { openModal: () => void }) {
           <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов и
           оплачивай ими консультации.
         </h2>
-        <p>1 балл = 1 RUB</p>
+        <p className="flex items-center gap-1">
+          <Coin /> 1 балл = 1 RUB
+        </p>
       </div>
       <Button onClick={openModal}>Зарегистрироваться</Button>
     </div>
@@ -35,7 +38,6 @@ export function SignUpPromptToast() {
   useEffect(() => {
     if (!loggedIn && !isUserDataLoading && !toastShown) {
       setShowToast(true);
-      setToastShown(true);
     }
     if (loggedIn) {
       //  no need to show toast
@@ -47,7 +49,9 @@ export function SignUpPromptToast() {
     dispatch(toggleRegistrationModal(true));
     setShowToast(false);
   };
-  if (!showToast) return null;
+  console.log({ showToast, toastShown });
+
+  if (!showToast || toastShown) return null;
 
   return (
     <Toast
