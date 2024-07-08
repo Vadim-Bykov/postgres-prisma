@@ -49,7 +49,6 @@ export function SignUpPromptToast() {
     dispatch(toggleRegistrationModal(true));
     setShowToast(false);
   };
-  console.log({ showToast, toastShown });
 
   if (!showToast || toastShown) return null;
 
