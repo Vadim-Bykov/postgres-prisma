@@ -1,5 +1,6 @@
 import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import { UserPurchase } from "@/models/purchase";
+import { Coin } from "@/public/icons/Coin";
 import {
   formatCurrencyAmount,
   formatDate,
@@ -44,6 +45,8 @@ export function Purchase({
   paymentStatus,
   paymentConfirmationAt,
   orderFulfillmentAt,
+  paidByMoney,
+  paidByBonus,
 }: UserPurchase) {
   return (
     <div className="flex flex-col lg:flex-row gap-3 rounded-xl border overflow-hidden">
@@ -67,6 +70,17 @@ export function Purchase({
           Оплата произведена - {/* @ts-ignore */}
           {formatDate(createdAt, { dateStyle: "long" })}
         </p>
+        {paidByBonus && (
+          <p className="text-sm">
+            Оплачено бонусами - <Coin /> {paidByBonus}
+          </p>
+        )}
+        {paidByMoney && (
+          <p className="text-sm">
+            Оплачено бонусами -{" "}
+            {formatCurrencyAmount({ currency, price: paidByMoney })}
+          </p>
+        )}
         <p className="text-sm">
           Статус оплаты - {PAYMENT_STATUS_MAP[paymentStatus]}{" "}
           {paymentStatus === "CONFIRMED" &&
