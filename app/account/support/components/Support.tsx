@@ -15,7 +15,7 @@ export function Support() {
         </p>
         <ContactLinks className="flex gap-5" />
       </div>
-      <div>
+      <div className="flex flex-col items-start">
         <p>
           Если у вас возник технический вопрос или вы заметили какие-то проблемы
           в работе сайта, пожалуйста обратитесь в техническую поддержку в

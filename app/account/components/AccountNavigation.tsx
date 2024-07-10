@@ -27,6 +27,11 @@ export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
     iconSource: "account/notification-3-line.svg",
   },
   {
+    text: "Друзья",
+    href: "/account/friends",
+    iconSource: "account/friends.svg",
+  },
+  {
     text: "Поддержка",
     href: "/account/support",
     iconSource: "account/question-line.svg",
@@ -63,6 +68,11 @@ export function AccountNavigation({
         isTablet={isTablet}
         {...ACCOUNT_NAV_ITEMS[3]}
         isActive={pathname === ACCOUNT_NAV_ITEMS[3].href}
+      />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[4]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[4].href}
       />
       <LogoutNavItem isTablet={isTablet} />
     </nav>
