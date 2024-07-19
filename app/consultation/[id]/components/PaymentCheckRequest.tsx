@@ -10,6 +10,7 @@ import {
   useUpdatePurchaseMutation,
 } from "@/store/features/api/subApi/purchase";
 import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
+import { useAppRouter } from "@/utils/useAppRouter";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
 import Link from "next/link";
@@ -37,6 +38,8 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const { walletBallance, sumToPayByBonus } = useBonusToPayConsultation(
     consultationId as string
   );
+
+  const { push } = useAppRouter();
 
   const [
     purchaseConsultation,
@@ -87,8 +90,10 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
       };
 
       userHasPurchase
-        ? updatePurchase(purchase)
-        : purchaseConsultation(purchase);
+        ? await updatePurchase(purchase)
+        : await purchaseConsultation(purchase);
+
+      push("/account/purchases");
     }
   );
 
@@ -136,7 +141,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         />
       </div>
 
-      {walletBallance > 0 && (
+      {walletBallance > 0 && !userHasPurchase && (
         <div className="flex flex-col gap-1 text-xs">
           <p>
             Укажите пожалуйста количество бонусных баллов, которыми хотите

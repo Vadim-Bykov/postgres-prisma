@@ -18,7 +18,7 @@ export const purchaseApi = appApi.injectEndpoints({
         method: "POST",
         body: purchaseData,
       }),
-      invalidatesTags: ["Wallet"],
+      invalidatesTags: ["Wallet", "Purchase"],
     }),
     updatePurchase: builder.mutation<Purchase, PurchaseBody>({
       query: (purchaseData) => ({
@@ -26,7 +26,7 @@ export const purchaseApi = appApi.injectEndpoints({
         method: "PATCH",
         body: purchaseData,
       }),
-      invalidatesTags: ["Wallet"],
+      invalidatesTags: ["Wallet", "Purchase"],
     }),
   }),
 });

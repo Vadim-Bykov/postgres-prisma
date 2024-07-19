@@ -44,7 +44,7 @@ export function Friends() {
           </p>
           {userEmail && (
             <CopyToClipboard text={userEmail}>
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-2 mt-2 cursor-pointer">
                 <span>{userEmail}</span>
                 <IconButton
                   iconProps={{ name: "file-copy-line.svg", color: "purple" }}

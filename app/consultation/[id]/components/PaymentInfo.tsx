@@ -130,7 +130,7 @@ export function PaymentInfo() {
             </div>
 
             <CopyToClipboard text={number.split(" ").join("")}>
-              <div className="flex gap-3">
+              <div className="flex gap-3 cursor-pointer">
                 <p>{number}</p>
                 <IconButton
                   iconProps={{ name: "file-copy-line.svg", color: "purple" }}

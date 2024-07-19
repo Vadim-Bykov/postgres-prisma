@@ -13,10 +13,11 @@ export type Pathname =
   | "/account/friends"
   | "/account/support"
   | "/account/purchases"
-  | "/consultation"
-  | `/consultation/${number}`
   | "/article"
-  | `/article/${number}`;
+  | `/article/${number}`
+  | "/bonus-program"
+  | "/consultation"
+  | `/consultation/${number}`;
 
 interface AppRouter extends AppRouterInstance {
   push(href: Pathname, options?: NavigateOptions): void;

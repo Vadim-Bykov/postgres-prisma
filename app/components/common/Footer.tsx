@@ -1,6 +1,8 @@
 import { BRAND_NAME } from "@/app/constants/brand";
 import Image from "next/image";
 import { ContactLinks } from "./ContactLinks";
+import { Coin } from "@/public/icons/Coin";
+import Link from "next/link";
 
 export function Footer() {
   return (
@@ -16,7 +18,14 @@ export function Footer() {
 
       <ContactLinks className="basis-1/3 flex flex-grow justify-center gap-3 lg:gap-8" />
 
-      <div className="basis-1/3 " />
+      <Link
+        href="/bonus-program"
+        className="basis-1/3 font-head text-white flex flex-grow justify-end items-center"
+      >
+        <span>
+          Бонусная программа <Coin size={32} />
+        </span>
+      </Link>
     </footer>
   );
 }
