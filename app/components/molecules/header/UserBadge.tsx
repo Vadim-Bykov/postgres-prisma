@@ -53,7 +53,7 @@ export function UserBadge({
           <Image
             priority
             src={AvatarImage}
-            alt="Placeholder image for user avatar depicting an piñata Max mascot"
+            alt="Placeholder image for user avatar"
             className="w-10 h-10"
           />
           <Icon

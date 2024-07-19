@@ -26,7 +26,7 @@ export function MobileAccountNavigation() {
           <Image
             priority
             src={AvatarImage}
-            alt="Placeholder image for user avatar depicting an piñata Max mascot"
+            alt="Placeholder image for user avatar"
             className="w-24 h-24"
           />
         </div>

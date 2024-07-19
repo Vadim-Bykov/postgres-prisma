@@ -70,14 +70,14 @@ export function Purchase({
           Оплата произведена - {/* @ts-ignore */}
           {formatDate(createdAt, { dateStyle: "long" })}
         </p>
-        {paidByBonus && (
+        {!!paidByBonus && (
           <p className="text-sm">
             Оплачено бонусами - <Coin /> {paidByBonus}
           </p>
         )}
-        {paidByMoney && (
+        {!!paidByMoney && (
           <p className="text-sm">
-            Оплачено бонусами -{" "}
+            Оплачено деньгами -{" "}
             {formatCurrencyAmount({ currency, price: paidByMoney })}
           </p>
         )}

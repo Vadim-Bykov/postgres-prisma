@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { ApiError } from "../error/ApiError";
+import { getFriendDto } from "../dtos/friendDto";
 
 export const createFriend = async ({
   userId,
@@ -27,9 +28,10 @@ export const getAllFriends = async ({ email }: { email: string }) => {
   try {
     const friends = await prisma.friend.findMany({
       where: { invitedByFriendEmail: email },
+      include: { users: true },
     });
 
-    return friends;
+    return friends.map(getFriendDto);
   } catch (error: any) {
     throw catchErrorHandler({
       error,

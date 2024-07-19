@@ -4,14 +4,12 @@ import Icon from "@/app/components/atoms/common/Icon/Icon";
 import { IconButton } from "@/app/components/atoms/common/IconButton";
 import { PERCENTAGE_FROM_FRIEND_PURCHASE } from "@/app/constants/constants";
 import { Coin } from "@/public/icons/Coin";
-import { useFriendsQuery } from "@/store/features/api/subApi/friend";
 import { useAppSelector } from "@/store/store";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { FriendsList } from "./FriendsList";
 
 export function Friends() {
-  const { data: friends } = useFriendsQuery();
   const userEmail = useAppSelector((state) => state.user.userData?.email ?? "");
-  // console.log({ friends });
 
   return (
     <div className="w-full max-w-xl flex flex-col gap-6 ">
@@ -44,16 +42,20 @@ export function Friends() {
             Чтобы пригласить друга, просто поделитесь с ним своим адресом
             электронной почты, с которым вы зарегистрировались.
           </p>
-          <CopyToClipboard text={userEmail}>
-            <div className="flex gap-2">
-              <span>{userEmail}</span>
-              <IconButton
-                iconProps={{ name: "file-copy-line.svg", color: "purple" }}
-              />
-            </div>
-          </CopyToClipboard>
+          {userEmail && (
+            <CopyToClipboard text={userEmail}>
+              <div className="flex gap-2 mt-2">
+                <span>{userEmail}</span>
+                <IconButton
+                  iconProps={{ name: "file-copy-line.svg", color: "purple" }}
+                />
+              </div>
+            </CopyToClipboard>
+          )}
         </div>
       </div>
+
+      <FriendsList />
     </div>
   );
 }

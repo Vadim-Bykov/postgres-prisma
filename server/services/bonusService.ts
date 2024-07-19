@@ -1,9 +1,9 @@
 import prisma from "@/lib/prisma";
-import { ApiError } from "../error/ApiError";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { BonusType } from "@prisma/client";
 import * as walletService from "./walletService";
 import * as friendService from "./friendService";
+import * as consultationService from "./consultationService";
 import { PERCENTAGE_FROM_FRIEND_PURCHASE } from "@/app/constants/constants";
 
 export const createBonus = async ({
@@ -75,6 +75,45 @@ export const createPurchaseBonusForFriend = async ({
     });
 
     return bonus;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при создании бонуса",
+    });
+  }
+};
+
+export const getBonusesFromFriend = async (friendObjectId: number) => {
+  try {
+    const bonuses = await prisma.bonus.findMany({
+      where: { friendId: friendObjectId },
+      include: { purchase: true },
+    });
+
+    const consultations = await consultationService.getAllConsultations();
+
+    return bonuses.map((bonus) => ({
+      ...bonus,
+      consultationName: consultations.find(
+        (consultation) => consultation.id === bonus.purchase?.consultationId
+      )?.title,
+      purchase: undefined,
+    }));
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при создании бонуса",
+    });
+  }
+};
+
+export const getUserBonuses = async (userId: number) => {
+  try {
+    const bonuses = await prisma.bonus.findMany({
+      where: { userId },
+    });
+
+    return bonuses;
   } catch (error: any) {
     throw catchErrorHandler({
       error,
