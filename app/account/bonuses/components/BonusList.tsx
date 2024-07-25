@@ -4,7 +4,22 @@ import { useGetUserBonusesQuery } from "@/store/features/api/subApi/bonus";
 import { useFriendsQuery } from "@/store/features/api/subApi/friend";
 import { formatDate } from "@/utils/formatting";
 import { Bonus } from "@prisma/client";
+import { range } from "lodash-es";
 import Link from "next/link";
+import Skeleton from "react-loading-skeleton";
+
+export function BonusPlaceholder() {
+  return (
+    <div className="flex flex-col gap-1">
+      <Skeleton width={200} height={30} />
+      {range(5).map((index) => (
+        <div key={index} className="overflow-hidden rounded-sm">
+          <Skeleton width={576} height={30} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function BonusItem({
   type,
@@ -51,7 +66,7 @@ export function BonusList() {
     useGetUserBonusesQuery();
 
   if (isBonusesLoading) {
-    return null;
+    return <BonusPlaceholder />;
   }
 
   return !!bonuses?.length ? (

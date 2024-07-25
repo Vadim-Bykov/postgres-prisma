@@ -2,6 +2,15 @@ import AvatarImage from "@/public/icons/avatar.svg";
 import { Coin } from "@/public/icons/Coin";
 import { useGetBonusesFromFriendQuery } from "@/store/features/api/subApi/bonus";
 import Image from "next/image";
+import Skeleton from "react-loading-skeleton";
+
+export function FriendCardPlaceholder() {
+  return (
+    <div className="overflow-hidden h-32 rounded-2xl">
+      <Skeleton width={576} height={128} />
+    </div>
+  );
+}
 
 export function FriendCard({
   friendObjectId,
@@ -17,7 +26,7 @@ export function FriendCard({
   });
 
   if (isLoading) {
-    return null;
+    return <FriendCardPlaceholder />;
   }
 
   return (

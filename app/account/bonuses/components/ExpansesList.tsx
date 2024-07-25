@@ -1,6 +1,7 @@
 import { Coin } from "@/public/icons/Coin";
 import { useGetAllUserPurchasesQuery } from "@/store/features/api/subApi/purchase";
 import Link from "next/link";
+import { BonusPlaceholder } from "./BonusList";
 
 function Expanse({
   title,
@@ -29,7 +30,7 @@ export function ExpansesList() {
   );
 
   if (isPurchasesLoading) {
-    return null;
+    return <BonusPlaceholder />;
   }
 
   return hasPurchasePaidByBonus ? (

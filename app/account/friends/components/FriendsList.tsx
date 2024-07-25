@@ -1,7 +1,11 @@
-import { useFriendsQuery } from "@/store/features/api/subApi/friend";
-import React from "react";
-import { FriendCard } from "./FriendCard";
 import { Coin } from "@/public/icons/Coin";
+import { useFriendsQuery } from "@/store/features/api/subApi/friend";
+import { range } from "lodash-es";
+import { FriendCard, FriendCardPlaceholder } from "./FriendCard";
+
+function Placeholder() {
+  return range(2).map((index) => <FriendCardPlaceholder key={index} />);
+}
 
 export function FriendsList() {
   const { data: friends, isLoading } = useFriendsQuery();
@@ -16,7 +20,7 @@ export function FriendsList() {
   }
 
   if (isLoading) {
-    return null;
+    return <Placeholder />;
   }
 
   return (
