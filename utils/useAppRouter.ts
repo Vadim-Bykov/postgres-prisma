@@ -10,6 +10,7 @@ export type Pathname =
   | "/account"
   | "/account/personal-details"
   | "/account/notifications"
+  | "/account/bonuses"
   | "/account/friends"
   | "/account/support"
   | "/account/purchases"

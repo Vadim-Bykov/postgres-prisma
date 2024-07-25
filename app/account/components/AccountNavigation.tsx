@@ -22,14 +22,19 @@ export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
     iconSource: "account/bank-line.svg",
   },
   {
-    text: "Уведомления",
-    href: "/account/notifications",
-    iconSource: "account/notification-3-line.svg",
+    text: "Мои бонусы",
+    href: "/account/bonuses",
+    iconSource: "",
   },
   {
     text: "Друзья",
     href: "/account/friends",
     iconSource: "account/friends.svg",
+  },
+  {
+    text: "Уведомления",
+    href: "/account/notifications",
+    iconSource: "account/notification-3-line.svg",
   },
   {
     text: "Поддержка",

@@ -1,5 +1,6 @@
 import { BonusesFromFriend } from "@/models/bonus";
 import { appApi } from "../appApi";
+import { Bonus } from "@prisma/client";
 
 export const bonusApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,7 +10,12 @@ export const bonusApi = appApi.injectEndpoints({
     >({
       query: (params) => ({ url: "bonus", params }),
     }),
+    getUserBonuses: builder.query<Bonus[], void>({
+      query: () => "bonus",
+      providesTags: ["Bonus"],
+    }),
   }),
 });
 
-export const { useGetBonusesFromFriendQuery } = bonusApi;
+export const { useGetBonusesFromFriendQuery, useGetUserBonusesQuery } =
+  bonusApi;

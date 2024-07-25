@@ -4,6 +4,7 @@ import { AccountNavItem } from "./AccountNavigation";
 import Icon from "@/app/components/atoms/common/Icon/Icon";
 import { useAppDispatch } from "@/store/store";
 import { toggleLogoutModal } from "@/store/authentication";
+import { Coin } from "@/public/icons/Coin";
 
 interface NavItemProps extends AccountNavItem {
   isActive: boolean;
@@ -27,7 +28,11 @@ export function NavItem({
         isActive && "bg-gray-light"
       )}
     >
-      <Icon name={iconSource} className="relative top-px" />
+      {iconSource ? (
+        <Icon name={iconSource} className="relative -top-px" />
+      ) : (
+        <Coin size={18} color="#3B3252" />
+      )}
       <span>{text}</span>
       {isTablet && (
         <span className="flex flex-grow justify-end">

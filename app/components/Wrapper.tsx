@@ -9,7 +9,6 @@ import { Footer } from "./common/Footer";
 import { AuthenticationFlow } from "./organisms/AuthenticationFlow";
 import { Header } from "./organisms/Header";
 import { AnalyticsHandler } from "./AnalyticsHandler";
-import { Toast } from "./common/Toast/Toast";
 import { SignUpPromptToast } from "./common/Toast/SignupPrompt";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
