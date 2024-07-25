@@ -51,8 +51,8 @@ export function FriendCard({
               <div key={id}>
                 <span className="text-purple-light">
                   Купил консультацию{" "}
-                  <span className="text-purple-dark">
-                    &quot;{consultationName}&quot;
+                  <span className="italic font-semibold text-purple-dark">
+                    &ldquo;{consultationName}&rdquo;
                   </span>{" "}
                   и принес вам:
                 </span>{" "}

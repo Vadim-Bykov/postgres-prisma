@@ -16,7 +16,7 @@ export function NavItem({
   return (
     <Link
       href={route}
-      className={clsx(["relative min-w-fit h-full"])}
+      className="relative min-w-fit h-full font-head"
       onClick={onClick}
     >
       <div

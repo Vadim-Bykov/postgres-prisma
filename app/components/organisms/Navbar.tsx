@@ -5,6 +5,7 @@ import { UserBadge } from "../molecules/header/UserBadge";
 import { NavbarItem } from "./Header";
 import { BRAND_NAME } from "@/app/constants/brand";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Navbar({
   navbarItems,
@@ -22,14 +23,14 @@ export function Navbar({
         className
       )}
     >
-      <div className="flex items-center gap-2">
+      <Link href="/" className="flex items-center gap-2">
         <Image
           src={require("@/public/lion.svg")}
           className="w-14 h-12"
           alt="Lion image"
         />
         <h1 className="text-3xl">{BRAND_NAME}</h1>
-      </div>
+      </Link>
 
       <nav
         className={clsx([
