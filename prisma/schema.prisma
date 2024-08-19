@@ -213,6 +213,8 @@ model Bonus {
   friendId      Int?
   friend        Friend?   @relation(fields: [friendId], references: [id])
 
+  viewed Boolean @default(false)
+
   createdAt DateTime  @default(now())
   updatedAt DateTime?
 }

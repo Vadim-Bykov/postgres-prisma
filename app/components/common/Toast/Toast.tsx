@@ -1,25 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
-import {
-  ToastContainer,
-  ToastContainerProps,
-  ToastContent,
-  toast,
-} from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { memo } from "react";
+import { ToastContainer } from "react-toastify";
+import { useBonusesToasts } from "./BonusToast";
+import { useSignUpPromptToast } from "./SignupPrompt";
 
-interface Props extends ToastContainerProps {
-  ToastContent: ToastContent;
-  show?: boolean;
-}
-
-export function Toast({ show, ToastContent, ...props }: Props) {
-  useEffect(() => {
-    if (show) {
-      toast(ToastContent);
-    }
-  }, [show, ToastContent]);
-
-  return <ToastContainer toastClassName="rounded-lg" {...props} />;
-}
+// eslint-disable-next-line react/display-name
+export const Toast = memo(function () {
+  useBonusesToasts();
+  useSignUpPromptToast();
+  return <ToastContainer toastClassName="rounded-lg" className="lg:w-96" />;
+});

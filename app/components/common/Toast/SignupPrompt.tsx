@@ -4,13 +4,13 @@ import {
   REGISTRATION_BONUS,
   REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
 } from "@/app/constants/constants";
-import React, { useEffect, useState } from "react";
-import { Toast } from "./Toast";
-import Button from "../../atoms/common/Button";
-import { useAppDispatch } from "@/store/store";
-import { toggleRegistrationModal } from "@/store/authentication";
-import { useIsLoggedIn } from "@/utils/authorization";
 import { Coin } from "@/public/icons/Coin";
+import { toggleRegistrationModal } from "@/store/authentication";
+import { useAppDispatch } from "@/store/store";
+import { useIsLoggedIn } from "@/utils/authorization";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import Button from "../../atoms/common/Button";
 
 function Content({ openModal }: { openModal: () => void }) {
   return (
@@ -58,7 +58,9 @@ function Content({ openModal }: { openModal: () => void }) {
   );
 }
 
-export function SignUpPromptToast() {
+export const SIGN_UP_TOAST_ID = "SignUpPromptToast";
+
+export function useSignUpPromptToast() {
   const [showToast, setShowToast] = useState(false);
   const [toastShown, setToastShown] = useState(false);
   const loggedIn = useIsLoggedIn();
@@ -76,19 +78,20 @@ export function SignUpPromptToast() {
     }
   }, [loggedIn, isUserDataLoading, toastShown]);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     dispatch(toggleRegistrationModal(true));
     setShowToast(false);
-  };
+  }, [dispatch]);
 
-  if (!showToast || toastShown) return null;
+  useEffect(() => {
+    if (showToast && !toastShown && !toast.isActive(SIGN_UP_TOAST_ID)) {
+      toast(<Content openModal={openModal} />, {
+        autoClose: 10000,
+        className: "lg:w-96",
+        toastId: SIGN_UP_TOAST_ID,
+      });
+    }
+  }, [openModal, showToast, toastShown]);
 
-  return (
-    <Toast
-      show={showToast}
-      autoClose={20000}
-      className="lg:w-96"
-      ToastContent={() => <Content openModal={openModal} />}
-    />
-  );
+  return null;
 }
