@@ -1,9 +1,12 @@
 import { Coin } from "@/public/icons/Coin";
-import { useGetUserBonusesQuery } from "@/store/features/api/subApi/bonus";
+import {
+  useGetUserBonusesQuery,
+  useMarkViewedBonusMutation,
+} from "@/store/features/api/subApi/bonus";
 import { useFriendsQuery } from "@/store/features/api/subApi/friend";
 import { useIsLoggedIn } from "@/utils/authorization";
 import { formatDate } from "@/utils/formatting";
-import { useAppPathname, useAppRouter } from "@/utils/useAppRouter";
+import { useAppRouter } from "@/utils/useAppRouter";
 import { Bonus, Currency } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -55,7 +58,7 @@ function Content({
           )}
         </div>
       </div>
-      <Button onClick={onClick}>Зарегистрироваться</Button>
+      <Button onClick={onClick}>Просмотреть мои бонусы</Button>
     </div>
   );
 }
@@ -68,10 +71,11 @@ export function BonusToast() {
 
 export const useBonusesToasts = () => {
   const loggedIn = useIsLoggedIn();
-  const pathname = useAppPathname();
   const { push } = useAppRouter();
+  const [markViewedBonus] = useMarkViewedBonusMutation();
+
   const onClick = () => {
-    push("/account/friends");
+    push("/account/bonuses");
     toast.dismiss();
   };
   const [bonusIndex, setBonusIndex] = useState(0);
@@ -92,8 +96,7 @@ export const useBonusesToasts = () => {
     isFriendsLoading ||
     !bonuses?.length ||
     !friends ||
-    allBonusesViewed ||
-    pathname === "/account/friends"
+    allBonusesViewed
   ) {
     return null;
   }
@@ -116,7 +119,10 @@ export const useBonusesToasts = () => {
       />,
       {
         autoClose: 10000,
-        onClose: () => setBonusIndex((prev) => prev + 1),
+        onClose: () => {
+          setBonusIndex((prev) => prev + 1);
+          markViewedBonus({ bonusId: bonusToNotify.id });
+        },
         toastId: `BonusToast-${bonusToNotify.id}`,
       }
     );

@@ -29,7 +29,7 @@ export function UserBadge({
   const asPath = useAppPathname();
   const { push } = useAppRouter();
   const { isTablet } = useWindowDimensions();
-  const { data: wallet } = useWalletQuery();
+  const { data: wallet } = useWalletQuery(undefined, { skip: !loggedIn });
   const walletBallance = wallet?.bonusAmount ?? "--";
 
   const onAvatarClick = () => {

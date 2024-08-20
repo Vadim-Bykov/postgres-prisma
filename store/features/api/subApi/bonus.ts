@@ -1,4 +1,4 @@
-import { BonusesFromFriend } from "@/models/bonus";
+import { BonusesFromFriend, ViewedBonusBody } from "@/models/bonus";
 import { appApi } from "../appApi";
 import { Bonus } from "@prisma/client";
 
@@ -14,8 +14,15 @@ export const bonusApi = appApi.injectEndpoints({
       query: () => "bonus",
       providesTags: ["Bonus"],
     }),
+    markViewedBonus: builder.mutation<void, ViewedBonusBody>({
+      query: (bonusData) => ({ url: "bonus", body: bonusData }),
+      invalidatesTags: ["Bonus"],
+    }),
   }),
 });
 
-export const { useGetBonusesFromFriendQuery, useGetUserBonusesQuery } =
-  bonusApi;
+export const {
+  useGetBonusesFromFriendQuery,
+  useGetUserBonusesQuery,
+  useMarkViewedBonusMutation,
+} = bonusApi;

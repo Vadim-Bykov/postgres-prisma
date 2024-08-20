@@ -1,6 +1,8 @@
+import { ViewedBonusBody } from "@/models/bonus";
 import { ApiError } from "@/server/error/ApiError";
 import * as bonusService from "@/server/services/bonusService";
 import * as cookieService from "@/server/services/cookieService";
+import { apiCatchErrorHandler } from "@/utils/errorHandler";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
@@ -21,10 +23,24 @@ export async function GET(request: Request) {
 
     return NextResponse.json(bonuses);
   } catch (error) {
-    if (error instanceof NextResponse) {
-      return error;
-    } else {
-      throw ApiError.badRequest("Ошибка при получении данных кошелька", error);
-    }
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при получении данных бонусов",
+    });
+  }
+}
+
+export async function PATH(request: Request) {
+  try {
+    const bonusId: ViewedBonusBody = await request.json();
+    const userData = await cookieService.getUserDataFromCookies();
+    const bonus = await bonusService.markViewedBonus(+bonusId, userData.id);
+
+    return NextResponse.json(bonus);
+  } catch (error) {
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при получении данных бонуса для отметки просмотра",
+    });
   }
 }

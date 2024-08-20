@@ -1,10 +1,10 @@
+import { PERCENTAGE_FROM_FRIEND_PURCHASE } from "@/app/constants/constants";
 import prisma from "@/lib/prisma";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { BonusType } from "@prisma/client";
-import * as walletService from "./walletService";
-import * as friendService from "./friendService";
 import * as consultationService from "./consultationService";
-import { PERCENTAGE_FROM_FRIEND_PURCHASE } from "@/app/constants/constants";
+import * as friendService from "./friendService";
+import * as walletService from "./walletService";
 
 export const createBonus = async ({
   userId,
@@ -118,6 +118,22 @@ export const getUserBonuses = async (userId: number) => {
     throw catchErrorHandler({
       error,
       message: "Ошибка в базе при создании бонуса",
+    });
+  }
+};
+
+export const markViewedBonus = async (bonusId: number, userId: number) => {
+  try {
+    const bonuses = await prisma.bonus.update({
+      where: { id: bonusId, userId },
+      data: { viewed: true },
+    });
+
+    return bonuses;
+  } catch (error: any) {
+    throw catchErrorHandler({
+      error,
+      message: "Ошибка в базе при отметке просмотренного бонуса",
     });
   }
 };
