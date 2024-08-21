@@ -15,7 +15,11 @@ export const bonusApi = appApi.injectEndpoints({
       providesTags: ["Bonus"],
     }),
     markViewedBonus: builder.mutation<void, ViewedBonusBody>({
-      query: (bonusData) => ({ url: "bonus", body: bonusData }),
+      query: (bonusData) => ({
+        url: "bonus",
+        body: bonusData,
+        method: "PATCH",
+      }),
       invalidatesTags: ["Bonus"],
     }),
   }),

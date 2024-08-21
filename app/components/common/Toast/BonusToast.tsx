@@ -15,7 +15,7 @@ import Button from "../../atoms/common/Button";
 interface BonusToast extends Bonus {
   friendName: string;
   friendEmail: string;
-  onClick: () => void;
+  onButtonClick: () => void;
 }
 
 function Content({
@@ -25,7 +25,7 @@ function Content({
   createdAt,
   friendName,
   friendEmail,
-  onClick,
+  onButtonClick,
 }: BonusToast) {
   return (
     <div className="flex flex-col gap-6 text-sm lg:text-base">
@@ -58,15 +58,9 @@ function Content({
           )}
         </div>
       </div>
-      <Button onClick={onClick}>Просмотреть мои бонусы</Button>
+      <Button onClick={onButtonClick}>Просмотреть мои бонусы</Button>
     </div>
   );
-}
-
-export function BonusToast() {
-  useBonusesToasts();
-
-  return null;
 }
 
 export const useBonusesToasts = () => {
@@ -74,10 +68,6 @@ export const useBonusesToasts = () => {
   const { push } = useAppRouter();
   const [markViewedBonus] = useMarkViewedBonusMutation();
 
-  const onClick = () => {
-    push("/account/bonuses");
-    toast.dismiss();
-  };
   const [bonusIndex, setBonusIndex] = useState(0);
 
   const { data: friends, isLoading: isFriendsLoading } = useFriendsQuery(
@@ -100,6 +90,17 @@ export const useBonusesToasts = () => {
   ) {
     return null;
   }
+
+  const goToWatchDetails = () => {
+    push("/account/bonuses");
+    toast.dismiss();
+  };
+
+  const onCloseAction = (bonusId: number) => {
+    setBonusIndex((prev) => prev + 1);
+    markViewedBonus({ bonusId });
+  };
+
   const unViewedBonuses = bonuses.filter(({ viewed }) => !viewed);
   const bonusToNotify = unViewedBonuses[bonusIndex];
 
@@ -114,15 +115,12 @@ export const useBonusesToasts = () => {
       <Content
         friendName={friendName}
         friendEmail={friendEmail}
-        onClick={onClick}
+        onButtonClick={goToWatchDetails}
         {...bonusToNotify}
       />,
       {
         autoClose: 10000,
-        onClose: () => {
-          setBonusIndex((prev) => prev + 1);
-          markViewedBonus({ bonusId: bonusToNotify.id });
-        },
+        onClose: () => onCloseAction(bonusToNotify.id),
         toastId: `BonusToast-${bonusToNotify.id}`,
       }
     );

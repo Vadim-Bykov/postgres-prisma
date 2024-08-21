@@ -29,7 +29,7 @@ export const userApi = appApi.injectEndpoints({
         method: "POST",
         body: { email, password },
       }),
-      invalidatesTags: ["Auth", "Wallet"],
+      invalidatesTags: ["Auth", "Wallet", "Bonus"],
     }),
     logout: builder.mutation<void, void>({
       query: () => ({

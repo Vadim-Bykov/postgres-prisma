@@ -88,6 +88,7 @@ export const getBonusesFromFriend = async (friendObjectId: number) => {
     const bonuses = await prisma.bonus.findMany({
       where: { friendId: friendObjectId },
       include: { purchase: true },
+      orderBy: { createdAt: "desc" },
     });
 
     const consultations = await consultationService.getAllConsultations();
@@ -111,6 +112,7 @@ export const getUserBonuses = async (userId: number) => {
   try {
     const bonuses = await prisma.bonus.findMany({
       where: { userId },
+      orderBy: { createdAt: "desc" },
     });
 
     return bonuses;
@@ -126,7 +128,7 @@ export const markViewedBonus = async (bonusId: number, userId: number) => {
   try {
     const bonuses = await prisma.bonus.update({
       where: { id: bonusId, userId },
-      data: { viewed: true },
+      data: { viewed: true, updatedAt: new Date().toISOString() },
     });
 
     return bonuses;

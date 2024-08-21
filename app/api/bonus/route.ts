@@ -30,11 +30,14 @@ export async function GET(request: Request) {
   }
 }
 
-export async function PATH(request: Request) {
+export async function PATCH(request: Request) {
   try {
-    const bonusId: ViewedBonusBody = await request.json();
+    const body: ViewedBonusBody = await request.json();
     const userData = await cookieService.getUserDataFromCookies();
-    const bonus = await bonusService.markViewedBonus(+bonusId, userData.id);
+    const bonus = await bonusService.markViewedBonus(
+      +body.bonusId,
+      userData.id
+    );
 
     return NextResponse.json(bonus);
   } catch (error) {
