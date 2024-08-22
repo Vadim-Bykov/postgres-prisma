@@ -21,7 +21,7 @@ export const userApi = appApi.injectEndpoints({
         method: "POST",
         body: userData,
       }),
-      invalidatesTags: ["Users", "Auth", "Wallet"],
+      invalidatesTags: ["Users", "Auth", "Wallet", "Bonus"],
     }),
     login: builder.mutation<UserDto, UserLoginBody>({
       query: ({ email, password }) => ({

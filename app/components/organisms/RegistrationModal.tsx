@@ -54,8 +54,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   const [formError, setFormError] = useState("");
   const [showFormError, setShowFormError] = useState(false);
 
-  const [createUser, { isLoading: isUserCreating, error }] =
-    useCreateUserMutation();
+  const [createUser, { isLoading: isUserCreating }] = useCreateUserMutation();
   const [showPasswordConfirmationError, setShowPasswordConfirmationError] =
     useState(false);
   const password = watch("password");

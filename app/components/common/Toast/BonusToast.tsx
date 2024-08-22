@@ -79,14 +79,17 @@ export const useBonusesToasts = () => {
     { skip: !loggedIn }
   );
 
-  const allBonusesViewed = bonuses?.every((bonus) => bonus.viewed);
+  const bonusesToDisplay = bonuses?.filter(
+    ({ viewed, confirmed }) => !viewed && confirmed
+  );
 
   if (
     isBonusesLoading ||
     isFriendsLoading ||
     !bonuses?.length ||
     !friends ||
-    allBonusesViewed
+    !bonusesToDisplay ||
+    bonusesToDisplay?.length < 1
   ) {
     return null;
   }
@@ -101,8 +104,7 @@ export const useBonusesToasts = () => {
     markViewedBonus({ bonusId });
   };
 
-  const unViewedBonuses = bonuses.filter(({ viewed }) => !viewed);
-  const bonusToNotify = unViewedBonuses[bonusIndex];
+  const bonusToNotify = bonusesToDisplay[bonusIndex];
 
   if (bonusToNotify && !toast.isActive(`BonusToast-${bonusToNotify.id}`)) {
     const friend = friends?.find(
