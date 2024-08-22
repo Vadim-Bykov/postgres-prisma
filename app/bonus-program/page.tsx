@@ -32,7 +32,7 @@ export default function BonusProgram() {
 
         <div className="flex flex-col gap-1">
           <h2>
-            Зарегистрируйся на <span className="text-xl">{BRAND_NAME}</span> и
+            Зарегистрируйся на <span className="text-xl">{BRAND_NAME}</span>,
             получи бонус{" "}
             <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов и
             оплачивай ими консультации.

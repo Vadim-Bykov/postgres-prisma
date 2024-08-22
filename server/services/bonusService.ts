@@ -30,6 +30,9 @@ export const createBonus = async ({
         purchasePrice,
         purchaseId,
         friendId,
+        confirmed:
+          bonusType === "REGISTRATION" ||
+          bonusType === "REGISTRATION_WITH_REFERRAL_EMAIL",
       },
     });
 
