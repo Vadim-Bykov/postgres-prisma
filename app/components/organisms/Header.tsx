@@ -73,8 +73,6 @@ export function Header({}) {
           animation ? "opacity-100" : "opacity-70"
         )}
       >
-        <MobileMenu navbarItems={filteredNavbarItems} />
-
         <Navbar
           className={clsx(
             "-translate-y-20 duration-700 ease-in-out transition-transform",
@@ -83,6 +81,8 @@ export function Header({}) {
           navbarItems={filteredNavbarItems}
         />
       </header>
+
+      <MobileMenu navbarItems={filteredNavbarItems} />
     </>
   );
 }

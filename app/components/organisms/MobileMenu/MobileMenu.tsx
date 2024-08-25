@@ -49,7 +49,7 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
         <BurgerMenuButton isOpen={isOpen} onClick={toggleMenu} />
 
         <Link href="/" className="flex items-center gap-2">
-          <h1 className="text-3xl">{BRAND_NAME}</h1>
+          <h1 className="text-3xl text-white">{BRAND_NAME}</h1>
           <Image
             src={require("@/public/lion.svg")}
             className="w-11 h-10"

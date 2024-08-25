@@ -25,7 +25,7 @@ export function NavItem({
           isActive && " scale-100"
         )}
       />
-      <span className="text-xl">{title}</span>
+      <span className="text-xl text-white">{title}</span>
     </Link>
   );
 }
