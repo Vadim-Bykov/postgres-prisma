@@ -9,37 +9,31 @@ datasource db {
 }
 
 model Users {
-  id                Int                 @id @unique @default(autoincrement())
-  name              String
-  email             String              @unique
-  password          String
-  role              Role                @default(USER)
-  image             String?
-  project           Project             @default(ASTRO)
-  environment       Environment         @default(production)
-  location          Location?
-  Token             Token[]
-  passwordResetLink PasswordResetLink[]
-
-  purchase Purchase[]
-
-  emailNotification  Boolean             @default(true)
-  articleEmails      ArticleEmail[]
-  consultationEmails ConsultationEmail[]
-
-  wallet Wallet?
-  Bonus  Bonus[]
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime?
-  lastVisitAt DateTime  @default(now())
-
-  Consultation   Consultation? @relation(fields: [consultationId], references: [id])
-  consultationId Int?
-
+  id                   Int                 @id @unique @default(autoincrement())
+  name                 String
+  email                String              @unique
+  password             String
+  role                 Role                @default(USER)
+  image                String?
+  createdAt            DateTime            @default(now())
+  environment          Environment         @default(production)
+  project              Project             @default(ASTRO)
+  updatedAt            DateTime?
+  emailNotification    Boolean             @default(true)
+  lastVisitAt          DateTime            @default(now())
+  consultationId       Int?
   invitedByFriendEmail String?
-  I_am_Friend          Friend?  @relation("I_am_Friend")
+  Bonus                Bonus[]
   Friends              Friend[]
+  I_am_Friend          Friend?             @relation("I_am_Friend")
+  location             Location?
+  passwordResetLink    PasswordResetLink?
+  purchase             Purchase[]
+  Token                Token[]
+  Consultation         Consultation?       @relation(fields: [consultationId], references: [id])
+  wallet               Wallet?
+  articleEmails        ArticleEmail[]      @relation("ArticleEmailToUsers")
+  consultationEmails   ConsultationEmail[] @relation("ConsultationEmailToUsers")
 }
 
 model Token {
@@ -60,9 +54,121 @@ model PasswordResetLink {
   link      String?
   state     PasswordResetLinkState @default(PENDING)
   createdAt DateTime               @default(now())
-  updatedAt DateTime?
   userId    Int                    @unique
+  updatedAt DateTime?
   Users     Users                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Consultation {
+  id                Int                @id @unique @default(autoincrement())
+  title             String
+  price             Int
+  currency          Currency           @default(RUB)
+  perks             String[]
+  status            ConsultationStatus @default(PENDING)
+  primary           Boolean?           @default(false)
+  createdAt         DateTime           @default(now())
+  removedAt         DateTime?
+  updatedAt         DateTime?
+  imageSource       String
+  description       String[]
+  perksTitle        String?
+  subTitle          String?
+  consultationEmail ConsultationEmail?
+  purchase          Purchase[]
+  usersGotEmail     Users[]
+}
+
+model Banking {
+  id            Int           @id @unique @default(autoincrement())
+  bankName      String
+  currency      Currency      @default(BYN)
+  number        String
+  ownerName     String?
+  paymentSystem PaymentSystem @default(VISA)
+  purchase      Purchase[]
+}
+
+model Purchase {
+  id                    Int            @id @unique @default(autoincrement())
+  userId                Int
+  consultationId        Int
+  bankRecipientId       Int
+  paymentNumber         String?
+  createdAt             DateTime       @default(now())
+  paymentStatus         PaymentStatus  @default(CHECKING)
+  status                PurchaseStatus @default(NOT_STARTED)
+  updatedAt             DateTime?
+  orderFulfillmentAt    DateTime?
+  paymentConfirmationAt DateTime?
+  paidByBonus           Int?
+  paidByMoney           Int            @default(0)
+  Bonus                 Bonus[]
+  banking               Banking        @relation(fields: [bankRecipientId], references: [id])
+  consultation          Consultation   @relation(fields: [consultationId], references: [id])
+  users                 Users          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ArticleEmail {
+  id            Int      @id @unique @default(autoincrement())
+  articleId     Int      @unique
+  createdAt     DateTime @default(now())
+  title         String
+  usersGotEmail Users[]  @relation("ArticleEmailToUsers")
+}
+
+model ConsultationEmail {
+  id             Int          @id @unique @default(autoincrement())
+  title          String
+  consultationId Int          @unique
+  createdAt      DateTime     @default(now())
+  consultation   Consultation @relation(fields: [consultationId], references: [id])
+  usersGotEmail  Users[]      @relation("ConsultationEmailToUsers")
+}
+
+model Wallet {
+  userId      Int       @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime?
+  bonusAmount Int?
+  id          Int       @id @unique @default(autoincrement())
+  users       Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Bonus {
+  id            Int       @id @unique @default(autoincrement())
+  userId        Int
+  type          BonusType
+  amount        Int?
+  purchasePrice Int?
+  purchaseId    Int?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  friendId      Int?
+  viewed        Boolean   @default(false)
+  confirmed     Boolean   @default(false)
+  friend        Friend?   @relation(fields: [friendId], references: [id])
+  purchase      Purchase? @relation(fields: [purchaseId], references: [id])
+  users         Users     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Friend {
+  id                   Int       @id @unique @default(autoincrement())
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime?
+  invitedByFriendEmail String
+  userId               Int       @unique
+  Bonus                Bonus[]
+  friend               Users     @relation(fields: [invitedByFriendEmail], references: [email], onDelete: Cascade)
+  users                Users     @relation("I_am_Friend", fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model users {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  email     String    @unique @db.VarChar(255)
+  image     String?   @db.VarChar(255)
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
 }
 
 enum Role {
@@ -99,40 +205,10 @@ enum Currency {
   BYN @map("Br")
 }
 
-model Consultation {
-  id                Int                 @id @unique @default(autoincrement())
-  title             String
-  subTitle          String?
-  description       String[]
-  price             Int
-  currency          Currency            @default(RUB)
-  perksTitle        String?
-  perks             String[]
-  status            ConsultationStatus  @default(PENDING)
-  primary           Boolean?            @default(false)
-  removedAt         DateTime?
-  purchase          Purchase[]
-  consultationEmail ConsultationEmail[]
-  imageSource       String
-  createdAt         DateTime            @default(now())
-  updatedAt         DateTime?
-  usersGotEmail     Users[]
-}
-
 enum PaymentSystem {
   MIR
   VISA
   MASTERCARD
-}
-
-model Banking {
-  id            Int           @id @unique @default(autoincrement())
-  bankName      String
-  currency      Currency      @default(BYN)
-  number        String
-  ownerName     String?
-  paymentSystem PaymentSystem @default(VISA)
-  purchase      Purchase[]
 }
 
 enum PaymentStatus {
@@ -146,89 +222,8 @@ enum PurchaseStatus {
   DONE
 }
 
-model Purchase {
-  id                    Int            @id @unique @default(autoincrement())
-  userId                Int
-  users                 Users          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  consultationId        Int
-  consultation          Consultation   @relation(fields: [consultationId], references: [id])
-  bankRecipientId       Int
-  banking               Banking        @relation(fields: [bankRecipientId], references: [id])
-  paymentNumber         String?
-  status                PurchaseStatus @default(NOT_STARTED)
-  paymentStatus         PaymentStatus  @default(CHECKING)
-  createdAt             DateTime       @default(now())
-  updatedAt             DateTime?
-  paymentConfirmationAt DateTime?
-  orderFulfillmentAt    DateTime?
-  Bonus                 Bonus[]
-  paidByMoney           Int            @default(0)
-  paidByBonus           Int?
-}
-
-model ArticleEmail {
-  id            Int      @id @unique @default(autoincrement())
-  title         String
-  articleId     Int      @unique
-  usersGotEmail Users[]
-  createdAt     DateTime @default(now())
-}
-
-model ConsultationEmail {
-  id             Int          @id @unique @default(autoincrement())
-  title          String
-  consultationId Int          @unique
-  consultation   Consultation @relation(fields: [consultationId], references: [id])
-  usersGotEmail  Users[]
-  createdAt      DateTime     @default(now())
-}
-
-model Wallet {
-  id     Int   @id @unique @default(autoincrement())
-  userId Int   @unique
-  users  Users @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  bonusAmount Int?
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-}
-
 enum BonusType {
   REGISTRATION
   REGISTRATION_WITH_REFERRAL_EMAIL
   FRIEND_S_PURCHASE
-}
-
-model Bonus {
-  id     Int   @id @unique @default(autoincrement())
-  userId Int
-  users  Users @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  type          BonusType
-  amount        Int?
-  purchasePrice Int?
-  purchaseId    Int?
-  purchase      Purchase? @relation(fields: [purchaseId], references: [id])
-  friendId      Int?
-  friend        Friend?   @relation(fields: [friendId], references: [id])
-
-  viewed    Boolean @default(false)
-  confirmed Boolean @default(false)
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-}
-
-model Friend {
-  id     Int   @id @unique @default(autoincrement())
-  userId Int   @unique
-  users  Users @relation("I_am_Friend", fields: [userId], references: [id], onDelete: Cascade)
-
-  invitedByFriendEmail String
-  friend               Users  @relation(fields: [invitedByFriendEmail], references: [email], onDelete: Cascade)
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime?
-  Bonus     Bonus[]
 }
