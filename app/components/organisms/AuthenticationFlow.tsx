@@ -4,16 +4,34 @@ import {
   toggleRegistrationModal,
   toggleResetPasswordModal,
 } from "@/store/authentication";
-import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { User } from "@/models/users";
-import { LoginModal } from "./LoginModal";
-import { LogoutModal } from "./LogoutModal";
-import { RegistrationModal } from "./RegistrationModal";
-import { ResetPasswordModal } from "./ResetPassword/ResetPasswordModal";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+const RegistrationModal = dynamic(
+  () => import("./RegistrationModal").then((mod) => mod.RegistrationModal),
+  { ssr: false }
+);
+const LoginModal = dynamic(
+  () => import("./LoginModal").then((mod) => mod.LoginModal),
+  { ssr: false }
+);
+const LogoutModal = dynamic(
+  () => import("./LogoutModal").then((mod) => mod.LogoutModal),
+  { ssr: false }
+);
+const ResetPasswordModal = dynamic(
+  () =>
+    import("./ResetPassword/ResetPasswordModal").then(
+      (mod) => mod.ResetPasswordModal
+    ),
+  { ssr: false }
+);
 
 export function AuthenticationFlow() {
   const dispatch = useAppDispatch();
+  const [authenticationFlowActive, setAuthenticationFlowActive] =
+    useState(false);
 
   const registrationModalOpen = useAppSelector(
     (state) => state.authentication.registrationModalOpen
@@ -27,6 +45,21 @@ export function AuthenticationFlow() {
   const resetPasswordModalOpen = useAppSelector(
     (state) => state.authentication.resetPasswordModalOpen
   );
+  const activateFlow =
+    registrationModalOpen ||
+    loginModalOpen ||
+    logoutModalOpen ||
+    resetPasswordModalOpen;
+
+  useEffect(() => {
+    if (activateFlow) {
+      setAuthenticationFlowActive(true);
+    }
+  }, [activateFlow]);
+
+  if (!authenticationFlowActive) {
+    return null;
+  }
 
   const closeRegistrationModal = () => {
     dispatch(toggleRegistrationModal(false));
@@ -41,8 +74,6 @@ export function AuthenticationFlow() {
   const closeResetPasswordModal = () => {
     dispatch(toggleResetPasswordModal(false));
   };
-
-  const [userEmail, setUserEmail] = useState<User["email"]>("");
 
   return (
     <>
@@ -62,7 +93,7 @@ export function AuthenticationFlow() {
         onRequestClose={closeRegistrationModal}
       />
       <ResetPasswordModal
-        email={userEmail}
+        email=""
         open={resetPasswordModalOpen}
         onRequestClose={closeResetPasswordModal}
       />

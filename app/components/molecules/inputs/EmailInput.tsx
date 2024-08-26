@@ -15,6 +15,7 @@ export function EmailInput({ register, name = "email", ...props }: Props) {
   return (
     <Input
       type="email"
+      autoComplete="email"
       label="Электронная почта"
       // placeholder="example@domain.com"
       {...props}

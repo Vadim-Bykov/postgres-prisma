@@ -130,6 +130,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           <PasswordInput
             register={register}
             name="password"
+            autoComplete="new-password"
             containerClassName="mb-1"
             error={errors.password?.message}
             registerOptions={{
@@ -151,6 +152,7 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
           register={register}
           label="Подтверждение пароля"
           name="confirmPassword"
+          autoComplete="new-password"
           registerOptions={{
             validate: (confirmPassword) => {
               return (

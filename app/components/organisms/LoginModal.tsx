@@ -95,6 +95,7 @@ export function LoginModal({
           <fieldset className="flex flex-col gap-2 mb-6">
             <EmailInput register={register} error={errors.email?.message} />
             <PasswordInput
+              autoComplete="current-password"
               register={register}
               error={errors.password?.message}
             />
