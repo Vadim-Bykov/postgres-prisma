@@ -4,11 +4,10 @@ import {
   useMarkViewedBonusMutation,
 } from "@/store/features/api/subApi/bonus";
 import { useFriendsQuery } from "@/store/features/api/subApi/friend";
-import { useIsLoggedIn } from "@/utils/authorization";
 import { formatDate } from "@/utils/formatting";
 import { useAppRouter } from "@/utils/useAppRouter";
 import { Bonus, Currency } from "@prisma/client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import Button from "../../atoms/common/Button";
 
@@ -64,24 +63,24 @@ function Content({
 }
 
 export const useBonusesToasts = () => {
-  const loggedIn = useIsLoggedIn();
   const { push } = useAppRouter();
   const [markViewedBonus] = useMarkViewedBonusMutation();
 
   const [bonusIndex, setBonusIndex] = useState(0);
 
-  const { data: friends, isLoading: isFriendsLoading } = useFriendsQuery(
-    undefined,
-    { skip: !loggedIn }
-  );
-  const { data: bonuses, isLoading: isBonusesLoading } = useGetUserBonusesQuery(
-    undefined,
-    { skip: !loggedIn }
-  );
+  const {
+    data: friends,
+    isLoading: isFriendsLoading,
+    isSuccess: isBonusesLoaded,
+  } = useFriendsQuery();
+  const { data: bonuses, isLoading: isBonusesLoading } =
+    useGetUserBonusesQuery();
 
-  const bonusesToDisplay = bonuses?.filter(
-    ({ viewed, confirmed }) => !viewed && confirmed
-  );
+  const bonusesToDisplay = useMemo(() => {
+    if (isBonusesLoaded) {
+      return bonuses?.filter(({ viewed, confirmed }) => !viewed && confirmed);
+    }
+  }, [isBonusesLoaded]);
 
   if (
     isBonusesLoading ||
@@ -127,4 +126,9 @@ export const useBonusesToasts = () => {
       }
     );
   }
+};
+
+export const BonusToast = () => {
+  useBonusesToasts();
+  return null;
 };

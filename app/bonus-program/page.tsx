@@ -1,20 +1,19 @@
 "use client";
 
 import { Coin } from "@/public/icons/Coin";
+import { toggleRegistrationModal } from "@/store/authentication";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useIsLoggedIn } from "@/utils/authorization";
+import CopyToClipboard from "react-copy-to-clipboard";
 import Button from "../components/atoms/common/Button";
+import { IconButton } from "../components/atoms/common/IconButton";
+import { PageLayout } from "../components/templates/PageLayout";
 import { BRAND_NAME } from "../constants/brand";
 import {
   PERCENTAGE_FROM_FRIEND_PURCHASE,
   REGISTRATION_BONUS,
   REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
 } from "../constants/constants";
-import { PageLayout } from "../components/templates/PageLayout";
-import { useIsLoggedIn } from "@/utils/authorization";
-import { AuthenticationButton } from "../components/atoms/AuthenticationButton";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { IconButton } from "../components/atoms/common/IconButton";
-import { toggleRegistrationModal } from "@/store/authentication";
 
 export const dynamic = "force-dynamic";
 

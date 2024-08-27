@@ -5,9 +5,8 @@ import {
 } from "@/app/constants/constants";
 import { toggleRegistrationModal } from "@/store/authentication";
 import { useAppDispatch } from "@/store/store";
-import { useIsLoggedIn } from "@/utils/authorization";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "../../atoms/common/Button";
 
@@ -44,41 +43,24 @@ function Content({
 
 export const SIGN_UP_TOAST_ID = "SignUpPromptToast";
 
-export function useSignUpPromptToast() {
-  const [showToast, setShowToast] = useState(false);
-  const [toastShown, setToastShown] = useState(false);
-  const loggedIn = useIsLoggedIn();
-  const isUserDataLoading = loggedIn === undefined;
-
+export const SignUpPromptToast = () => {
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!loggedIn && !isUserDataLoading && !toastShown) {
-      setShowToast(true);
-    }
-    if (loggedIn) {
-      //  no need to show toast
-      setToastShown(true);
-    }
-  }, [loggedIn, isUserDataLoading, toastShown]);
 
   const dismissToast = useCallback(() => toast.dismiss(), []);
   const openModal = useCallback(() => {
     dispatch(toggleRegistrationModal(true));
-    setShowToast(false);
-    setToastShown(true);
     dismissToast();
   }, [dismissToast, dispatch]);
 
   useEffect(() => {
-    if (showToast && !toastShown && !toast.isActive(SIGN_UP_TOAST_ID)) {
+    if (!toast.isActive(SIGN_UP_TOAST_ID)) {
       toast(<Content openModal={openModal} dismissToast={dismissToast} />, {
         autoClose: 10000,
         className: "lg:w-96",
         toastId: SIGN_UP_TOAST_ID,
       });
     }
-  }, [dismissToast, openModal, showToast, toastShown]);
+  }, [dismissToast, openModal]);
 
   return null;
-}
+};
