@@ -62,34 +62,15 @@ function Content({
   );
 }
 
-export const useBonusesToasts = () => {
+export const useBonusesToasts = (bonusesToDisplay: Bonus[]) => {
   const { push } = useAppRouter();
   const [markViewedBonus] = useMarkViewedBonusMutation();
 
   const [bonusIndex, setBonusIndex] = useState(0);
 
-  const {
-    data: friends,
-    isLoading: isFriendsLoading,
-    isSuccess: isBonusesLoaded,
-  } = useFriendsQuery();
-  const { data: bonuses, isLoading: isBonusesLoading } =
-    useGetUserBonusesQuery();
+  const { data: friends, isLoading: isFriendsLoading } = useFriendsQuery();
 
-  const bonusesToDisplay = useMemo(() => {
-    if (isBonusesLoaded) {
-      return bonuses?.filter(({ viewed, confirmed }) => !viewed && confirmed);
-    }
-  }, [isBonusesLoaded]);
-
-  if (
-    isBonusesLoading ||
-    isFriendsLoading ||
-    !bonuses?.length ||
-    !friends ||
-    !bonusesToDisplay ||
-    bonusesToDisplay?.length < 1
-  ) {
+  if (isFriendsLoading) {
     return null;
   }
 
@@ -128,7 +109,11 @@ export const useBonusesToasts = () => {
   }
 };
 
-export const BonusToast = () => {
-  useBonusesToasts();
+export const BonusToast = ({
+  bonusesToDisplay,
+}: {
+  bonusesToDisplay: Bonus[];
+}) => {
+  useBonusesToasts(bonusesToDisplay);
   return null;
 };

@@ -16,23 +16,18 @@ const SignUpPromptToast = dynamic(
 
 export const Toast = () => {
   const loggedIn = useIsLoggedIn();
-  const { data: bonuses, isSuccess: isBonusesLoaded } = useGetUserBonusesQuery(
-    undefined,
-    { skip: !loggedIn }
-  );
+  const { data: bonuses } = useGetUserBonusesQuery(undefined, {
+    skip: !loggedIn,
+  });
 
   const bonusesToDisplay = bonuses?.filter(
     ({ viewed, confirmed }) => !viewed && confirmed
   );
 
-  const showBonusToast =
-    loggedIn &&
-    isBonusesLoaded &&
-    bonuses?.length &&
-    bonusesToDisplay &&
-    bonusesToDisplay?.length > 0;
+  const showBonusToast = bonusesToDisplay && bonusesToDisplay?.length > 0;
 
   const showSignUpPromptToast = loggedIn === false;
+  console.log({ bonusesToDisplay, showSignUpPromptToast });
 
   if (!showBonusToast && !showSignUpPromptToast) {
     return null;
@@ -41,7 +36,7 @@ export const Toast = () => {
   return (
     <>
       <ToastContainer toastClassName="rounded-lg" className="lg:w-96" />
-      {showBonusToast && <BonusToast />}
+      {showBonusToast && <BonusToast bonusesToDisplay={bonusesToDisplay} />}
       {showSignUpPromptToast && <SignUpPromptToast />}
     </>
   );

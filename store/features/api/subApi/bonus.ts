@@ -20,7 +20,6 @@ export const bonusApi = appApi.injectEndpoints({
         body: bonusData,
         method: "PATCH",
       }),
-      invalidatesTags: ["Bonus"],
     }),
   }),
 });
