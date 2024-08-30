@@ -8,7 +8,7 @@ export function MobileNavbar({
   onNavItemClick,
 }: {
   navbarItems: NavbarItem[];
-  onNavItemClick: () => void;
+  onNavItemClick?: () => void;
 }) {
   const pathname = useAppPathname();
   return (

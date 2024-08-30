@@ -27,7 +27,6 @@ export const Toast = () => {
   const showBonusToast = bonusesToDisplay && bonusesToDisplay?.length > 0;
 
   const showSignUpPromptToast = loggedIn === false;
-  console.log({ bonusesToDisplay, showSignUpPromptToast });
 
   if (!showBonusToast && !showSignUpPromptToast) {
     return null;

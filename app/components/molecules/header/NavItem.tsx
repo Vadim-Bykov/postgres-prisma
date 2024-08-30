@@ -1,6 +1,8 @@
+import { cn } from "@/utils/css";
+import { Pathname, useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
 import Link from "next/link";
-import React from "react";
+import React, { useTransition } from "react";
 
 export function NavItem({
   route,
@@ -8,16 +10,24 @@ export function NavItem({
   isActive,
   onClick,
 }: {
-  route: string;
+  route: Pathname;
   title: string;
   isActive: boolean;
   onClick?: () => void;
 }) {
+  const [isTransitioning, setTransition] = useTransition();
+  const { push } = useAppRouter();
+  const handleNAvigation = () => {
+    setTransition(() => {
+      push(route);
+      onClick?.();
+    });
+  };
   return (
-    <Link
-      href={route}
+    <button
+      // href={route}
       className="relative min-w-fit h-full font-head"
-      onClick={onClick}
+      onClick={handleNAvigation}
     >
       <div
         className={clsx(
@@ -25,7 +35,11 @@ export function NavItem({
           isActive && " scale-100"
         )}
       />
-      <span className="text-xl text-white">{title}</span>
-    </Link>
+      <span
+        className={cn("text-xl text-white", isTransitioning && "opacity-70")}
+      >
+        {title}
+      </span>
+    </button>
   );
 }

@@ -61,13 +61,13 @@ export function MobileMenu({ navbarItems }: { navbarItems: NavbarItem[] }) {
       <section
         className={clsx(
           "flex flex-col grow items-center justify-center gap-y-6 overflow-hidden transition-opacity z-10",
-          !isOpen && "opacity-0",
+          isOpen ? "opacity-100" : "opacity-0",
           BURGER_TRANSITION_CLASSNAMES
         )}
       >
-        <UserBadge onAvatarLogoClick={toggleMenu} className="mb-10" />
+        <UserBadge className="mb-10" />
 
-        <MobileNavbar navbarItems={navbarItems} onNavItemClick={toggleMenu} />
+        <MobileNavbar navbarItems={navbarItems} />
       </section>
     </menu>
   );

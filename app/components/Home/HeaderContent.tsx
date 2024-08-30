@@ -13,7 +13,7 @@ export function HeaderContent({ className }: { className?: string }) {
   return (
     <section
       className={clsx(
-        "relative bg-primary flex flex-col text-white px-5 lg:px-20 duration-[3000ms] ease-in-out transition-opacity overflow-y-hidden",
+        "relative bg-primary flex flex-col text-white px-5 lg:px-20 duration-1000 ease-in-out transition-opacity overflow-y-hidden",
         runAnimation ? "opacity-100" : "opacity-70"
       )}
     >
