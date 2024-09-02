@@ -31,7 +31,11 @@ export function NavItem({
           isTransitioning && "animate-pulse-fast bg-slate-700 scale-100"
         )}
       />
-      <span className={cn("text-xl text-white")}>{title}</span>
+      <span
+        className={cn("text-xl text-white", isTransitioning && "opacity-70")}
+      >
+        {title}
+      </span>
     </button>
   );
 }
