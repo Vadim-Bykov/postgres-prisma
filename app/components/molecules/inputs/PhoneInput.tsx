@@ -4,7 +4,6 @@ import {
 } from "@/app/components/atoms/common/Input";
 import messages from "@/app/constants/messages.json";
 import { leaveOnlyNumbers } from "@/utils/formatting";
-// import InputMask from "@mona-health/react-input-mask";
 import UsaFlagImage from "@public/images/flag-us.png";
 import Image from "next/image";
 import { Control, Controller } from "react-hook-form";
@@ -18,7 +17,6 @@ export function PhoneInput({ control }: Props) {
   return (
     <Controller
       name="phoneNumber"
-      // Needed to avoid changing an uncontrolled input to be controlled
       defaultValue=""
       control={control}
       rules={{
