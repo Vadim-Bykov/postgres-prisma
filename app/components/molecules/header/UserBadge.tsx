@@ -11,6 +11,7 @@ import { AuthenticationButton } from "../../atoms/AuthenticationButton";
 import Icon from "../../atoms/common/Icon/Icon";
 import { useWalletQuery } from "@/store/features/api/subApi/wallet";
 import { Coin } from "@/public/icons/Coin";
+import { cn } from "@/utils/css";
 
 export function UserBadge({
   onAvatarLogoClick,
@@ -27,7 +28,7 @@ export function UserBadge({
   const dispatch = useAppDispatch();
 
   const asPath = useAppPathname();
-  const { push } = useAppRouter();
+  const { push, isTransitioning } = useAppRouter();
   const { isTablet } = useWindowDimensions();
   const { data: wallet } = useWalletQuery(undefined, { skip: !loggedIn });
   const walletBallance = wallet?.bonusAmount ?? "--";
@@ -48,7 +49,10 @@ export function UserBadge({
       {loggedIn || isUserDataLoading ? (
         <button
           onClick={onAvatarClick}
-          className="flex flex-col lg:flex-row items-center gap-3 relative"
+          className={cn(
+            "flex flex-col lg:flex-row items-center gap-3 relative",
+            isTransitioning && "opacity-60"
+          )}
         >
           <Image
             priority
@@ -74,6 +78,12 @@ export function UserBadge({
             <Coin />{" "}
             <span className="text-pink font-semibold">{walletBallance}</span>
           </span>
+          <div
+            className={cn(
+              "h-[6px] w-full absolute -bottom-2",
+              isTransitioning && "animate-pulse-fast bg-slate-500"
+            )}
+          />
         </button>
       ) : (
         <AuthenticationButton

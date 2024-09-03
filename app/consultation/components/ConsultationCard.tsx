@@ -31,7 +31,7 @@ export function ConsultationCard({
   setMaxWidth,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const router = useAppRouter();
+  const { push, isTransitioning, prefetch } = useAppRouter();
 
   useEffect(() => {
     if (ref && ref.current?.clientWidth) {
@@ -59,8 +59,10 @@ export function ConsultationCard({
       </p>
 
       <Button
+        onMouseEnter={() => prefetch(`/consultation/${id}`)}
         className="w-full"
-        onClick={() => router.push(`/consultation/${id}`)}
+        loading={isTransitioning}
+        onClick={() => push(`/consultation/${id}`)}
       >
         Узнать подробнее
       </Button>

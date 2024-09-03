@@ -23,7 +23,8 @@ export function Footer() {
         className="basis-1/3 font-head text-white flex flex-grow justify-end items-center"
       >
         <span>
-          Бонусная программа <Coin size={32} />
+          Бонусная программа&nbsp;
+          <Coin size={32} />
         </span>
       </Link>
     </footer>

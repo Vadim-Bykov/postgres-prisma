@@ -1,6 +1,7 @@
 import { cn } from "@/utils/css";
 import { Pathname, useAppRouter } from "@/utils/useAppRouter";
 import clsx from "clsx";
+import Link from "next/link";
 
 export function NavItem({
   route,
@@ -19,8 +20,9 @@ export function NavItem({
     onClick?.();
   };
   return (
-    <button
-      // href={route}
+    <Link
+      href={route}
+      prefetch
       className={cn("relative min-w-fit h-full font-head")}
       onClick={handleNAvigation}
     >
@@ -36,6 +38,6 @@ export function NavItem({
       >
         {title}
       </span>
-    </button>
+    </Link>
   );
 }

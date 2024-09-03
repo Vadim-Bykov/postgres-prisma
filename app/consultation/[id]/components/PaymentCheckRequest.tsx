@@ -39,7 +39,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
     consultationId as string
   );
 
-  const { push } = useAppRouter();
+  const { push, isTransitioning } = useAppRouter();
 
   const [
     purchaseConsultation,
@@ -168,8 +168,8 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         authenticationForActionRequired
         type="submit"
         className="self-start"
-        disabled={isPurchasing || isUpdating}
-        loading={isPurchasing || isUpdating}
+        disabled={isPurchasing || isUpdating || isTransitioning}
+        loading={isPurchasing || isUpdating || isTransitioning}
       >
         {userHasPurchase ? "Исправить данные об оплате" : "Проверить оплату"}
       </AuthenticationButton>
