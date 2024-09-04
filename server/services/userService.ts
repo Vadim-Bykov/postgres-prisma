@@ -21,6 +21,7 @@ import {
   REGISTRATION_BONUS,
   REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
 } from "@/app/constants/constants";
+import { UserLocation } from "@/models/location";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -29,6 +30,50 @@ import {
 //   picture?: any;
 //   // picture?: fileUpload.UploadedFile;
 // }
+
+export const registerUserExtraData = async ({
+  userId,
+  userName,
+  userEmail,
+  invitedByFriendEmail,
+  location,
+}: {
+  userId: number;
+  userEmail: string;
+  invitedByFriendEmail?: string | null;
+  location?: UserLocation;
+  userName: string;
+}) => {
+  await Promise.all([
+    walletService.createWallet({
+      userId,
+      invitedByFriend: !!invitedByFriendEmail,
+    }),
+    prisma.location.create({
+      data: { ...location, userId },
+    }),
+    !!invitedByFriendEmail &&
+      friendService.createFriend({
+        invitedByFriendEmail,
+        userId,
+      }),
+    // await mailService.sendActivationMail({ name: userName, email: userEmail }),
+  ]);
+
+  await Promise.all([
+    await bonusService.createBonus({
+      userId,
+      bonusType: "REGISTRATION",
+      amount: REGISTRATION_BONUS,
+    }),
+    !!invitedByFriendEmail &&
+      (await bonusService.createBonus({
+        userId,
+        bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
+        amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+      })),
+  ]);
+};
 
 export const registration = async ({
   name,
@@ -81,35 +126,13 @@ UserCreationBody) => {
       },
     });
 
-    await Promise.all([
-      walletService.createWallet({
-        userId: user.id,
-        invitedByFriend: !!invitedByFriendEmail,
-      }),
-      prisma.location.create({
-        data: { ...location, userId: user.id },
-      }),
-      !!invitedByFriendEmail &&
-        friendService.createFriend({
-          invitedByFriendEmail,
-          userId: user.id,
-        }),
-      // await mailService.sendActivationMail({ name, email });
-    ]);
-
-    await Promise.all([
-      await bonusService.createBonus({
-        userId: user.id,
-        bonusType: "REGISTRATION",
-        amount: REGISTRATION_BONUS,
-      }),
-      !!invitedByFriendEmail &&
-        (await bonusService.createBonus({
-          userId: user.id,
-          bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
-          amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
-        })),
-    ]);
+    registerUserExtraData({
+      userId: user.id,
+      userEmail: email,
+      userName: name,
+      invitedByFriendEmail,
+      location,
+    });
 
     const userDto = getUserDto({ ...user, location });
     const { refreshToken } = await tokenService.generateToken(userDto);
