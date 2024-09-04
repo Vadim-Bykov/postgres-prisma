@@ -20,7 +20,7 @@ export function Footer() {
 
       <Link
         href="/bonus-program"
-        className="basis-1/3 font-head text-white flex flex-grow justify-end items-center"
+        className="basis-1/3 font-head text-white text-center lg:text-right"
       >
         <span>
           Бонусная программа&nbsp;
