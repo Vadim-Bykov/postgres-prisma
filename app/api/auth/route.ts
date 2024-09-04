@@ -1,5 +1,4 @@
 import { REFRESH_TOKEN_COOKIE } from "@/app/constants/constants";
-import { setTokensToCookies } from "@/server/services/cookieService";
 import * as tokenService from "@/server/services/tokenService";
 import * as userService from "@/server/services/userService";
 import { apiCatchErrorHandler } from "@/utils/errorHandler";
@@ -15,8 +14,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ auth: false });
     }
 
-    const tokenPayload = await tokenService.validateRefreshToken(refreshToken);
-    const tokenData = await tokenService.findRefreshToken(refreshToken);
+    const [tokenPayload, tokenData] = await Promise.all([
+      tokenService.validateRefreshToken(refreshToken),
+      tokenService.findRefreshToken(refreshToken),
+    ]);
 
     if (!tokenPayload || !tokenData) {
       cookieService.removeTokensFromCookies();
@@ -25,17 +26,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ auth: false });
     }
 
-    const { refreshToken: updatedRefreshToken } =
-      await tokenService.generateToken(tokenPayload);
-
-    const tokeData = await tokenService.saveRefreshToken({
-      userId: tokenPayload.id,
-      refreshToken,
-      updatedRefreshToken,
-    });
-
     userService.updateUserLastVisit(tokenPayload.id);
-    setTokensToCookies({ refreshToken: tokeData.refreshToken });
 
     return NextResponse.json({
       user: tokenPayload,
