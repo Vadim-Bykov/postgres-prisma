@@ -12,7 +12,7 @@ export function PurchaseList() {
   const { data: purchases, isLoading } = useGetAllUserPurchasesQuery();
 
   return (
-    <div className="w-full max-w-xl flex flex-col gap-6">
+    <div className="w-full max-w-2xl flex flex-col gap-6">
       <h2 className="text-2xl font-head font-semibold ">
         Здесь вы можете просмотреть оплаченные консультации и их статус
       </h2>

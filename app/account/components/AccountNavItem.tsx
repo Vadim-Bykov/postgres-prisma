@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import Link from "next/link";
 import { AccountNavItem } from "./AccountNavigation";
 import Icon from "@/app/components/atoms/common/Icon/Icon";
 import { useAppDispatch } from "@/store/store";
 import { toggleLogoutModal } from "@/store/authentication";
 import { Coin } from "@/public/icons/Coin";
+import { Link } from "@/app/components/atoms/common/Link";
 
 interface NavItemProps extends AccountNavItem {
   isActive: boolean;
@@ -22,8 +22,11 @@ export function NavItem({
   return (
     <Link
       href={href}
+      withLoader={false}
+      withPulse
       target={target}
       className={clsx(
+        "text-base text-purple-dark font-normal",
         "flex gap-3 items-center relative px-6 py-2 rounded-[10px]",
         isActive && "bg-gray-light"
       )}

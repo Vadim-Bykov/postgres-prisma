@@ -9,11 +9,17 @@ import { useAppSelector } from "@/store/store";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
 import Image from "next/image";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { PaymentCheckRequest } from "./PaymentCheckRequest";
+import { Link } from "@/app/components/atoms/common/Link";
+import dynamic from "next/dynamic";
+import { useIsLoggedIn } from "@/utils/authorization";
+
+const PaymentCheckRequest = dynamic(
+  () => import("./PaymentCheckRequest").then((mod) => mod.PaymentCheckRequest),
+  { ssr: false }
+);
 
 const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
   MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
@@ -24,8 +30,8 @@ const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
 export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
   const [locationError, setLocationError] = useState("");
-  const userData = useAppSelector((state) => state.user.userData);
-
+  const loggedIn = useIsLoggedIn();
+  // const userData = useAppSelector((state) => state.user.userData);
   // TODO: uncomment if we want BY users to be restricted
   // const currentUserLocationCountry = useAppSelector(
   //   (state) => state.user.currentLocation?.country
@@ -38,10 +44,10 @@ export function PaymentInfo() {
   const {
     data: userPurchase,
     isLoading: isUserPurchaseChecking,
-    isError,
+    isSuccess: isPurchaseChecked,
   } = useGetUserPurchaseQuery(
     { consultationId: consultationId as string },
-    { skip: !userData }
+    { skip: !loggedIn }
   );
 
   const {
@@ -78,32 +84,23 @@ export function PaymentInfo() {
         {messages.payments[userPurchase?.paymentStatus || "CHECKING"]}
       </span>
 
-      {userPurchase?.paymentStatus === "CONFIRMED" ? (
-        <Link className="text-purple font-semibold" href={"/account/purchases"}>
+      {!!userPurchase?.paymentStatus && (
+        <Link
+          className="text-purple font-semibold flex items-center"
+          href={"/account/purchases"}
+        >
           Перейти в личный кабинет
         </Link>
-      ) : (
-        <>
-          {!!userPurchase?.paymentStatus && (
-            <Link
-              className="text-purple font-semibold"
-              href={"/account/purchases"}
-            >
-              Перейти в личный кабинет
-            </Link>
-          )}
-          <Button
-            onClick={getBankingData}
-            disabled={
-              isBankingDataLoading || isUserPurchaseChecking || !!banking
-            }
-            loading={isBankingDataLoading}
-          >
-            {userPurchase?.paymentStatus === "CHECKING"
-              ? "Хочу исправить ошибку в отправленных данных об оплате"
-              : "Получить данные для оплаты"}
-          </Button>
-        </>
+      )}
+      {(loggedIn === false ||
+        (isPurchaseChecked && !userPurchase && !banking)) && (
+        <Button
+          onClick={getBankingData}
+          disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
+          loading={isBankingDataLoading}
+        >
+          Получить данные для оплаты
+        </Button>
       )}
 
       <span
@@ -145,22 +142,7 @@ export function PaymentInfo() {
         )
       )}
 
-      {banking && (
-        <>
-          <div className="text-xs">
-            <p>
-              После оплаты, пожалуйста нажмите кнопку &quot;Проверить
-              оплату&quot;.
-            </p>
-            <p>
-              Вы также можете мне прислать копию чека об оплате в мессенджерах
-              или на эл.почту.
-            </p>
-          </div>
-
-          <PaymentCheckRequest banking={banking} />
-        </>
-      )}
+      {banking && <PaymentCheckRequest banking={banking} />}
     </>
   );
 }

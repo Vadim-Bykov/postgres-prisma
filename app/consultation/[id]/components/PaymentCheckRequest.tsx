@@ -99,6 +99,16 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
 
   return (
     <Form className="flex flex-col gap-3" onSubmit={onSubmit}>
+      <div className="text-xs">
+        <p>
+          После оплаты, пожалуйста нажмите кнопку &quot;Проверить оплату&quot;.
+        </p>
+        <p>
+          Вы также можете мне прислать копию чека об оплате в мессенджерах или
+          на эл.почту.
+        </p>
+      </div>
+
       <div className="flex flex-col gap-1 text-xs">
         <p>
           Укажите пожалуйста банк получатель, на который производили оплату (

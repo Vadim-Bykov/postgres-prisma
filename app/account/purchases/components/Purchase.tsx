@@ -1,3 +1,4 @@
+import { Link } from "@/app/components/atoms/common/Link";
 import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
 import { UserPurchase } from "@/models/purchase";
 import { Coin } from "@/public/icons/Coin";
@@ -8,7 +9,6 @@ import {
 } from "@/utils/formatting";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import { PaymentStatus, PurchaseStatus } from "@prisma/client";
-import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 
 const PAYMENT_STATUS_MAP: { [key in PaymentStatus]: string } = {

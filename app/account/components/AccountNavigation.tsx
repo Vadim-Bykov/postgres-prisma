@@ -79,6 +79,11 @@ export function AccountNavigation({
         {...ACCOUNT_NAV_ITEMS[4]}
         isActive={pathname === ACCOUNT_NAV_ITEMS[4].href}
       />
+      <NavItem
+        isTablet={isTablet}
+        {...ACCOUNT_NAV_ITEMS[5]}
+        isActive={pathname === ACCOUNT_NAV_ITEMS[5].href}
+      />
       <LogoutNavItem isTablet={isTablet} />
     </nav>
   );

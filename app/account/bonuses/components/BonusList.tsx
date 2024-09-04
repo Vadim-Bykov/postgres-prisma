@@ -1,3 +1,4 @@
+import { Link } from "@/app/components/atoms/common/Link";
 import { Currency } from "@/prisma/enumAdapter";
 import { Coin } from "@/public/icons/Coin";
 import { useGetUserBonusesQuery } from "@/store/features/api/subApi/bonus";
@@ -5,7 +6,6 @@ import { useFriendsQuery } from "@/store/features/api/subApi/friend";
 import { formatDate } from "@/utils/formatting";
 import { Bonus } from "@prisma/client";
 import { range } from "lodash-es";
-import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 
 export function BonusPlaceholder() {
@@ -94,7 +94,7 @@ export function BonusList() {
         бонусы <Coin size={18} />
       </h2>
       <Link href="/bonus-program" className="text-purple font-semibold">
-        Узнать как.
+        Узнать как
       </Link>
     </div>
   );

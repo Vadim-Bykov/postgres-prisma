@@ -2,9 +2,9 @@
 
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 import Image from "next/image";
-import Link from "next/link";
 import { ARTICLES, Article } from "../constants/articles";
 import { useAppSelector } from "@/store/store";
+import { Link } from "@/app/components/atoms/common/Link";
 
 interface ArticleCardProps extends Article {
   showDivider: boolean;
