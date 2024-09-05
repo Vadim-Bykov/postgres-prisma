@@ -1,7 +1,13 @@
 import { Coin } from "@/public/icons/Coin";
 import { useFriendsQuery } from "@/store/features/api/subApi/friend";
 import { range } from "lodash-es";
-import { FriendCard, FriendCardPlaceholder } from "./FriendCard";
+import { FriendCardPlaceholder } from "./FriendCard";
+import dynamic from "next/dynamic";
+
+const FriendCard = dynamic(
+  () => import("./FriendCard").then((mod) => mod.FriendCard),
+  { ssr: false }
+);
 
 function Placeholder() {
   return range(2).map((index) => <FriendCardPlaceholder key={index} />);
