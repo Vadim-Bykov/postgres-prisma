@@ -1,31 +1,24 @@
 "use client";
 
 import Button from "@/app/components/atoms/common/Button";
-import { IconButton } from "@/app/components/atoms/common/IconButton";
+import { Link } from "@/app/components/atoms/common/Link";
 import messages from "@/app/constants/messages.json";
 import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
 import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
-import { useAppSelector } from "@/store/store";
-import { Banking } from "@prisma/client";
+import { useIsLoggedIn } from "@/utils/authorization";
 import clsx from "clsx";
-import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Link } from "@/app/components/atoms/common/Link";
-import dynamic from "next/dynamic";
-import { useIsLoggedIn } from "@/utils/authorization";
 
 const PaymentCheckRequest = dynamic(
   () => import("./PaymentCheckRequest").then((mod) => mod.PaymentCheckRequest),
   { ssr: false }
 );
-
-const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
-  MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
-  VISA: require("@/public/icons/payment/visa.svg"),
-  MIR: require("@/public/icons/payment/mir.png"),
-};
+const BankingList = dynamic(
+  () => import("./BankingList").then((mod) => mod.BankingList),
+  { ssr: false }
+);
 
 export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
@@ -92,7 +85,7 @@ export function PaymentInfo() {
           Перейти в личный кабинет
         </Link>
       )}
-      {(loggedIn === false ||
+      {((loggedIn === false && !banking) ||
         (isPurchaseChecked && !userPurchase && !banking)) && (
         <Button
           onClick={getBankingData}
@@ -114,35 +107,12 @@ export function PaymentInfo() {
         {error?.data?.message || locationError}
       </span>
 
-      {banking?.map(
-        ({ bankName, number, ownerName, id, currency, paymentSystem }) => (
-          <div key={id}>
-            <div className="flex items-center gap-3">
-              <p>{bankName} </p>
-              <Image
-                alt="Payment system logo"
-                className="w-8 h-auto"
-                src={PAYMENT_SYSTEM_LOGO[paymentSystem]}
-              />
-            </div>
-
-            <CopyToClipboard text={number.split(" ").join("")}>
-              <div className="flex gap-3 cursor-pointer">
-                <p>{number}</p>
-                <IconButton
-                  iconProps={{ name: "file-copy-line.svg", color: "purple" }}
-                />
-              </div>
-            </CopyToClipboard>
-
-            <p>Валюта - {currency}</p>
-
-            {ownerName && <p>{ownerName}</p>}
-          </div>
-        )
+      {banking && (
+        <>
+          <BankingList banking={banking} />
+          <PaymentCheckRequest banking={banking} />
+        </>
       )}
-
-      {banking && <PaymentCheckRequest banking={banking} />}
     </>
   );
 }
