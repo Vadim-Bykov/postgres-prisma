@@ -8,6 +8,7 @@ import { useIsLoggedIn } from "@/utils/authorization";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import dynamic from "next/dynamic";
 import { cn } from "@/utils/css";
+import { shallowEqual } from "react-redux";
 
 const Navbar = dynamic(() => import("./Navbar").then((mod) => mod.Navbar), {
   ssr: false,
@@ -63,7 +64,7 @@ export function Header({}) {
   useAuthenticationQuery();
   useGetLocationQuery();
 
-  const userData = useAppSelector((state) => state.user.userData);
+  const userData = useAppSelector((state) => state.user.userData, shallowEqual);
   const loggedIn = useIsLoggedIn();
 
   const filteredNavbarItems = loggedIn

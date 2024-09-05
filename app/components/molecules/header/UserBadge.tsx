@@ -12,6 +12,7 @@ import Icon from "../../atoms/common/Icon/Icon";
 import { useWalletQuery } from "@/store/features/api/subApi/wallet";
 import { Coin } from "@/public/icons/Coin";
 import { cn } from "@/utils/css";
+import { shallowEqual } from "react-redux";
 
 export function UserBadge({
   onAvatarLogoClick,
@@ -20,7 +21,7 @@ export function UserBadge({
   onAvatarLogoClick?: () => void;
   className?: HTMLAttributes<HTMLDivElement>["className"];
 }) {
-  const userData = useAppSelector((state) => state.user.userData);
+  const userData = useAppSelector((state) => state.user.userData, shallowEqual);
   const loggedIn = useIsLoggedIn();
 
   const isUserDataLoading = loggedIn === undefined;

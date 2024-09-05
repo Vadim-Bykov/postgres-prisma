@@ -23,6 +23,7 @@ import {
   REGISTRATION_BONUS,
   REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
 } from "@/app/constants/constants";
+import { shallowEqual } from "react-redux";
 
 type FormValues = {
   firstName: string;
@@ -58,7 +59,10 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   const [showPasswordConfirmationError, setShowPasswordConfirmationError] =
     useState(false);
   const password = watch("password");
-  const location = useAppSelector((state) => state.user.currentLocation);
+  const location = useAppSelector(
+    (state) => state.user.currentLocation,
+    shallowEqual
+  );
   const showFriendEmail = watch("showFriendEmail", false);
 
   const onSubmit = handleSubmit(

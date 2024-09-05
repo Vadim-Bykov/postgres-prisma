@@ -103,3 +103,9 @@ export function Purchase({
     </div>
   );
 }
+
+export function PurchaseList({ purchases }: { purchases: UserPurchase[] }) {
+  return purchases?.map((purchase) => (
+    <Purchase key={purchase.id} {...purchase} />
+  ));
+}

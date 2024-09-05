@@ -1,5 +1,5 @@
-import { PurchaseList } from "./components/PurchaseList";
+import { PurchasePageContent } from "./components/PurchasePageContent";
 
 export default function PurchasesPage() {
-  return <PurchaseList />;
+  return <PurchasePageContent />;
 }

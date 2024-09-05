@@ -1,14 +1,20 @@
 "use client";
 
 import { useGetAllUserPurchasesQuery } from "@/store/features/api/subApi/purchase";
-import { Purchase, PurchaseCardPlaceholder } from "./Purchase";
+import { PurchaseCardPlaceholder } from "./Purchase";
 import { range } from "lodash-es";
+import dynamic from "next/dynamic";
+
+const PurchaseList = dynamic(
+  () => import("./Purchase").then((mod) => mod.PurchaseList),
+  { ssr: false }
+);
 
 function Placeholder() {
   return range(3).map((index) => <PurchaseCardPlaceholder key={index} />);
 }
 
-export function PurchaseList() {
+export function PurchasePageContent() {
   const { data: purchases, isLoading } = useGetAllUserPurchasesQuery();
 
   return (
@@ -20,11 +26,9 @@ export function PurchaseList() {
       <div className="flex flex-col gap-5">
         {isLoading ? (
           <Placeholder />
-        ) : (
-          purchases?.map((purchase) => {
-            return <Purchase key={purchase.id} {...purchase} />;
-          })
-        )}
+        ) : purchases ? (
+          <PurchaseList purchases={purchases} />
+        ) : null}
       </div>
     </div>
   );
