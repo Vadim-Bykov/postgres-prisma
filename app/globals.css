@@ -12,16 +12,6 @@ body {
 }
 
 @font-face {
-  font-family: Logotype;
-  src: url("../public/fonts/KingthingsPetrock/Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: HeaderType;
-  src: url("../public/fonts/Geologica/Regular.ttf") format("truetype");
-}
-
-@font-face {
   font-family: Onest;
   src: url("../public/fonts/Onest/Regular.ttf") format("truetype");
 }

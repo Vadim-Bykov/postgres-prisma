@@ -10,8 +10,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        logo: "Logotype",
-        head: "HeaderType",
+        logo: ["var(--font-logo)"],
+        head: ["var(--font-head)"],
         sans: ["Onest", "Helvetica", "Arial", "sans-serif"],
       },
       transitionProperty: {
