@@ -57,7 +57,7 @@ export const registerUserExtraData = async ({
         invitedByFriendEmail,
         userId,
       }),
-    // await mailService.sendActivationMail({ name: userName, email: userEmail }),
+    await mailService.sendActivationMail({ name: userName, email: userEmail }),
   ]);
 
   await Promise.all([

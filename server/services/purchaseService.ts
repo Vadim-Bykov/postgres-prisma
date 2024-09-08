@@ -103,11 +103,11 @@ export const createPurchase = async ({
         },
         // include: { consultation: true },
       }),
-      // mailService.sendCheckingPurchaseMail({
-      //   name: userData.name,
-      //   email: userData.email,
-      //   consultationId,
-      // }),
+      mailService.sendCheckingPurchaseMail({
+        name: userData.name,
+        email: userData.email,
+        consultationId,
+      }),
     ]);
 
     !!user.invitedByFriendEmail &&
@@ -198,12 +198,12 @@ export const updateUserPurchase = async ({
           updatedAt: new Date().toISOString(),
         },
       }),
-      // await mailService.sendCheckingPurchaseMail({
-      //   name: userData.name,
-      //   email: userData.email,
-      //   consultationId,
-      //   isProvidedDataUpdate: true,
-      // }),
+      await mailService.sendCheckingPurchaseMail({
+        name: userData.name,
+        email: userData.email,
+        consultationId,
+        isProvidedDataUpdate: true,
+      }),
     ]);
 
     return purchase;
