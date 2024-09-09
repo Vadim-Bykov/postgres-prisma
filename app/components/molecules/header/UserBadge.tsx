@@ -9,7 +9,7 @@ import Image from "next/image";
 import { HTMLAttributes } from "react";
 import { AuthenticationButton } from "../../atoms/AuthenticationButton";
 import Icon from "../../atoms/common/Icon/Icon";
-import { useWalletQuery } from "@/store/features/api/subApi/wallet";
+import { useWalletQuery, walletApi } from "@/store/features/api/subApi/wallet";
 import { Coin } from "@/public/icons/Coin";
 import { cn } from "@/utils/css";
 import { shallowEqual } from "react-redux";
@@ -31,7 +31,14 @@ export function UserBadge({
   const asPath = useAppPathname();
   const { push, isTransitioning } = useAppRouter();
   const { isTablet } = useWindowDimensions();
-  const { data: wallet } = useWalletQuery(undefined, { skip: !loggedIn });
+
+  const walletApiResult = walletApi.endpoints.wallet.useQueryState();
+  const currentWalletData = walletApiResult.currentData?.bonusAmount;
+
+  const { data: wallet } = useWalletQuery(undefined, {
+    skip: !loggedIn,
+    pollingInterval: currentWalletData === null ? 2000 : undefined,
+  });
   const walletBallance = wallet?.bonusAmount ?? "--";
 
   const onAvatarClick = () => {
