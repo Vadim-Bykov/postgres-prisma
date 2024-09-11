@@ -1,7 +1,6 @@
-import { IconButton } from "@/app/components/atoms/common/IconButton";
+import { IconButton } from "@/app/_components/common/Button/IconButton";
 import { Banking } from "@prisma/client";
 import Image from "next/image";
-import React from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 
 const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {

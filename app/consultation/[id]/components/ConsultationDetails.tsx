@@ -1,20 +1,20 @@
 "use client";
 
+import { SendEmailButton } from "@/app/_components/common/Button/SendEmailButton";
+import { Paragraph } from "@/app/_components/common/Paragraph";
+import { ImageWithLoader } from "@/app/_components/ImageWithLoader";
+import { PERCENTAGE_TO_PAY_BY_BONUS } from "@/app/constants/constants";
 import { useGetConsultationQuery } from "@/store/features/api/subApi/consultationApi";
+import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
 import {
   formatBonusStringEnding,
   formatCurrencyAmount,
   formatGoogleDriveImageUrl,
 } from "@/utils/formatting";
-import { PaymentInfo } from "./PaymentInfo";
-import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
-import Skeleton from "react-loading-skeleton";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
-import { Paragraph } from "@/app/components/common/Paragraph";
-import { SendEmailButton } from "@/app/components/common/SendEmailButton";
-import { PERCENTAGE_TO_PAY_BY_BONUS } from "@/app/constants/constants";
-import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
 import clsx from "clsx";
+import Skeleton from "react-loading-skeleton";
+import { PaymentInfo } from "./PaymentInfo";
 
 const MAX_WIDTH = 1024;
 

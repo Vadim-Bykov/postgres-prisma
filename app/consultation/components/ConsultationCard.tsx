@@ -1,10 +1,10 @@
+import Button from "@/app/_components/common/Button/Button";
 import { formatCurrencyAmount } from "@/utils/formatting";
 import { useAppRouter } from "@/utils/useAppRouter";
 import { Consultation } from "@prisma/client";
 import clsx from "clsx";
 import { useEffect, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
-import Button from "../../components/atoms/common/Button";
 
 export function ConsultationCardPlaceholder() {
   return (

@@ -1,8 +1,8 @@
 "use client";
 
-import { AboutMe } from "./components/Home/AboutMe";
-import { HeaderContent } from "./components/Home/HeaderContent";
-import { PageLayout } from "./components/templates/PageLayout";
+import { PageLayout } from "@/app/_components/templates/PageLayout";
+import { AboutMe } from "./_components/home-page/AboutMe";
+import { HeaderContent } from "./_components/home-page/HeaderContent";
 
 export const dynamic = "force-dynamic";
 

@@ -1,4 +1,4 @@
-import { PageLayout } from "@/app/components/templates/PageLayout";
+import { PageLayout } from "@/app/_components/templates/PageLayout";
 import { ConsultationDetails } from "./components/ConsultationDetails";
 
 export const dynamic = "force-dynamic";

@@ -1,9 +1,9 @@
-import Wrapper from "@/app/components/Wrapper";
+import Wrapper from "@/app/_components/main-layout/Wrapper";
 import "./globals.css";
 import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
-import { BRAND_NAME_STRING } from "./constants/brand";
 import localFont from "next/font/local";
+import { BRAND_NAME_STRING } from "@/app/constants/brand";
 
 export const metadata: Metadata = {
   title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,

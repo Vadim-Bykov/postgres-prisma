@@ -1,4 +1,4 @@
-import { PageLayout } from "../components/templates/PageLayout";
+import { PageLayout } from "../_components/templates/PageLayout";
 import { ArticleList } from "./components/ArticleList";
 
 export const dynamic = "force-dynamic";

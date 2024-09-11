@@ -1,7 +1,7 @@
-import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
-import { Input } from "@/app/components/atoms/common/Input";
-import { InputSelect } from "@/app/components/atoms/common/InputSelect";
-import { Form } from "@/app/components/common/Form";
+import { AuthenticationButton } from "@/app/_components/common/AuthenticationButton";
+import { Form } from "@/app/_components/common/Form";
+import { Input } from "@/app/_components/common/input/Input";
+import { InputSelect } from "@/app/_components/common/input/InputSelect";
 import messages from "@/app/constants/messages.json";
 import { PurchaseBody } from "@/models/purchase";
 import {

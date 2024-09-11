@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/app/components/atoms/common/Button";
-import { Link } from "@/app/components/atoms/common/Link";
+import Button from "@/app/_components/common/Button/Button";
+import { Link } from "@/app/_components/common/Link";
 import messages from "@/app/constants/messages.json";
 import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
 import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";

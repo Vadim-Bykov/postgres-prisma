@@ -1,5 +1,5 @@
 import { ConsultationList } from "./components/ConsultationList";
-import { PageLayout } from "../components/templates/PageLayout";
+import { PageLayout } from "../_components/templates/PageLayout";
 
 export const dynamic = "force-dynamic";
 

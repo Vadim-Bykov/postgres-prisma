@@ -1,13 +1,13 @@
 "use client";
 
+import Button from "@/app/_components/common/Button/Button";
 import { Coin } from "@/public/icons/Coin";
 import { toggleRegistrationModal } from "@/store/authentication";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useIsLoggedIn } from "@/utils/authorization";
 import CopyToClipboard from "react-copy-to-clipboard";
-import Button from "../components/atoms/common/Button";
-import { IconButton } from "../components/atoms/common/IconButton";
-import { PageLayout } from "../components/templates/PageLayout";
+import { IconButton } from "../_components/common/Button/IconButton";
+import { PageLayout } from "../_components/templates/PageLayout";
 import { BRAND_NAME } from "../constants/brand";
 import {
   PERCENTAGE_FROM_FRIEND_PURCHASE,

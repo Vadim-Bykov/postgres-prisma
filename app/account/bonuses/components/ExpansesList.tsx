@@ -1,7 +1,7 @@
 import { Coin } from "@/public/icons/Coin";
 import { useGetAllUserPurchasesQuery } from "@/store/features/api/subApi/purchase";
 import { BonusPlaceholder } from "./BonusList";
-import { Link } from "@/app/components/atoms/common/Link";
+import { Link } from "@/app/_components/common/Link";
 
 function Expanse({
   title,

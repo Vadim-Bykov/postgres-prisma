@@ -1,6 +1,6 @@
 "use client";
 
-import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
+import { ImageWithLoader } from "@/app/_components/ImageWithLoader";
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 import clsx from "clsx";
 import { useParams } from "next/navigation";
@@ -10,8 +10,8 @@ import {
   colorVariants,
 } from "../../constants/articles";
 import { ParagraphList } from "./ParagraphList";
-import { SendEmailButton } from "@/app/components/common/SendEmailButton";
 import { useAppRouter } from "@/utils/useAppRouter";
+import { SendEmailButton } from "@/app/_components/common/Button/SendEmailButton";
 
 export function ArticleContent() {
   const { id } = useParams();
