@@ -7,7 +7,7 @@ declare global {
 
 let prisma;
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV !== "development") {
   prisma = new PrismaClient();
 } else {
   prisma = new PrismaClient().$extends(
@@ -21,4 +21,4 @@ if (process.env.NODE_ENV === "development") {
 // @ts-ignore
 if (process.env.NODE_ENV === "development") global.prisma = prisma;
 
-export default prisma;
+export default prisma as PrismaClient;
