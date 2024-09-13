@@ -98,7 +98,7 @@ export function ConsultationDetails({ id }: { id: string }) {
             >
               {formatCurrencyAmount({ price, currency })}
             </span>
-            {walletBallance && sumToPayByMoney && (
+            {walletBallance && sumToPayByMoney ? (
               <>
                 {" "}
                 - для вас{" "}
@@ -106,7 +106,7 @@ export function ConsultationDetails({ id }: { id: string }) {
                   {formatCurrencyAmount({ price: sumToPayByMoney, currency })}
                 </span>
               </>
-            )}
+            ) : null}
             .
           </p>
           {walletBallance > 0 && (
