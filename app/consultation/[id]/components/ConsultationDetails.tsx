@@ -15,6 +15,7 @@ import { useWindowDimensions } from "@/utils/useWindowDimensions";
 import clsx from "clsx";
 import Skeleton from "react-loading-skeleton";
 import { PaymentInfo } from "./PaymentInfo";
+import { cn } from "@/utils/css";
 
 const MAX_WIDTH = 1024;
 
@@ -80,7 +81,11 @@ export function ConsultationDetails({ id }: { id: string }) {
         <div className="flex flex-col gap-2">
           {description.map((paragraph) => {
             return (
-              <Paragraph key={paragraph} lineHeight={28}>
+              <Paragraph
+                key={paragraph}
+                lineHeight={28}
+                className={cn(paragraph.startsWith("-") && "-mt-3")}
+              >
                 {paragraph}
               </Paragraph>
             );

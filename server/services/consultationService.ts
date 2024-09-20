@@ -2,11 +2,14 @@ import prisma from "@/lib/prisma";
 import { ApiError } from "../error/ApiError";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { Consultation } from "@prisma/client";
+import { getEnvironment } from "../helpers/envKeys";
 
 export const getAllConsultations = async () => {
   try {
     const consultations = await prisma.consultation.findMany({
-      where: { status: "PUBLISHED" },
+      where: {
+        status: getEnvironment() === "production" ? "PUBLISHED" : undefined,
+      },
       orderBy: { primary: "desc" },
     });
 
