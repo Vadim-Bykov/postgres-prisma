@@ -47,3 +47,26 @@ export function formatGoogleDriveImageUrl(imageId: string) {
 
   return `https://drive.google.com/uc?export=view&id=${imageId}`;
 }
+
+const APP_CURRENCY_NAME = "балл";
+
+export function formatBonusStringEnding(bonus = 0) {
+  let bonusString = "";
+
+  const string = bonus.toString();
+  const lastChar = string.charAt(string.length - 1);
+
+  if (lastChar === "1" && !(bonus === 11)) {
+    bonusString = `${APP_CURRENCY_NAME}`;
+  } else if (lastChar === "2" && !(bonus === 12)) {
+    bonusString = `${APP_CURRENCY_NAME}а`;
+  } else if (lastChar === "3" && !(bonus === 13)) {
+    bonusString = `${APP_CURRENCY_NAME}а`;
+  } else if (lastChar === "4" && !(bonus === 14)) {
+    bonusString = `${APP_CURRENCY_NAME}а`;
+  } else {
+    bonusString = `${APP_CURRENCY_NAME}ов`;
+  }
+
+  return bonusString;
+}

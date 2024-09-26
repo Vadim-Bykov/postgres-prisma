@@ -1,7 +1,7 @@
-import { AuthenticationButton } from "@/app/components/atoms/AuthenticationButton";
-import { Input } from "@/app/components/atoms/common/Input";
-import { InputSelect } from "@/app/components/atoms/common/InputSelect";
-import { Form } from "@/app/components/common/Form";
+import { AuthenticationButton } from "@/app/_components/common/AuthenticationButton";
+import { Form } from "@/app/_components/common/Form";
+import { Input } from "@/app/_components/common/input/Input";
+import { InputSelect } from "@/app/_components/common/input/InputSelect";
 import messages from "@/app/constants/messages.json";
 import { PurchaseBody } from "@/models/purchase";
 import {
@@ -9,6 +9,8 @@ import {
   useGetUserPurchaseQuery,
   useUpdatePurchaseMutation,
 } from "@/store/features/api/subApi/purchase";
+import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
+import { useAppRouter } from "@/utils/useAppRouter";
 import { Banking } from "@prisma/client";
 import clsx from "clsx";
 import Link from "next/link";
@@ -19,6 +21,7 @@ import { useForm } from "react-hook-form";
 interface FormData {
   bankRecipientId: string;
   paymentNumber?: string | null;
+  paidByBonus?: number;
 }
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
@@ -32,6 +35,11 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const { data: userPurchase } = useGetUserPurchaseQuery({
     consultationId: consultationId as string,
   });
+  const { walletBallance, sumToPayByBonus } = useBonusToPayConsultation(
+    consultationId as string
+  );
+
+  const { push, isTransitioning } = useAppRouter();
 
   const [
     purchaseConsultation,
@@ -68,7 +76,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
     : 0;
 
   const onSubmit = handleSubmit(
-    async ({ bankRecipientId, paymentNumber }: FormData) => {
+    async ({ bankRecipientId, paymentNumber, paidByBonus }: FormData) => {
       if (bankRecipientId === "0") {
         setError("bankRecipientId", { message: messages.validation.required });
         return;
@@ -78,16 +86,29 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         bankRecipientId: +bankRecipientId,
         consultationId: +consultationId,
         paymentNumber,
+        paidByBonus: paidByBonus ? +paidByBonus : undefined,
       };
 
       userHasPurchase
-        ? updatePurchase(purchase)
-        : purchaseConsultation(purchase);
+        ? await updatePurchase(purchase)
+        : await purchaseConsultation(purchase);
+
+      push("/account/purchases");
     }
   );
 
   return (
     <Form className="flex flex-col gap-3" onSubmit={onSubmit}>
+      <div className="text-xs">
+        <p>
+          После оплаты, пожалуйста нажмите кнопку &quot;Проверить оплату&quot;.
+        </p>
+        <p>
+          Вы также можете мне прислать копию чека об оплате в мессенджерах или
+          на эл.почту.
+        </p>
+      </div>
+
       <div className="flex flex-col gap-1 text-xs">
         <p>
           Укажите пожалуйста банк получатель, на который производили оплату (
@@ -130,12 +151,35 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         />
       </div>
 
+      {walletBallance > 0 && !userHasPurchase && (
+        <div className="flex flex-col gap-1 text-xs">
+          <p>
+            Укажите пожалуйста количество бонусных баллов, которыми хотите
+            оплатить консультацию (не более {sumToPayByBonus}).
+          </p>
+          <Input
+            label="Количество бонусных баллов для оплаты"
+            error={errors.paidByBonus?.message}
+            {...register("paidByBonus", {
+              validate: (sum) => {
+                if (sumToPayByBonus && sum) {
+                  return (
+                    sumToPayByBonus >= +sum ||
+                    `Вы можете оплатить бонусными баллами только  ${sumToPayByBonus}.`
+                  );
+                }
+              },
+            })}
+          />
+        </div>
+      )}
+
       <AuthenticationButton
         authenticationForActionRequired
         type="submit"
         className="self-start"
-        disabled={isPurchasing || isUpdating}
-        loading={isPurchasing || isUpdating}
+        disabled={isPurchasing || isUpdating || isTransitioning}
+        loading={isPurchasing || isUpdating || isTransitioning}
       >
         {userHasPurchase ? "Исправить данные об оплате" : "Проверить оплату"}
       </AuthenticationButton>

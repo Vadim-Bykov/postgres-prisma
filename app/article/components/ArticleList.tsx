@@ -1,10 +1,10 @@
 "use client";
 
+import { Link } from "@/app/_components/common/Link";
+import { useAppSelector } from "@/store/store";
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 import Image from "next/image";
-import Link from "next/link";
 import { ARTICLES, Article } from "../constants/articles";
-import { useAppSelector } from "@/store/store";
 
 interface ArticleCardProps extends Article {
   showDivider: boolean;

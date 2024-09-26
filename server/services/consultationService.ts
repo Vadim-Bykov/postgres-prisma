@@ -2,11 +2,14 @@ import prisma from "@/lib/prisma";
 import { ApiError } from "../error/ApiError";
 import { catchErrorHandler } from "@/utils/errorHandler";
 import { Consultation } from "@prisma/client";
+import { getEnvironment } from "../helpers/envKeys";
 
 export const getAllConsultations = async () => {
   try {
     const consultations = await prisma.consultation.findMany({
-      where: { status: "PUBLISHED" },
+      where: {
+        status: getEnvironment() === "production" ? "PUBLISHED" : undefined,
+      },
       orderBy: { primary: "desc" },
     });
 
@@ -24,6 +27,10 @@ export const getConsultation = async (id: number) => {
     const consultation = await prisma.consultation.findUnique({
       where: { id },
     });
+
+    if (!consultation) {
+      throw ApiError.badRequest(`Консультация с ID: ${id} не сохранена в базе`);
+    }
 
     return consultation;
   } catch (error) {

@@ -1,31 +1,30 @@
 "use client";
 
-import Button from "@/app/components/atoms/common/Button";
-import { IconButton } from "@/app/components/atoms/common/IconButton";
+import Button from "@/app/_components/common/Button/Button";
+import { Link } from "@/app/_components/common/Link";
 import messages from "@/app/constants/messages.json";
 import { useBankingDataQuery } from "@/store/features/api/subApi/banking";
 import { useGetUserPurchaseQuery } from "@/store/features/api/subApi/purchase";
-import { useAppSelector } from "@/store/store";
-import { Banking } from "@prisma/client";
+import { useIsLoggedIn } from "@/utils/authorization";
 import clsx from "clsx";
-import Image from "next/image";
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
-import { PaymentCheckRequest } from "./PaymentCheckRequest";
 
-const PAYMENT_SYSTEM_LOGO: { [key in Banking["paymentSystem"]]: string } = {
-  MASTERCARD: require("@/public/icons/payment/mastercard.svg"),
-  VISA: require("@/public/icons/payment/visa.svg"),
-  MIR: require("@/public/icons/payment/mir.png"),
-};
+const PaymentCheckRequest = dynamic(
+  () => import("./PaymentCheckRequest").then((mod) => mod.PaymentCheckRequest),
+  { ssr: false }
+);
+const BankingList = dynamic(
+  () => import("./BankingList").then((mod) => mod.BankingList),
+  { ssr: false }
+);
 
 export function PaymentInfo() {
   const [showBanking, setShowBanking] = useState(false);
   const [locationError, setLocationError] = useState("");
-  const userData = useAppSelector((state) => state.user.userData);
-
+  const loggedIn = useIsLoggedIn();
+  // const userData = useAppSelector((state) => state.user.userData);
   // TODO: uncomment if we want BY users to be restricted
   // const currentUserLocationCountry = useAppSelector(
   //   (state) => state.user.currentLocation?.country
@@ -38,10 +37,10 @@ export function PaymentInfo() {
   const {
     data: userPurchase,
     isLoading: isUserPurchaseChecking,
-    isError,
+    isSuccess: isPurchaseChecked,
   } = useGetUserPurchaseQuery(
     { consultationId: consultationId as string },
-    { skip: !userData }
+    { skip: !loggedIn }
   );
 
   const {
@@ -78,32 +77,23 @@ export function PaymentInfo() {
         {messages.payments[userPurchase?.paymentStatus || "CHECKING"]}
       </span>
 
-      {userPurchase?.paymentStatus === "CONFIRMED" ? (
-        <Link className="text-purple font-semibold" href={"/account/purchases"}>
+      {!!userPurchase?.paymentStatus && (
+        <Link
+          className="text-purple font-semibold flex items-center"
+          href={"/account/purchases"}
+        >
           Перейти в личный кабинет
         </Link>
-      ) : (
-        <>
-          {!!userPurchase?.paymentStatus && (
-            <Link
-              className="text-purple font-semibold"
-              href={"/account/purchases"}
-            >
-              Перейти в личный кабинет
-            </Link>
-          )}
-          <Button
-            onClick={getBankingData}
-            disabled={
-              isBankingDataLoading || isUserPurchaseChecking || !!banking
-            }
-            loading={isBankingDataLoading}
-          >
-            {userPurchase?.paymentStatus === "CHECKING"
-              ? "Хочу исправить ошибку в отправленных данных об оплате"
-              : "Получить данные для оплаты"}
-          </Button>
-        </>
+      )}
+      {((loggedIn === false && !banking) ||
+        (isPurchaseChecked && !userPurchase && !banking)) && (
+        <Button
+          onClick={getBankingData}
+          disabled={isBankingDataLoading || isUserPurchaseChecking || !!banking}
+          loading={isBankingDataLoading}
+        >
+          Получить данные для оплаты
+        </Button>
       )}
 
       <span
@@ -117,47 +107,9 @@ export function PaymentInfo() {
         {error?.data?.message || locationError}
       </span>
 
-      {banking?.map(
-        ({ bankName, number, ownerName, id, currency, paymentSystem }) => (
-          <div key={id}>
-            <div className="flex items-center gap-3">
-              <p>{bankName} </p>
-              <Image
-                alt="Payment system logo"
-                className="w-8 h-auto"
-                src={PAYMENT_SYSTEM_LOGO[paymentSystem]}
-              />
-            </div>
-
-            <CopyToClipboard text={number.split(" ").join("")}>
-              <div className="flex gap-3">
-                <p>{number}</p>
-                <IconButton
-                  iconProps={{ name: "file-copy-line.svg", color: "purple" }}
-                />
-              </div>
-            </CopyToClipboard>
-
-            <p>Валюта - {currency}</p>
-
-            {ownerName && <p>{ownerName}</p>}
-          </div>
-        )
-      )}
-
       {banking && (
         <>
-          <div className="text-xs">
-            <p>
-              После оплаты, пожалуйста нажмите кнопку &quot;Проверить
-              оплату&quot;.
-            </p>
-            <p>
-              Вы также можете мне прислать копию чека об оплате в мессенджерах
-              или на эл.почту.
-            </p>
-          </div>
-
+          <BankingList banking={banking} />
           <PaymentCheckRequest banking={banking} />
         </>
       )}

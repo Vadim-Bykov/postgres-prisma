@@ -1,7 +1,7 @@
 "use client";
 
-import Button from "@/app/components/atoms/common/Button";
-import { Modal } from "@/app/components/common/Modal/Modal";
+import Button from "@/app/_components/common/Button/Button";
+import { Modal } from "@/app/_components/Modal/Modal";
 import { useResetPasswordLinkQuery } from "@/store/features/api/subApi/resetPasswordApi";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";

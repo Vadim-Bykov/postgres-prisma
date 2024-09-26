@@ -14,6 +14,14 @@ import { ApiError } from "../error/ApiError";
 import { getEnvironment } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
+import * as walletService from "./walletService";
+import * as friendService from "./friendService";
+import * as bonusService from "./bonusService";
+import {
+  REGISTRATION_BONUS,
+  REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+} from "@/app/constants/constants";
+import { UserLocation } from "@/models/location";
 
 // interface IRegistrationBody {
 //   name: string;
@@ -23,20 +31,77 @@ import * as tokenService from "./tokenService";
 //   // picture?: fileUpload.UploadedFile;
 // }
 
+export const registerUserExtraData = async ({
+  userId,
+  userName,
+  userEmail,
+  invitedByFriendEmail,
+  location,
+}: {
+  userId: number;
+  userEmail: string;
+  invitedByFriendEmail?: string | null;
+  location?: UserLocation;
+  userName: string;
+}) => {
+  await Promise.all([
+    walletService.createWallet({
+      userId,
+      invitedByFriend: !!invitedByFriendEmail,
+    }),
+    prisma.location.create({
+      data: { ...location, userId },
+    }),
+    !!invitedByFriendEmail &&
+      friendService.createFriend({
+        invitedByFriendEmail,
+        userId,
+      }),
+    await mailService.sendActivationMail({ name: userName, email: userEmail }),
+  ]);
+
+  await Promise.all([
+    await bonusService.createBonus({
+      userId,
+      bonusType: "REGISTRATION",
+      amount: REGISTRATION_BONUS,
+    }),
+    !!invitedByFriendEmail &&
+      (await bonusService.createBonus({
+        userId,
+        bonusType: "REGISTRATION_WITH_REFERRAL_EMAIL",
+        amount: REGISTRATION_WITH_REFERRAL_EMAIL_BONUS,
+      })),
+  ]);
+};
+
 export const registration = async ({
   name,
   email,
   password,
   location,
   imageFormData,
+  invitedByFriendEmail,
 }: // picture,
 UserCreationBody) => {
   try {
-    const candidate = await prisma.users.findFirst({ where: { email } });
+    const candidate = await prisma.users.findUnique({ where: { email } });
 
     if (candidate) {
       throw ApiError.badRequest(
         `Пользователь с адресом эл.почты ${email} уже зарегистрирован в базе`
+      );
+    }
+
+    const friend =
+      invitedByFriendEmail &&
+      (await prisma.users.findUnique({
+        where: { email: invitedByFriendEmail },
+      }));
+
+    if (invitedByFriendEmail && !friend) {
+      throw ApiError.badRequest(
+        `Пользователь (ваш друг) с адресом эл.почты ${invitedByFriendEmail} не зарегистрирован в базе. Пожалуйста уточните адрес эл.почты у своего друга.`
       );
     }
 
@@ -57,13 +122,16 @@ UserCreationBody) => {
         //  activationLink,
         //  picture: fileName,
         name,
+        invitedByFriendEmail,
       },
     });
 
-    await mailService.sendActivationMail({ name, email });
-
-    await prisma.location.create({
-      data: { ...location, userId: user.id },
+    registerUserExtraData({
+      userId: user.id,
+      userEmail: email,
+      userName: name,
+      invitedByFriendEmail,
+      location,
     });
 
     const userDto = getUserDto({ ...user, location });

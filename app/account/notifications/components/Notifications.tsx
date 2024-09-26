@@ -1,11 +1,11 @@
 "use client";
 
-import Button from "@/app/components/atoms/common/Button";
-import { Form } from "@/app/components/common/Form";
-import { ToggleInput } from "@/app/components/molecules/inputs/ToggleInput";
+import Button from "@/app/_components/common/Button/Button";
+import { Form } from "@/app/_components/common/Form";
+import { ToggleInput } from "@/app/_components/common/input/ToggleInput";
+import { ErrorMessage } from "@/app/_components/ErrorMessage";
 import { useUpdateUserPersonalDataMutation } from "@/store/features/api/subApi/userApi";
 import { useAppSelector } from "@/store/store";
-import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -102,15 +102,7 @@ export function Notifications() {
           register={register}
         />
 
-        <span
-          className={clsx(
-            "overflow-hidden text-pink inline-block",
-            "transition-max-height duration-500 ease-in-out",
-            showFormError ? "max-h-28" : "max-h-0"
-          )}
-        >
-          {formError}
-        </span>
+        <ErrorMessage visible={showFormError}>{formError}</ErrorMessage>
 
         <Button
           type="submit"

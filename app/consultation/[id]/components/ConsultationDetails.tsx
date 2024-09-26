@@ -1,16 +1,21 @@
 "use client";
 
+import { SendEmailButton } from "@/app/_components/common/Button/SendEmailButton";
+import { Paragraph } from "@/app/_components/common/Paragraph";
+import { ImageWithLoader } from "@/app/_components/ImageWithLoader";
+import { PERCENTAGE_TO_PAY_BY_BONUS } from "@/app/constants/constants";
 import { useGetConsultationQuery } from "@/store/features/api/subApi/consultationApi";
+import { useBonusToPayConsultation } from "@/utils/apiUtils/bonus";
 import {
+  formatBonusStringEnding,
   formatCurrencyAmount,
   formatGoogleDriveImageUrl,
 } from "@/utils/formatting";
-import { PaymentInfo } from "./PaymentInfo";
-import { ImageWithLoader } from "@/app/components/common/ImageWithLoader";
-import Skeleton from "react-loading-skeleton";
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
-import { Paragraph } from "@/app/components/common/Paragraph";
-import { SendEmailButton } from "@/app/components/common/SendEmailButton";
+import clsx from "clsx";
+import Skeleton from "react-loading-skeleton";
+import { PaymentInfo } from "./PaymentInfo";
+import { cn } from "@/utils/css";
 
 const MAX_WIDTH = 1024;
 
@@ -35,6 +40,8 @@ export function ConsultationPlaceholder() {
 
 export function ConsultationDetails({ id }: { id: string }) {
   const { data: consultation } = useGetConsultationQuery({ id });
+  const { walletBallance, sumToPayByBonus, sumToPayByMoney } =
+    useBonusToPayConsultation(id);
 
   if (!consultation) {
     return <ConsultationPlaceholder />;
@@ -74,15 +81,56 @@ export function ConsultationDetails({ id }: { id: string }) {
         <div className="flex flex-col gap-2">
           {description.map((paragraph) => {
             return (
-              <Paragraph key={paragraph} lineHeight={28}>
+              <Paragraph
+                key={paragraph}
+                lineHeight={28}
+                className={cn(paragraph.startsWith("-") && "-mt-3")}
+              >
                 {paragraph}
               </Paragraph>
             );
           })}
         </div>
-        <p>
-          Стоимость консультации {formatCurrencyAmount({ price, currency })}.
-        </p>
+        <div>
+          <p>
+            Стоимость консультации{" "}
+            <span
+              className={clsx(
+                walletBallance &&
+                  sumToPayByBonus &&
+                  "line-through text-red font-semibold"
+              )}
+            >
+              {formatCurrencyAmount({ price, currency })}
+            </span>
+            {walletBallance && sumToPayByMoney ? (
+              <>
+                {" "}
+                - для вас{" "}
+                <span className="text-purple font-semibold">
+                  {formatCurrencyAmount({ price: sumToPayByMoney, currency })}
+                </span>
+              </>
+            ) : null}
+            .
+          </p>
+          {walletBallance > 0 && (
+            <p className="text-sm">
+              У вас на счету{" "}
+              <span className="text-red font-semibold">{walletBallance}</span>{" "}
+              {formatBonusStringEnding(walletBallance)}. Вы можете
+              воспользоваться ими для оплаты.{" "}
+              <span className="text-red font-semibold">
+                {PERCENTAGE_TO_PAY_BY_BONUS}%
+              </span>{" "}
+              от стоимости консультации можно оплачивать баллами (
+              <span className="text-red font-semibold">{sumToPayByBonus}</span>{" "}
+              можете оплатить баллами и{" "}
+              <span className="text-red font-semibold">{sumToPayByMoney}</span>{" "}
+              деньгами).
+            </p>
+          )}
+        </div>
         <ul>
           {perksTitle && <p>{perksTitle}</p>}
           {perks.length > 0 &&

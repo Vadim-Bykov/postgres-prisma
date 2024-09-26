@@ -1,7 +1,7 @@
 "use client";
 
 import { useAdminRoute, useAuthorizedRoute } from "@/utils/authorization";
-import { UserList } from "../components/users/UserList";
+import { UserList } from "./_components/UserList";
 
 export const dynamic = "force-dynamic";
 

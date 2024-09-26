@@ -1,5 +1,5 @@
 import { NewConsultationEmailBody } from "./../../models/email";
-import nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
 import * as consultationService from "./consultationService";
 import { ApiError } from "../error/ApiError";
 import { BRAND_NAME_STRING } from "@/app/constants/brand";
@@ -20,7 +20,7 @@ import { Consultation } from "@prisma/client";
 import * as articleService from "./articleService";
 import { formatGoogleDriveImageUrl } from "@/utils/formatting";
 
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
   secure: true,

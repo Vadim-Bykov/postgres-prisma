@@ -11,6 +11,7 @@ export interface UserDto {
   createdAt: User["createdAt"];
   emailNotification: User["emailNotification"];
   location?: UserLocation;
+  invitedByFriendEmail: User["invitedByFriendEmail"];
 }
 
 interface UserDtoSource extends User {
@@ -27,6 +28,7 @@ export const getUserDto: GetUserDto = ({
   location,
   emailNotification,
   createdAt,
+  invitedByFriendEmail,
 }) => {
   return {
     id,
@@ -34,6 +36,7 @@ export const getUserDto: GetUserDto = ({
     role,
     name,
     emailNotification,
+    invitedByFriendEmail,
     createdAt,
     location: location
       ? {

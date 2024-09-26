@@ -1,9 +1,9 @@
-import Wrapper from "@/app/components/Wrapper";
+import Wrapper from "@/app/_components/main-layout/Wrapper";
 import "./globals.css";
-import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
-import { BRAND_NAME_STRING } from "./constants/brand";
+import localFont from "next/font/local";
+import { BRAND_NAME_STRING } from "@/app/constants/brand";
 
 export const metadata: Metadata = {
   title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,
@@ -12,10 +12,21 @@ export const metadata: Metadata = {
   keywords: "астрология, прогнозирование, помощь",
 };
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+const mainFont = localFont({
+  src: "../public/fonts/Onest/Regular.ttf",
   display: "swap",
+});
+
+const headerFont = localFont({
+  src: "../public/fonts/Geologica/Regular.ttf",
+  display: "swap",
+  variable: "--font-head",
+});
+
+const logoFont = localFont({
+  src: "../public/fonts/KingthingsPetrock/Regular.ttf",
+  display: "swap",
+  variable: "--font-logo",
 });
 
 export default function RootLayout({
@@ -25,7 +36,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body
+        className={`${mainFont.className} ${headerFont.variable} ${logoFont.variable}`}
+      >
         <Wrapper>{children}</Wrapper>
       </body>
     </html>
