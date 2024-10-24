@@ -9,7 +9,9 @@ const nextConfig = {
       },
     ],
   },
-  serverExternalPackages: ["uuid", "bcrypt", "jose", "nodemailer"],
+  experimental: {
+    serverComponentsExternalPackages: ["uuid", "bcrypt", "jose", "nodemailer"],
+  },
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

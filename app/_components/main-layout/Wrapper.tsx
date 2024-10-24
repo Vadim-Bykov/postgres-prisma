@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AnalyticsHandler } from "./AnalyticsHandler";
 import { AuthenticationFlow } from "./AuthenticationFlow";
 import { Header } from "./Header";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         {children}
         <Footer />
         <AnalyticsHandler />
+        <SpeedInsights />
         <Toast />
       </SkeletonTheme>
     </Provider>
