@@ -3,11 +3,12 @@ import { ConsultationDetails } from "./components/ConsultationDetails";
 
 export const dynamic = "force-dynamic";
 
-export default function Consultation({
-  params: { id },
-}: {
-  params: { id: string };
-}) {
+type Params = Promise<{ id: string }>;
+
+export default async function Consultation(props: { params: Params }) {
+  const params = await props.params;
+  const id = params.id;
+
   return (
     <PageLayout>
       <ConsultationDetails id={id} />

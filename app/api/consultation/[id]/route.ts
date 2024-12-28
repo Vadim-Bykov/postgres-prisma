@@ -4,12 +4,12 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+type Params = Promise<{ id: string }>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
   try {
-    const { id } = params;
+    const params = await segmentData.params;
+    const id = params.id;
 
     const consultation = await consultationService.getConsultation(+id);
 
@@ -23,12 +23,10 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: Request, segmentData: { params: Params }) {
   try {
-    const { id } = params;
+    const params = await segmentData.params;
+    const id = params.id;
 
     const consultation = await consultationService.deprecateConsultation(+id);
 
