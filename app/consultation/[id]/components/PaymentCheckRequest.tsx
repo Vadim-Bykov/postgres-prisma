@@ -25,7 +25,8 @@ interface FormData {
 }
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
-  const { id: consultationId } = useParams();
+  const { id: consultationId } = useParams<{ id: string }>();
+
   const {
     register,
     handleSubmit,

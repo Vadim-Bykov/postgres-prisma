@@ -14,7 +14,7 @@ import { useAppRouter } from "@/utils/useAppRouter";
 import { SendEmailButton } from "@/app/_components/common/Button/SendEmailButton";
 
 export function ArticleContent() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { back } = useAppRouter();
   const article = ARTICLES.find((item) => item.id === +id);
 

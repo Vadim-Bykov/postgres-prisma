@@ -3,6 +3,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const url = process.env.VERCEL_URL;
 
+export type TagType =
+  | "Users"
+  | "Auth"
+  | "Consultation"
+  | "Purchase"
+  | "Wallet"
+  | "Bonus";
+
 export const appApi = createApi({
   reducerPath: "api",
   tagTypes: ["Users", "Auth", "Consultation", "Purchase", "Wallet", "Bonus"],

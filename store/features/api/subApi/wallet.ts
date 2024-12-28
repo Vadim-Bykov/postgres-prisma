@@ -1,5 +1,14 @@
 import { Wallet } from "@prisma/client";
-import { appApi } from "../appApi";
+import { appApi, TagType } from "../appApi";
+import { useIsLoggedIn } from "@/utils/authorization";
+import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+  FetchBaseQueryMeta,
+  QueryDefinition,
+} from "@reduxjs/toolkit/query";
 
 export const walletApi = appApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,4 +19,23 @@ export const walletApi = appApi.injectEndpoints({
   }),
 });
 
-export const { useWalletQuery } = walletApi;
+const { useWalletQuery: useWalletQueryHook } = walletApi;
+
+export const useWalletQuery: UseQuery<
+  QueryDefinition<
+    void,
+    BaseQueryFn<
+      string | FetchArgs,
+      unknown,
+      FetchBaseQueryError,
+      {},
+      FetchBaseQueryMeta
+    >,
+    TagType,
+    Wallet,
+    "api"
+  >
+> = () => {
+  const isLoggedIn = useIsLoggedIn();
+  return useWalletQueryHook(undefined, { skip: !isLoggedIn });
+};

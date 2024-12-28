@@ -4,11 +4,15 @@ import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
 import localFont from "next/font/local";
 import { BRAND_NAME_STRING } from "@/app/constants/brand";
+import type { Viewport } from "next";
+
+export const viewport: Viewport = {
+  themeColor: "#141024",
+};
 
 export const metadata: Metadata = {
   title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,
   description: "Я помогу Вам найти себя в этой жизни",
-  themeColor: "#141024",
   keywords: "астрология, прогнозирование, помощь",
 };
 
