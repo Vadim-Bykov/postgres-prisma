@@ -33,15 +33,12 @@ export function PaymentInfo() {
 
   // const isAdmin = userData?.role === "ADMIN";
 
-  const { id: consultationId } = useParams();
+  const { id: consultationId } = useParams<{ id: string }>();
   const {
     data: userPurchase,
     isLoading: isUserPurchaseChecking,
     isSuccess: isPurchaseChecked,
-  } = useGetUserPurchaseQuery(
-    { consultationId: consultationId as string },
-    { skip: !loggedIn }
-  );
+  } = useGetUserPurchaseQuery({ consultationId }, { skip: !loggedIn });
 
   const {
     data: banking,

@@ -13,7 +13,7 @@ export function SendEmailButton({
 }: {
   target: "newArticle" | "newConsultation";
 }) {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [
     sendArticleEmail,
     {
