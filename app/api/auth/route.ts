@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     if (!tokenPayload || !tokenData) {
-      cookieService.removeTokensFromCookies();
+      await cookieService.removeTokensFromCookies();
       !!tokenData && tokenService.removeRefreshToken(refreshToken);
 
       return NextResponse.json({ auth: false });

@@ -37,8 +37,7 @@ export async function DELETE(
 
     const userDto = await userService.deleteUser(+userId);
 
-    // TODO: uncomment after implementing close account feature
-    removeTokensFromCookies();
+    await removeTokensFromCookies();
 
     return NextResponse.json(userDto);
   } catch (error) {

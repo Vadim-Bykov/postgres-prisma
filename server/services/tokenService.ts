@@ -68,7 +68,7 @@ export const validateRefreshToken = async (refreshToken: string) => {
 
 export const removeRefreshToken = async (refreshToken: string) => {
   try {
-    cookieService.removeTokensFromCookies();
+    await cookieService.removeTokensFromCookies();
 
     const tokenData = await prisma.token.delete({ where: { refreshToken } });
 

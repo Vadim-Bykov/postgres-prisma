@@ -17,7 +17,7 @@ export const authMiddleware = async (req: NextRequest) => {
 
     if (userData instanceof NextResponse) {
       // it means token is expired
-      cookieService.removeTokensFromCookies();
+      await cookieService.removeTokensFromCookies();
 
       return userData;
     }

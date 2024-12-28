@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const userDto = await userService.registration(userData);
     const { refreshToken } = userDto;
 
-    cookieService.setTokensToCookies({ refreshToken });
+    await cookieService.setTokensToCookies({ refreshToken });
 
     return NextResponse.json(userDto);
   } catch (error) {
@@ -45,7 +45,7 @@ export async function PATCH(request: Request) {
     const updatedUserData = await userService.updateUserPersonalData(userData);
     const { refreshToken, user } = updatedUserData;
 
-    cookieService.setTokensToCookies({ refreshToken });
+    await cookieService.setTokensToCookies({ refreshToken });
 
     return NextResponse.json(user);
   } catch (error) {

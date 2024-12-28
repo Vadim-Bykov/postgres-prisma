@@ -394,7 +394,7 @@ export const updateUserPersonalData = async ({
 
     const userDto = getUserDto({ ...updatedUser, location: userData.location });
 
-    const oldRefreshToken = cookieService.getTokensFromCookies();
+    const oldRefreshToken = await cookieService.getTokensFromCookies();
     const { refreshToken } = await tokenService.generateToken(userDto);
     await tokenService.updateRefreshToken({
       userId: userDto.id,

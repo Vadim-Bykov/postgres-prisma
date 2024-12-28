@@ -6,12 +6,12 @@ import { cookies } from "next/headers";
 import { ApiError } from "../error/ApiError";
 import * as tokenService from "./tokenService";
 
-export const setTokensToCookies = ({
+export const setTokensToCookies = async ({
   refreshToken,
 }: {
   refreshToken: string;
 }) => {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.set(REFRESH_TOKEN_COOKIE, refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
@@ -20,20 +20,20 @@ export const setTokensToCookies = ({
   });
 };
 
-export const removeTokensFromCookies = () => {
-  const cookieStore = cookies();
+export const removeTokensFromCookies = async () => {
+  const cookieStore = await cookies();
   cookieStore.delete(REFRESH_TOKEN_COOKIE);
   // cookieStore.delete(ACCESS_TOKEN_COOKIE);
 };
 
-export const getTokensFromCookies = () => {
-  const cookieStore = cookies();
+export const getTokensFromCookies = async () => {
+  const cookieStore = await cookies();
   const refreshToken = cookieStore.get(REFRESH_TOKEN_COOKIE)?.value;
   return refreshToken;
 };
 
 export const getUserDataFromCookies = async () => {
-  const refreshToken = getTokensFromCookies();
+  const refreshToken = await getTokensFromCookies();
 
   if (!refreshToken) {
     throw ApiError.unauthorized();

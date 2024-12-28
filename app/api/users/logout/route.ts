@@ -5,13 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
   try {
-    const refreshToken = cookieService.getTokensFromCookies();
+    const refreshToken = await cookieService.getTokensFromCookies();
 
     if (!refreshToken) {
       return ApiError.unauthorized();
     }
 
-    cookieService.removeTokensFromCookies();
+    await cookieService.removeTokensFromCookies();
 
     const tokenData = await userService.logout(refreshToken);
 
