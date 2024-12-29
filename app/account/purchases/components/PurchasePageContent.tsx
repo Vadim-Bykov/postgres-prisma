@@ -4,6 +4,7 @@ import { useGetAllUserPurchasesQuery } from "@/store/features/api/subApi/purchas
 import { PurchaseCardPlaceholder } from "./Purchase";
 import { range } from "lodash-es";
 import dynamic from "next/dynamic";
+import { Link } from "@/app/_components/common/Link";
 
 const PurchaseList = dynamic(
   () => import("./Purchase").then((mod) => mod.PurchaseList),
@@ -26,9 +27,18 @@ export function PurchasePageContent() {
       <div className="flex flex-col gap-5">
         {isLoading ? (
           <Placeholder />
-        ) : purchases ? (
+        ) : purchases?.length ? (
           <PurchaseList purchases={purchases} />
-        ) : null}
+        ) : (
+          <div>
+            <h2 className="font-head text-lg">
+              Вы еще не заказали не одной консультации.
+            </h2>
+            <Link href="/consultation" className="text-purple font-semibold">
+              Давайте подберем вам консультацию!
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
