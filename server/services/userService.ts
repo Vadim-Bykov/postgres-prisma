@@ -126,7 +126,7 @@ UserCreationBody) => {
       },
     });
 
-    registerUserExtraData({
+    await registerUserExtraData({
       userId: user.id,
       userEmail: email,
       userName: name,
