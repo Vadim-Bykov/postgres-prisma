@@ -9,31 +9,31 @@ datasource db {
 }
 
 model Users {
-  id                   Int                 @id @unique @default(autoincrement())
-  name                 String
-  email                String              @unique
-  password             String
-  role                 Role                @default(USER)
-  image                String?
-  createdAt            DateTime            @default(now())
-  environment          Environment         @default(production)
-  project              Project             @default(ASTRO)
-  updatedAt            DateTime?
-  emailNotification    Boolean             @default(true)
-  lastVisitAt          DateTime            @default(now())
-  consultationId       Int?
-  invitedByFriendEmail String?
-  Bonus                Bonus[]
-  Friends              Friend[]
-  I_am_Friend          Friend?             @relation("I_am_Friend")
-  location             Location?
-  passwordResetLink    PasswordResetLink?
-  purchase             Purchase[]
-  Token                Token[]
-  Consultation         Consultation?       @relation(fields: [consultationId], references: [id])
-  wallet               Wallet?
-  articleEmails        ArticleEmail[]      @relation("ArticleEmailToUsers")
-  consultationEmails   ConsultationEmail[] @relation("ConsultationEmailToUsers")
+  id                       Int                        @id @unique @default(autoincrement())
+  name                     String
+  email                    String                     @unique
+  password                 String
+  role                     Role                       @default(USER)
+  image                    String?
+  createdAt                DateTime                   @default(now())
+  environment              Environment                @default(production)
+  project                  Project                    @default(ASTRO)
+  updatedAt                DateTime?
+  emailNotification        Boolean                    @default(true)
+  lastVisitAt              DateTime                   @default(now())
+  consultationId           Int?
+  invitedByFriendEmail     String?
+  Bonus                    Bonus[]
+  Friends                  Friend[]
+  I_am_Friend              Friend?                    @relation("I_am_Friend")
+  location                 Location?
+  passwordResetLink        PasswordResetLink?
+  purchase                 Purchase[]
+  Token                    Token[]
+  Consultation             Consultation?              @relation(fields: [consultationId], references: [id])
+  wallet                   Wallet?
+  ArticleEmailToUsers      ArticleEmailToUsers[]
+  ConsultationEmailToUsers ConsultationEmailToUsers[]
 }
 
 model Token {
@@ -62,9 +62,9 @@ model PasswordResetLink {
 model Consultation {
   id                Int                @id @unique @default(autoincrement())
   title             String
-  subTitle          String?
   price             Int
   currency          Currency           @default(RUB)
+  perks             String[]
   status            ConsultationStatus @default(PENDING)
   primary           Boolean?           @default(false)
   createdAt         DateTime           @default(now())
@@ -73,7 +73,7 @@ model Consultation {
   imageSource       String
   description       String[]
   perksTitle        String?
-  perks             String[]
+  subTitle          String?
   consultationEmail ConsultationEmail?
   purchase          Purchase[]
   usersGotEmail     Users[]
@@ -110,20 +110,20 @@ model Purchase {
 }
 
 model ArticleEmail {
-  id            Int      @id @unique @default(autoincrement())
-  articleId     Int      @unique
-  createdAt     DateTime @default(now())
-  title         String
-  usersGotEmail Users[]  @relation("ArticleEmailToUsers")
+  id                  Int                   @id @unique @default(autoincrement())
+  articleId           Int                   @unique
+  createdAt           DateTime              @default(now())
+  title               String
+  ArticleEmailToUsers ArticleEmailToUsers[]
 }
 
 model ConsultationEmail {
-  id             Int          @id @unique @default(autoincrement())
-  title          String
-  consultationId Int          @unique
-  createdAt      DateTime     @default(now())
-  consultation   Consultation @relation(fields: [consultationId], references: [id])
-  usersGotEmail  Users[]      @relation("ConsultationEmailToUsers")
+  id                       Int                        @id @unique @default(autoincrement())
+  title                    String
+  consultationId           Int                        @unique
+  createdAt                DateTime                   @default(now())
+  consultation             Consultation               @relation(fields: [consultationId], references: [id])
+  ConsultationEmailToUsers ConsultationEmailToUsers[]
 }
 
 model Wallet {
@@ -169,6 +169,28 @@ model users {
   email     String    @unique @db.VarChar(255)
   image     String?   @db.VarChar(255)
   createdAt DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+model ArticleEmailToUsers {
+  A            Int
+  B            Int
+  ArticleEmail ArticleEmail @relation(fields: [A], references: [id], onDelete: Cascade)
+  Users        Users        @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_ArticleEmailToUsers_AB_pkey")
+  @@index([B], map: "_ArticleEmailToUsers_B_index")
+  @@map("_ArticleEmailToUsers")
+}
+
+model ConsultationEmailToUsers {
+  A                 Int
+  B                 Int
+  ConsultationEmail ConsultationEmail @relation(fields: [A], references: [id], onDelete: Cascade)
+  Users             Users             @relation(fields: [B], references: [id], onDelete: Cascade)
+
+  @@id([A, B], map: "_ConsultationEmailToUsers_AB_pkey")
+  @@index([B], map: "_ConsultationEmailToUsers_B_index")
+  @@map("_ConsultationEmailToUsers")
 }
 
 enum Role {
