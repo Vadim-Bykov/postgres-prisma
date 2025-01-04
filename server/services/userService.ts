@@ -45,18 +45,18 @@ export const registerUserExtraData = async ({
   userName: string;
 }) => {
   await Promise.all([
-    walletService.createWallet({
+    await walletService.createWallet({
       userId,
       invitedByFriend: !!invitedByFriendEmail,
     }),
-    prisma.location.create({
+    await prisma.location.create({
       data: { ...location, userId },
     }),
     !!invitedByFriendEmail &&
-      friendService.createFriend({
+      (await friendService.createFriend({
         invitedByFriendEmail,
         userId,
-      }),
+      })),
     await mailService.sendActivationMail({ name: userName, email: userEmail }),
   ]);
 
