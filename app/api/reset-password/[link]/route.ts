@@ -2,12 +2,12 @@ import { ApiError } from "@/server/error/ApiError";
 import * as userService from "@/server/services/userService";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { link: string } }
-) {
+type Params = Promise<{ link: string }>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
   try {
-    const { link } = params;
+    const params = await segmentData.params;
+    const link = params.link;
 
     const passwordData = await userService.resetUserPassword(link);
 

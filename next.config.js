@@ -1,17 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["pbs.twimg.com"],
     remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pbs.twimg.com",
+      },
       {
         protocol: "https",
         hostname: "drive.google.com",
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["uuid", "bcrypt", "jose", "nodemailer"],
-  },
+  serverExternalPackages: ["uuid", "bcrypt", "jose", "nodemailer"],
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({

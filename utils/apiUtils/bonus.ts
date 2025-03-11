@@ -19,9 +19,10 @@ export const useBonusToPayConsultation: UseBonusToPayType = (
   const { data: wallet, refetch } = useWalletQuery();
   const walletBallance = wallet?.bonusAmount || 0;
 
-  useEffect(() => {
-    refetch();
-  }, [refetch, consultationId]);
+  // TODO: find out if it is necessary after next upgrade
+  // useEffect(() => {
+  //   refetch();
+  // }, [refetch, consultationId]);
 
   if (!consultation) {
     return { walletBallance, allowedToPayByBonus: 0, sumToPayByBonus: 0 };

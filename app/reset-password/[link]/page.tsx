@@ -5,13 +5,12 @@ import { Modal } from "@/app/_components/Modal/Modal";
 import { useResetPasswordLinkQuery } from "@/store/features/api/subApi/resetPasswordApi";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, use } from "react";
 
-export default function ResetPasswordPage({
-  params,
-}: {
-  params: { link: string };
-}) {
+type Params = Promise<{ link: string }>;
+
+export default function ResetPasswordPage(props: { params: Params }) {
+  const params = use(props.params);
   const [open, setOpen] = useState(false);
   const { push } = useRouter();
   const { isSuccess, isError } = useResetPasswordLinkQuery({

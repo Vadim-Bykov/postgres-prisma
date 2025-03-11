@@ -6,12 +6,12 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+type Params = Promise<{ userId: string }>;
+
+export async function GET(request: Request, segmentData: { params: Params }) {
   try {
-    const { userId } = params;
+    const params = await segmentData.params;
+    const userId = params.userId;
 
     const user = await userService.getUser(+userId);
 
@@ -30,15 +30,15 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { userId: string } }
+  segmentData: { params: Params }
 ) {
   try {
-    const { userId } = params;
+    const params = await segmentData.params;
+    const userId = params.userId;
 
     const userDto = await userService.deleteUser(+userId);
 
-    // TODO: uncomment after implementing close account feature
-    removeTokensFromCookies();
+    await removeTokensFromCookies();
 
     return NextResponse.json(userDto);
   } catch (error) {

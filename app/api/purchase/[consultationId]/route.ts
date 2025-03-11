@@ -4,13 +4,12 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { consultationId: string } }
-) {
-  try {
-    const { consultationId } = params;
+type Params = Promise<{ consultationId: string }>;
 
+export async function GET(request: Request, segmentData: { params: Params }) {
+  try {
+    const params = await segmentData.params;
+    const consultationId = params.consultationId;
     const user = await purchaseService.getUserPurchase(+consultationId);
 
     return NextResponse.json(user);

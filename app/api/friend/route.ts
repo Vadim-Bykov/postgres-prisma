@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const refreshToken = cookieService.getTokensFromCookies();
+    const refreshToken = await cookieService.getTokensFromCookies();
 
     if (!refreshToken) {
       throw ApiError.unauthorized();

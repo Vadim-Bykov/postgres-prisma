@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     const { refreshToken } = userDto;
 
-    cookieService.setTokensToCookies({ refreshToken });
+    await cookieService.setTokensToCookies({ refreshToken });
 
     return NextResponse.json(userDto);
   } catch (error) {

@@ -25,7 +25,8 @@ interface FormData {
 }
 
 export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
-  const { id: consultationId } = useParams();
+  const { id: consultationId } = useParams<{ id: string }>();
+
   const {
     register,
     handleSubmit,
@@ -112,8 +113,8 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
       <div className="flex flex-col gap-1 text-xs">
         <p>
           Укажите пожалуйста банк получатель, на который производили оплату (
-          {banking?.map(({ bankName }, index) => (
-            <span key={bankName}>
+          {banking?.map(({ bankName, id }, index) => (
+            <span key={id}>
               {bankName}
               {index !== banking.length - 1 && ", "}
             </span>

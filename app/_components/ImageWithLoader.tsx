@@ -1,7 +1,7 @@
 "use client";
 
 import { useWindowDimensions } from "@/utils/useWindowDimensions";
-import { OnLoadingComplete } from "next/dist/shared/lib/get-img-props";
+import { OnLoad } from "next/dist/shared/lib/get-img-props";
 import Image, { ImageProps } from "next/image";
 import { SyntheticEvent, useState } from "react";
 import Skeleton from "react-loading-skeleton";
@@ -11,7 +11,7 @@ interface Props extends ImageProps {
 }
 
 export function ImageWithLoader({
-  onLoadingComplete,
+  onLoad,
   onError,
   src,
   fallbackSource = require("@/public/images/product/earth.jpeg"),
@@ -25,8 +25,8 @@ export function ImageWithLoader({
   const [isError, setIserror] = useState(false);
   const { isMobile, width: windowWidth } = useWindowDimensions();
 
-  const onLoadAction: OnLoadingComplete = (e) => {
-    onLoadingComplete?.(e);
+  const onLoadAction: OnLoad = (e) => {
+    onLoad?.(e);
     setIsLoading(false);
   };
 
@@ -40,7 +40,7 @@ export function ImageWithLoader({
       <Image
         src={isError ? fallbackSource : src}
         onError={onErrorAction}
-        onLoadingComplete={onLoadAction}
+        onLoad={onLoadAction}
         className={className}
         width={width}
         height={height}
