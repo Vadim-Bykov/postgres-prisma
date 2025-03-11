@@ -33,7 +33,7 @@ export const getBankingData = async () => {
     //   throw ApiError.badRequest(messages.location);
     // }
 
-    const banking = await prisma.banking.findMany();
+    const banking = await prisma.banking.findMany({ where: { active: true } });
 
     return banking;
   } catch (error: any) {

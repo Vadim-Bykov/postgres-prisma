@@ -87,6 +87,7 @@ model Banking {
   ownerName     String?
   paymentSystem PaymentSystem @default(VISA)
   purchase      Purchase[]
+  active        Boolean?      @default(true)
 }
 
 model Purchase {
