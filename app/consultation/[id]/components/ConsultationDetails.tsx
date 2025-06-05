@@ -85,6 +85,7 @@ export function ConsultationDetails({ id }: { id: string }) {
                 key={paragraph}
                 lineHeight={28}
                 className={cn(paragraph.startsWith("-") && "-mt-3")}
+                indentRequired={description.length > 1}
               >
                 {paragraph}
               </Paragraph>

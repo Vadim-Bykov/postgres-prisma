@@ -62,18 +62,18 @@ model PasswordResetLink {
 model Consultation {
   id                Int                @id @unique @default(autoincrement())
   title             String
+  subTitle          String?
+  description       String[]
+  perksTitle        String?
+  perks             String[]
   price             Int
   currency          Currency           @default(RUB)
-  perks             String[]
+  imageSource       String
   status            ConsultationStatus @default(PENDING)
   primary           Boolean?           @default(false)
   createdAt         DateTime           @default(now())
   removedAt         DateTime?
   updatedAt         DateTime?
-  imageSource       String
-  description       String[]
-  perksTitle        String?
-  subTitle          String?
   consultationEmail ConsultationEmail?
   purchase          Purchase[]
   usersGotEmail     Users[]
