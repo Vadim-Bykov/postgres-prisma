@@ -23,7 +23,6 @@ interface Props extends Consultation {
 export function ConsultationCard({
   primary,
   title,
-  subTitle,
   price,
   currency,
   id,
@@ -53,7 +52,6 @@ export function ConsultationCard({
       <h3 className="font-head text-[clamp(16px,5vw,30px)] lg:text-3xl font-semibold">
         {title}
       </h3>
-      {subTitle && <p>{subTitle}</p>}
       <p className="text-5xl font-semibold">
         {formatCurrencyAmount({ price, currency })}
       </p>
