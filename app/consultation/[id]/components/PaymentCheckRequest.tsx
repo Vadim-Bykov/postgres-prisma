@@ -69,7 +69,7 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
   const bankOptions: OptionHTMLAttributes<HTMLOptionElement>[] =
     banking.map((bank) => ({
       value: bank.id,
-      label: bank.bankName,
+      label: bank.number,
     })) ?? [];
 
   const defaultBankValue = userHasPurchase
@@ -112,10 +112,11 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
 
       <div className="flex flex-col gap-1 text-xs">
         <p>
-          Укажите пожалуйста банк получатель, на который производили оплату (
-          {banking?.map(({ bankName, id }, index) => (
+          Укажите пожалуйста номер карты банка получателя, на которую
+          производили оплату (
+          {banking?.map(({ number, id }, index) => (
             <span key={id}>
-              {bankName}
+              {number}
               {index !== banking.length - 1 && ", "}
             </span>
           ))}
@@ -123,12 +124,12 @@ export function PaymentCheckRequest({ banking }: { banking: Banking[] }) {
         </p>
         <InputSelect
           defaultValue={defaultBankValue}
-          label="Банк получатель"
+          label="Номер карты банка получателя"
           error={errors.bankRecipientId?.message}
           {...register("bankRecipientId")}
           options={[
             {
-              label: "Выберите банк получатель",
+              label: "Выберите номер карты банка получателя",
               value: 0,
               disabled: true,
               hidden: true,
