@@ -1,41 +1,157 @@
+import { ConsultationStatus, Currency, Prisma } from "@prisma/client";
 import prisma from "../lib/prisma";
 
+const consultations: Prisma.ConsultationCreateInput[] = [
+  {
+    title: "Ректификация: найду ваше точное время рождения",
+    subTitle: "Точная карта рождения — ключ к астрологии",
+    description: [
+      "Вы не уверены в своём времени рождения? Астрология без точного времени — как путешествие без карты.",
+      "Ректификация — это процесс, в котором по событиям вашей жизни мы восстанавливаем точное время рождения.",
+      "Вы наконец-то увидите свою настоящую карту — без искажений. Это как включить свет в комнате, где вы жили в полумраке.",
+    ],
+    perksTitle: "Что вы получите:",
+    perks: [
+      "Точное время рождения с высокой степенью достоверности",
+      "Уточнение положения домов, Асцендента, Луны и других точек карты",
+      "Более глубокое понимание других консультаций: предназначение, прогноз, совместимость",
+      "Ощущение, что вы наконец-то «встали на своё место»",
+      "Подходит, если нет точного времени рождения или карта кажется вам «не вашей»",
+    ],
+    price: 4000,
+    currency: Currency.RUB,
+    imageSource: "1ZVn3kSYa6IAe7XZiEJrWzd_SZLjdTre7",
+    status: ConsultationStatus.PUBLISHED,
+    primary: true,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
+  {
+    title: "Астрорелокация: твой город силы",
+    subTitle: "Где ты можешь раскрыться по-настоящему",
+    description: [
+      "Чувствуешь, что место, где ты живёшь — не твоё? Внутри что-то требует перемен?",
+      "Астрология релокации покажет, где на карте мира твоя энергия будет усиливаться, а не сдерживаться.",
+      "Место — это не просто фон. Оно может быть ключом к твоей внутренней реализации.",
+    ],
+    perksTitle: "Что даёт консультация:",
+    perks: [
+      "Список городов и стран, где ты будешь чувствовать себя увереннее, ярче, устойчивее",
+      "Анализ, как меняется твоя натальная карта при переезде (иногда важен даже часовой пояс)",
+      "Подходящие направления для: жизни, работы, отдыха, уединения, творчества, финансового роста",
+      "Рекомендации, как выстраивать жизнь с учётом новых энергетических условий",
+      "Подходит тем, кто ищет своё место силы и хочет переезжать осознанно",
+    ],
+    price: 6000,
+    currency: Currency.RUB,
+    imageSource: "1xdCIE8-TDoqVYIGkPvl2tCDf-gTBk5_L",
+    status: ConsultationStatus.PUBLISHED,
+    primary: false,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
+  {
+    title: "Твоя карта. Твоё предназначение. Твоя профессия",
+    subTitle: "Профессия как путь к себе",
+    description: [
+      "Натальная карта — это инструкция к жизни, в которой зашифровано не только ваше 'что', но и 'зачем'.",
+      "Мы разберём, где ваша внутренняя точка покоя и как через дело жизни прийти к ней.",
+      "Ваша профессия — не просто работа. Это способ быть собой в этом мире. Настоящим.",
+    ],
+    perksTitle: "Что вы получите:",
+    perks: [
+      "Чёткое понимание, в каком направлении двигаться и почему именно так",
+      "Конкретные рекомендации по сферам, форматам и стилю работы (соло, в команде, на сцене, в тени)",
+      "Ответы на вопрос: «А чем мне заниматься, чтобы это было МОЁ?»",
+      "Ощущение, что вы больше не ищете — вы наконец-то нашли себя",
+      "Подходит тем, кто хочет совместить профессию и душевную реализацию",
+    ],
+    price: 10000,
+    currency: Currency.RUB,
+    imageSource: "1TwqGpoe_YjyEf8RTVH7P7ZfXcGycEePb",
+    status: ConsultationStatus.PUBLISHED,
+    primary: false,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
+  {
+    title: "Ты. Твоя карта. Твой путь",
+    subTitle: "Натальная карта как карта дороги",
+    description: [
+      "Вы устали метаться между ролями и направлениями? Всё, что вы ищете, уже зашифровано в вашей карте.",
+      "Эта консультация — не просто анализ, а разговор с самой глубиной вашей натуры.",
+      "Вы не просто узнаете — вы начнёте ДЕЙСТВОВАТЬ, потому что почувствуете внутреннюю ясность.",
+    ],
+    perksTitle: "На консультации вы получите:",
+    perks: [
+      "Глубокий разбор натальной карты: кто вы, как думаете, чувствуете, действуете",
+      "Разбор энергетики: где вы теряете силы и где наполняетесь",
+      "Профориентация: подходящие профессии, формы заработка и точки признания",
+      "Прогноз на ближайшие месяцы: фокус, ключевые даты, периоды действия и паузы",
+      "Личные рекомендации по темам реализации, ресурсов и поддержки",
+      "Подходит тем, кто хочет выйти из внутреннего тумана и начать движение в ясности",
+    ],
+    price: 15000,
+    currency: Currency.RUB,
+    imageSource: "1xezUxkzF39QDgmXAmyJGAsp3DAa6W1IM",
+    status: ConsultationStatus.PUBLISHED,
+    primary: false,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
+  {
+    title: "Астропрогноз: что готовит время",
+    subTitle: "Личный навигатор на ближайшие месяцы",
+    description: [
+      "Время несёт свои энергии — важно не просто плыть по течению, а уметь им управлять.",
+      "Этот прогноз — не о «судьбе», а о твоих возможностях. Ты управляешь своим выбором.",
+      "Пусть следующие месяцы станут твоим временем роста — осознанного, своевременного, мощного.",
+    ],
+    perksTitle: "На этой консультации вы получите:",
+    perks: [
+      "Личный астропрогноз на 3–6 месяцев: главные темы, потенциалы и уроки",
+      "Прогноз по сферам: отношения, карьера, финансы, семья — с конкретными акцентами",
+      "Ключевые периоды и даты: когда запускать, когда ждать, когда быть внимательным",
+      "Рекомендации по действиям: что поддержит, а что отнимет энергию",
+      "Эмоционально-энергетическую карту: как проживать сложные периоды без выгорания",
+      "Подходит, если вы хотите планировать не «от головы», а в гармонии с ритмом времени",
+    ],
+    price: 5000,
+    currency: Currency.RUB,
+    imageSource: "1xe8peZVb-HIk1KNDYYiCY_2Dcab8UPQF",
+    status: ConsultationStatus.PUBLISHED,
+    primary: false,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
+];
+
 async function main() {
-  const response = await Promise.all([
-    prisma.users.upsert({
-      where: { email: "rauchg@vercel.com" },
-      update: {},
-      create: {
-        name: "Guillermo Rauch",
-        email: "rauchg@vercel.com",
-        password: "12345",
-        image:
-          "https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg",
+  await prisma.$transaction(async (tx) => {
+    const existingConsultations = await tx.consultation.findMany({
+      where: {
+        title: {
+          in: consultations.map((c) => c.title),
+        },
       },
-    }),
-    prisma.users.upsert({
-      where: { email: "lee@vercel.com" },
-      update: {},
-      create: {
-        name: "Lee Robinson",
-        email: "lee@vercel.com",
-        password: "12345",
-        image:
-          "https://pbs.twimg.com/profile_images/1587647097670467584/adWRdqQ6_400x400.jpg",
-      },
-    }),
-    await prisma.users.upsert({
-      where: { email: "stey@vercel.com" },
-      update: {},
-      create: {
-        name: "Steven Tey",
-        email: "stey@vercel.com",
-        password: "12345",
-        image:
-          "https://pbs.twimg.com/profile_images/1506792347840888834/dS-r50Je_400x400.jpg",
-      },
-    }),
-  ]);
+    });
+
+    const existingTitles = existingConsultations.map((c) => c.title);
+    const newConsultations = consultations.filter(
+      (c) => !existingTitles.includes(c.title)
+    );
+
+    if (newConsultations.length > 0) {
+      await tx.consultation.createMany({
+        data: newConsultations,
+      });
+    }
+  });
 }
 // main()
 //   .then(async () => {

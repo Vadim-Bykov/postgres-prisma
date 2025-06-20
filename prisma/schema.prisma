@@ -228,3 +228,15 @@ enum BonusType {
   REGISTRATION_WITH_REFERRAL_EMAIL
   FRIEND_S_PURCHASE
 }
+
+enum FeatureType {
+  SIGN_UP_PROMPT
+  BONUS_PROGRAM
+}
+
+model FeatureFlag {
+  id        Int         @id @unique @default(autoincrement())
+  title     FeatureType
+  createdAt DateTime    @default(now())
+  value     Boolean     @default(false)
+}

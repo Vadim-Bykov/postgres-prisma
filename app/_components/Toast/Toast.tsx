@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetUserBonusesQuery } from "@/store/features/api/subApi/bonus";
+import { useGetFeatureFlagsQuery } from "@/store/features/api/subApi/featureFlag";
 import { useIsLoggedIn } from "@/utils/authorization";
 import dynamic from "next/dynamic";
 import { ToastContainer } from "react-toastify";
@@ -20,13 +21,21 @@ export const Toast = () => {
     skip: !loggedIn,
   });
 
+  const { data: featureFlags } = useGetFeatureFlagsQuery(undefined, {
+    skip: loggedIn,
+  });
+
+  const showFeatureFlagToast = featureFlags?.some(
+    (flag) => flag.title === "SIGN_UP_PROMPT" && flag.value === true
+  );
+
   const bonusesToDisplay = bonuses?.filter(
     ({ viewed, confirmed }) => !viewed && confirmed
   );
 
   const showBonusToast = bonusesToDisplay && bonusesToDisplay?.length > 0;
 
-  const showSignUpPromptToast = loggedIn === false;
+  const showSignUpPromptToast = loggedIn === false && showFeatureFlagToast;
 
   if (!showBonusToast && !showSignUpPromptToast) {
     return null;

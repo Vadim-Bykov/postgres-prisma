@@ -9,11 +9,20 @@ export type TagType =
   | "Consultation"
   | "Purchase"
   | "Wallet"
-  | "Bonus";
+  | "Bonus"
+  | "FeatureFlag";
 
 export const appApi = createApi({
   reducerPath: "api",
-  tagTypes: ["Users", "Auth", "Consultation", "Purchase", "Wallet", "Bonus"],
+  tagTypes: [
+    "Users",
+    "Auth",
+    "Consultation",
+    "Purchase",
+    "Wallet",
+    "Bonus",
+    "FeatureFlag",
+  ],
   baseQuery: fetchBaseQuery({
     baseUrl: `${String(url).replace("undefined", "")}/api/`,
   }),
