@@ -44,8 +44,8 @@ export const Toast = () => {
   return (
     <>
       <ToastContainer toastClassName="rounded-lg" className="lg:w-96" />
-      {showBonusToast && <BonusToast bonusesToDisplay={bonusesToDisplay} />}
-      {showSignUpPromptToast && <SignUpPromptToast />}
+      {/* {showBonusToast && <BonusToast bonusesToDisplay={bonusesToDisplay} />}
+      {showSignUpPromptToast && <SignUpPromptToast />} */}
     </>
   );
 };
