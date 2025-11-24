@@ -59,12 +59,17 @@ export const registerUserExtraData = async ({
       })),
     await mailService.sendActivationMail({ name: userName, email: userEmail }),
   ]);
+  const featureFlags = await prisma.featureFlag.findMany();
+
+  const registrationBonus = featureFlags?.some(
+    (flag) => flag.title === "SIGN_UP_PROMPT" && flag.value === true
+  );
 
   await Promise.all([
     await bonusService.createBonus({
       userId,
       bonusType: "REGISTRATION",
-      amount: REGISTRATION_BONUS,
+      amount: registrationBonus ? REGISTRATION_BONUS : 0,
     }),
     !!invitedByFriendEmail &&
       (await bonusService.createBonus({

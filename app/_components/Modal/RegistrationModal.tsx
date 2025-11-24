@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { shallowEqual } from "react-redux";
 import { ErrorMessage } from "../ErrorMessage";
+import { useGetFeatureFlagsQuery } from "@/store/features/api/subApi/featureFlag";
 
 type FormValues = {
   firstName: string;
@@ -40,6 +41,11 @@ interface Props extends ModalProps {
 
 export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
   const dispatch = useAppDispatch();
+  const { data: featureFlags } = useGetFeatureFlagsQuery();
+
+  const showBonusProgram = featureFlags?.some(
+    (flag) => flag.title === "SIGN_UP_PROMPT" && flag.value === true
+  );
 
   const {
     register,
@@ -110,11 +116,16 @@ export function RegistrationModal({ email = "", onSuccess, ...props }: Props) {
         <h1 className="font-head text-2xl sm:text-3xl font-semibold ">
           Давай создадим тебе аккаунт
         </h1>
-        <p>
-          Ты получишь бонус{" "}
-          <span className="font-semibold">{REGISTRATION_BONUS}</span> баллов.
-        </p>
-        <p>1 балл = 1 RUB</p>
+        {showBonusProgram && (
+          <>
+            <p>
+              Ты получишь бонус{" "}
+              <span className="font-semibold">{REGISTRATION_BONUS}</span>{" "}
+              баллов.
+            </p>
+            <p>1 балл = 1 RUB</p>
+          </>
+        )}
       </div>
 
       <Form

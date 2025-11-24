@@ -35,11 +35,14 @@ export function UserBadge({
   const walletApiResult = walletApi.endpoints.wallet.useQueryState();
   const currentWalletData = walletApiResult.currentData?.bonusAmount;
 
-  const { data: wallet } = useWalletQuery(undefined, {
-    skip: !loggedIn,
-    pollingInterval: currentWalletData === null ? 2000 : undefined,
-  });
-  const walletBallance = wallet?.bonusAmount ?? "--";
+  const { data: wallet, isLoading: isWalletLoading } = useWalletQuery(
+    undefined,
+    {
+      skip: !loggedIn,
+      pollingInterval: currentWalletData === null ? 2000 : undefined,
+    }
+  );
+  const walletBallance = isWalletLoading ? "--" : wallet?.bonusAmount ?? "0";
 
   const onAvatarClick = () => {
     if (isUserDataLoading) return;
