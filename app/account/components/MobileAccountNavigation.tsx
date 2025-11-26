@@ -5,6 +5,7 @@ import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
 import { useWalletQuery } from "@/store/features/api/subApi/wallet";
 import { Coin } from "@/public/icons/Coin";
+import { useGetFeatureFlagsQuery } from "@/store/features/api/subApi/featureFlag";
 
 export function MobileAccountNavigation() {
   const { userData } = useAppSelector((state) => state.user);
@@ -12,6 +13,10 @@ export function MobileAccountNavigation() {
   const userEmail = userData?.email ?? "";
   const { data: wallet } = useWalletQuery();
   const walletBallance = wallet?.bonusAmount ?? "--";
+  const { data: featureFlags } = useGetFeatureFlagsQuery();
+  const showBonusProgram = featureFlags?.find(
+    (flag) => flag.title === "BONUS_PROGRAM"
+  )?.value;
 
   return (
     <section
@@ -38,7 +43,7 @@ export function MobileAccountNavigation() {
         </p>
       </div>
 
-      <AccountNavigation isTablet />
+      <AccountNavigation isTablet showBonusProgram={!!showBonusProgram} />
     </section>
   );
 }

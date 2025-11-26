@@ -10,6 +10,7 @@ import { AccountNavigation } from "./AccountNavigation";
 import { MobileHeader } from "./MobileHeader";
 import { useWalletQuery } from "@/store/features/api/subApi/wallet";
 import { Coin } from "@/public/icons/Coin";
+import { useGetFeatureFlagsQuery } from "@/store/features/api/subApi/featureFlag";
 
 export function AccountNavigationLayout({
   children,
@@ -21,6 +22,11 @@ export function AccountNavigationLayout({
   const userEmail = userData?.email ?? "";
   const { data: wallet } = useWalletQuery();
   const walletBallance = wallet?.bonusAmount ?? "--";
+  const { data: featureFlags } = useGetFeatureFlagsQuery();
+
+  const showBonusProgram = featureFlags?.find(
+    (flag) => flag.title === "BONUS_PROGRAM"
+  )?.value;
 
   return (
     <div className="flex flex-col lg:flex-row min-h-[calc(100vh-68px-112px)] lg:min-h-[calc(100vh-88px-80px)]">
@@ -47,7 +53,7 @@ export function AccountNavigationLayout({
           </p>
         </div>
 
-        <AccountNavigation />
+        <AccountNavigation showBonusProgram={!!showBonusProgram} />
       </section>
 
       <MobileHeader />

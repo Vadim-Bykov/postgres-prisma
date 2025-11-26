@@ -45,8 +45,10 @@ export const ACCOUNT_NAV_ITEMS: AccountNavItem[] = [
 
 export function AccountNavigation({
   isTablet = false,
+  showBonusProgram,
 }: {
   isTablet?: boolean;
+  showBonusProgram?: boolean;
 }) {
   const pathname = useAppPathname();
 
@@ -64,11 +66,13 @@ export function AccountNavigation({
         {...ACCOUNT_NAV_ITEMS[1]}
         isActive={pathname === ACCOUNT_NAV_ITEMS[1].href}
       />
-      <NavItem
-        isTablet={isTablet}
-        {...ACCOUNT_NAV_ITEMS[2]}
-        isActive={pathname === ACCOUNT_NAV_ITEMS[2].href}
-      />
+      {showBonusProgram && (
+        <NavItem
+          isTablet={isTablet}
+          {...ACCOUNT_NAV_ITEMS[2]}
+          isActive={pathname === ACCOUNT_NAV_ITEMS[2].href}
+        />
+      )}
       <NavItem
         isTablet={isTablet}
         {...ACCOUNT_NAV_ITEMS[3]}
