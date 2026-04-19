@@ -204,6 +204,7 @@ enum Currency {
   RUB @map("₽")
   USD @map("$")
   BYN @map("Br")
+  EUR @map("€")
 }
 
 enum PaymentSystem {
