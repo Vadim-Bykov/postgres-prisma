@@ -157,6 +157,31 @@ const consultations: Prisma.ConsultationCreateInput[] = [
     removedAt: null,
     updatedAt: null,
   },
+  {
+    title: "Предназначение и финансовая свобода",
+    subTitle: "Как сохранить отношения и не потерять себя?",
+    description: [
+      "Брак — это союз двух личностей, а не подчинение.",
+      "Когда мужчина чувствует власть над женщиной, он начинает злоупотреблять — проверено психологией.",
+      "Чтобы семья была счастливой, важно знать своё предназначение и то, что зажигает тебя изнутри.",
+      "Хотите, чтобы в семье было счастье, а мужчина не злоупотреблял властью? Ответ прост: знать своё предназначение и иметь своё дело.",
+    ],
+    perksTitle: "На консультации мы:",
+    perks: [
+      "Определим вашу главную жизненную задачу с помощью расстановки на картах",
+      "Астрологически подберём хобби и проект, который вас вдохновляет",
+      "Расскажу, где ваша энергия превращается в доход",
+      "Включим подсознание — оно подскажет, что вас зажигает и что приносит реальный результат",
+    ],
+    price: 5000,
+    currency: Currency.RUB,
+    imageSource: "1xezUxkzF39QDgmXAmyJGAsp3DAa6W1IM",
+    status: ConsultationStatus.PUBLISHED,
+    primary: false,
+    createdAt: new Date(),
+    removedAt: null,
+    updatedAt: null,
+  },
 ];
 
 async function main() {
@@ -171,7 +196,7 @@ async function main() {
 
     const existingTitles = existingConsultations.map((c) => c.title);
     const newConsultations = consultations.filter(
-      (c) => !existingTitles.includes(c.title)
+      (c) => !existingTitles.includes(c.title),
     );
 
     if (newConsultations.length > 0) {
