@@ -10,6 +10,9 @@
     "prisma-db-push": "npx prisma db push",
     "prisma-db-pull": "npx prisma db pull",
     "prisma-format": "npx prisma format",
+    "db-backup": "bash scripts/backup-db.sh",
+    "db-backup:sql": "bash scripts/backup-db.sh --sql",
+    "db-backup:both": "bash scripts/backup-db.sh --both",
     "build": "prisma generate && prisma db push && prisma db seed && next build",
     "start": "next start",
     "lint": "next lint"
