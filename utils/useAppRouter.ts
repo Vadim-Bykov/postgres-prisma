@@ -19,7 +19,8 @@ export type Pathname =
   | `/article/${number}`
   | "/bonus-program"
   | "/consultation"
-  | `/consultation/${number}`;
+  | `/consultation/${number}`
+  | "/doctronic-embed";
 
 interface AppRouter extends AppRouterInstance {
   push(href: Pathname, options?: NavigateOptions): void;

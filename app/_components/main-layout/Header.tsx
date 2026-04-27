@@ -15,7 +15,7 @@ const Navbar = dynamic(() => import("./Navbar").then((mod) => mod.Navbar), {
 });
 const MobileMenu = dynamic(
   () => import("./MobileMenu/MobileMenu").then((mod) => mod.MobileMenu),
-  { ssr: false }
+  { ssr: false },
 );
 
 export interface NavbarItem {
@@ -50,6 +50,11 @@ const NAVBAR_ITEMS: NavbarItem[] = [
   //   title: "Admin",
   //   authenticationRequired: true,
   // },
+  {
+    route: "/doctronic-embed",
+    title: "Embed test",
+    authenticationRequired: false,
+  },
 ];
 
 export function Header({}) {
@@ -81,7 +86,7 @@ export function Header({}) {
         className={cn(
           "relative bg-primary flex flex-col text-white px-5 lg:px-20 h-[68px] lg:h-auto",
           "ease-in-out transition-opacity duration-1000 opacity-70",
-          animation && "opacity-100"
+          animation && "opacity-100",
         )}
       >
         {isTablet ? (
@@ -90,7 +95,7 @@ export function Header({}) {
           <Navbar
             className={cn(
               "-translate-y-20 duration-700 ease-in-out transition-transform",
-              animation && "translate-y-[0]"
+              animation && "translate-y-[0]",
             )}
             navbarItems={filteredNavbarItems}
           />

@@ -21,6 +21,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@doctronic/embed": "https://staging-embed.doctronic.ai/doctronic/0.5.0-90f9606-staging/doctronic-embed-0.5.0-90f9606-staging.tgz?Expires=1934711370&Signature=s~DPwdqROhHoLC1MQrUBBar~O11hvffLD3ZHgC-GDeZtdVg5dIRUPUqhMOroFYzxk9Qh711vOnvcFDLnSoDKnJUwgcWmXsOc~S8c8XiEjktM9FDx3xfqhMDoBShHoWj0oE6zfiVZBoyLGtDIf3W0odujBAewXzlaamHGHm~1ir0eHV3hGOrfgO8ei~OAQblIfjqUVyCe8AKbZ0q6xQ5nu7GN8m5K9qGIz9gsKEmVsaZSLcCv-vC-ZO~~Sv7xcFfCxfsgivGBYGFdUofOfhKWDn5L~FbhcInsxDTvROK2ewKVnvfwbJKdHMXUvvuEYEUjOQCrNWeWXvqGBENd3CcK2Q__&Key-Pair-Id=K3AT05VOUT06GP",
     "@next/bundle-analyzer": "^14.2.8",
     "@prisma/client": "^6.1.0",
     "@react-spring/web": "^9.7.3",
