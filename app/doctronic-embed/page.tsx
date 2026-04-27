@@ -14,7 +14,7 @@ import Icon from "../_components/common/Icon/Icon";
 const DOCTRONIC_EMBED_ENVIRONMENT =
   (process.env
     .NEXT_PUBLIC_DOCTRONIC_EMBED_ENVIRONMENT as DoctronicEnvironment) ??
-  "development";
+  "staging";
 
 type EmbedMode = "inline" | "modal" | "floating";
 
