@@ -1,4 +1,4 @@
-import Wrapper from "@/app/_components/main-layout/Wrapper";
+import { ConditionalWrapper } from "@/app/_components/main-layout/ConditionalWrapper";
 import "./globals.css";
 import { Metadata } from "next";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -43,8 +43,7 @@ export default function RootLayout({
       <body
         className={`${mainFont.className} ${headerFont.variable} ${logoFont.variable}`}
       >
-        {/* <Wrapper>{children}</Wrapper> */}
-        {children}
+        <ConditionalWrapper>{children}</ConditionalWrapper>
       </body>
     </html>
   );
