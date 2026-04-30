@@ -43,7 +43,8 @@ export default function RootLayout({
       <body
         className={`${mainFont.className} ${headerFont.variable} ${logoFont.variable}`}
       >
-        <Wrapper>{children}</Wrapper>
+        {/* <Wrapper>{children}</Wrapper> */}
+        {children}
       </body>
     </html>
   );
