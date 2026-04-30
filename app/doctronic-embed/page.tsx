@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 const DOCTRONIC_EMBED_ENVIRONMENT =
   (process.env
     .NEXT_PUBLIC_DOCTRONIC_EMBED_ENVIRONMENT as DoctronicEnvironment) ??
-  "staging";
+  "development";
 
 const SAMPLE_BLOG_PARAGRAPHS = [
   "Type 2 diabetes is one of the most common chronic conditions worldwide, affecting how your body processes blood sugar (glucose). When you have type 2 diabetes, your body either resists the effects of insulin or doesn't produce enough to maintain normal glucose levels. Left unmanaged, high blood sugar can lead to serious complications over time.",
