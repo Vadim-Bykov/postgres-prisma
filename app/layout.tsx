@@ -10,11 +10,11 @@ export const viewport: Viewport = {
   themeColor: "#141024",
 };
 
-export const metadata: Metadata = {
-  title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,
-  description: "Я помогу Вам найти себя в этой жизни",
-  keywords: "астрология, прогнозирование, помощь",
-};
+// export const metadata: Metadata = {
+//   title: `${BRAND_NAME_STRING} поможет Вам найти себя в этой жизни`,
+//   description: "Я помогу Вам найти себя в этой жизни",
+//   keywords: "астрология, прогнозирование, помощь",
+// };
 
 const mainFont = localFont({
   src: "../public/fonts/Onest/Regular.ttf",
