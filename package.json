@@ -21,7 +21,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@doctronic/embed": "https://staging-embed.doctronic.ai/doctronic/0.5.0-90f9606-staging/doctronic-embed-0.5.0-90f9606-staging.tgz?Expires=1934711370&Signature=s~DPwdqROhHoLC1MQrUBBar~O11hvffLD3ZHgC-GDeZtdVg5dIRUPUqhMOroFYzxk9Qh711vOnvcFDLnSoDKnJUwgcWmXsOc~S8c8XiEjktM9FDx3xfqhMDoBShHoWj0oE6zfiVZBoyLGtDIf3W0odujBAewXzlaamHGHm~1ir0eHV3hGOrfgO8ei~OAQblIfjqUVyCe8AKbZ0q6xQ5nu7GN8m5K9qGIz9gsKEmVsaZSLcCv-vC-ZO~~Sv7xcFfCxfsgivGBYGFdUofOfhKWDn5L~FbhcInsxDTvROK2ewKVnvfwbJKdHMXUvvuEYEUjOQCrNWeWXvqGBENd3CcK2Q__&Key-Pair-Id=K3AT05VOUT06GP",
+    "@doctronic/embed": "https://staging-embed.doctronic.ai/doctronic/0.5.1-c179dc2-staging/doctronic-embed-0.5.1-c179dc2-staging.tgz?Expires=1939537782&Signature=luu7aLOS3qpxGuPLbZxRxqGJmIKWMDLVW7Kfw9F~GSxIOBqgNtoCdDTQxB5vUow3NvGZubtwfcZYhsK7h7g~sUxaEwdYhXqdAiDTv2ErfApzEjnVlW0bUw~F1EWLNBmiZ3VB-LaHcN-2V6SEN22JH3-Mh0cq82orIrXCFMz-nDbzU6sQ2q94uD93iOwLwEzD~MjFhIwKBoXwMpLQVNMwUak-McZnRt4Z0JwVty5d9nO1LIZ4a2RRq5x5V~Nc6KXgHpGC0CJ23HVSaD2w2m57thma1BiTq5uw468dOsypg2fHuGKAfvU4B3b1taGWlJ3Z3aB9k8m7LI4PWGzWAWoiuA__&Key-Pair-Id=K3AT05VOUT06GP",
     "@next/bundle-analyzer": "^14.2.8",
     "@prisma/client": "^6.1.0",
     "@react-spring/web": "^9.7.3",
