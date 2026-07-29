@@ -27,7 +27,8 @@ function EmbedContainer({ className }: { className?: string }) {
     if (!el) return;
 
     const embed = new DoctronicEmbed({
-      environment: DOCTRONIC_EMBED_ENVIRONMENT,
+      environment: "development",
+      soleraDemoSeed: "marcus",
       onEvent: (event) =>
         console.log("[DoctronicEmbed]", event.type, event.data),
       onError: (error) =>

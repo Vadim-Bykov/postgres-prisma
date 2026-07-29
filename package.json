@@ -21,7 +21,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@doctronic/embed": "https://staging-embed.doctronic.ai/doctronic/0.5.1-c179dc2-staging/doctronic-embed-0.5.1-c179dc2-staging.tgz?Expires=1939537782&Signature=luu7aLOS3qpxGuPLbZxRxqGJmIKWMDLVW7Kfw9F~GSxIOBqgNtoCdDTQxB5vUow3NvGZubtwfcZYhsK7h7g~sUxaEwdYhXqdAiDTv2ErfApzEjnVlW0bUw~F1EWLNBmiZ3VB-LaHcN-2V6SEN22JH3-Mh0cq82orIrXCFMz-nDbzU6sQ2q94uD93iOwLwEzD~MjFhIwKBoXwMpLQVNMwUak-McZnRt4Z0JwVty5d9nO1LIZ4a2RRq5x5V~Nc6KXgHpGC0CJ23HVSaD2w2m57thma1BiTq5uw468dOsypg2fHuGKAfvU4B3b1taGWlJ3Z3aB9k8m7LI4PWGzWAWoiuA__&Key-Pair-Id=K3AT05VOUT06GP",
+    "@doctronic/embed": "https://staging-embed.doctronic.ai/0.6.1-e709aa9-staging/doctronic-embed-0.6.1-e709aa9-staging.tgz",
     "@next/bundle-analyzer": "^14.2.8",
     "@prisma/client": "^6.1.0",
     "@react-spring/web": "^9.7.3",
