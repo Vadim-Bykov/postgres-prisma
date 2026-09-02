@@ -1,14 +1,36 @@
 "use client";
 
-import { DoctronicEmbed, type DoctronicEnvironment } from "@doctronic/embed";
+import { DoctronicEmbed, type EmbedLandingPageConfig } from "@doctronic/embed";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import styles from "./page.module.css";
 
-const DOCTRONIC_EMBED_ENVIRONMENT =
-  (process.env
-    .NEXT_PUBLIC_DOCTRONIC_EMBED_ENVIRONMENT as DoctronicEnvironment) ??
-  "production";
+const ARTICLE_START_CHAT_MESSAGE = "I have questions about type 2 diabetes";
+
+const TEST_LANDING_PAGE: EmbedLandingPageConfig = {
+  headline: "Ask about your health",
+  bodyText: [
+    "Get instant medical guidance from our AI health assistant and get a  consultation with a top doctor.",
+    "What can I help you with today?",
+  ],
+  ctaButtonText: "Ask now",
+  placeholders: ["Ask a question...", "Describe your symptoms..."],
+  startersIntro: "I'm interested in...",
+  starters: [
+    {
+      name: "Check my symptoms",
+      message: "I have a headache and feel nauseous. What could this be?",
+    },
+    {
+      name: "Ask about diabetes",
+      message: "I have questions about type 2 diabetes",
+    },
+    {
+      name: "Medication advice",
+      message: "What should I know before starting metformin?",
+    },
+  ],
+};
 
 const SAMPLE_BLOG_PARAGRAPHS = [
   "Type 2 diabetes is one of the most common chronic conditions worldwide, affecting how your body processes blood sugar (glucose). When you have type 2 diabetes, your body either resists the effects of insulin or doesn't produce enough to maintain normal glucose levels. Left unmanaged, high blood sugar can lead to serious complications over time.",
@@ -19,27 +41,64 @@ const SAMPLE_BLOG_PARAGRAPHS = [
   "Living well with type 2 diabetes is absolutely possible. With the right combination of lifestyle changes, regular check-ups, and medication when needed, many people keep their blood sugar in a healthy range and avoid complications. The key is to stay informed, stay active, and work closely with your healthcare provider.",
 ];
 
+function AskAboutArticleButton({ onClick }: { onClick: () => void }) {
+  return (
+    <div className={styles.popupTrigger}>
+      <p className="font-semibold">Have questions about type 2 diabetes?</p>
+      <p className={styles.popupTriggerText}>
+        Our health assistant can help you understand your condition better.
+      </p>
+      <div className={styles.popupTriggerActions}>
+        <button className={styles.modeButton} onClick={onClick} type="button">
+          Ask about this article
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function EmbedContainer({ className }: { className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const embedRef = useRef<DoctronicEmbed | null>(null);
 
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const embed = new DoctronicEmbed({
-      environment: "demo",
-      soleraDemoSeed: "marcus",
+      environment: "staging",
       onEvent: (event) =>
         console.log("[DoctronicEmbed]", event.type, event.data),
       onError: (error) =>
         console.error("[DoctronicEmbed]", error.reason, error.message),
+      landingPage: TEST_LANDING_PAGE,
     });
 
     embed.show(el);
-    return () => embed.destroy();
+    embedRef.current = embed;
+
+    return () => {
+      embed.destroy();
+      embedRef.current = null;
+    };
   }, []);
 
-  return <div ref={containerRef} className={className} />;
+  const handleAsk = useCallback(() => {
+    containerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    embedRef.current?.startChat(ARTICLE_START_CHAT_MESSAGE);
+  }, []);
+
+  return (
+    <>
+      <AskAboutArticleButton onClick={handleAsk} />
+      <div className={styles.contentViolator}>
+        <div ref={containerRef} className={className} />
+      </div>
+    </>
+  );
 }
 
 export default function EmbedTestPage() {
@@ -63,9 +122,7 @@ export default function EmbedTestPage() {
             <p key={index}>{text}</p>
           ))}
 
-          <div className={styles.contentViolator}>
-            <EmbedContainer className={styles.contentViolatorEmbed} />
-          </div>
+          <EmbedContainer className={styles.contentViolatorEmbed} />
 
           {SAMPLE_BLOG_PARAGRAPHS.slice(2).map((text, index) => (
             <p key={index + 2}>{text}</p>
