@@ -21,7 +21,7 @@
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
-    "@doctronic/embed": "https://staging-embed.doctronic.ai/0.6.1-bdce7de-staging/doctronic-embed-0.6.1-bdce7de-staging.tgz",
+    "@doctronic/embed": "https://staging-embed.doctronic.ai/0.7.0-6bdafdd-staging/doctronic-embed-0.7.0-6bdafdd-staging.tgz",
     "@next/bundle-analyzer": "^14.2.8",
     "@prisma/client": "^6.1.0",
     "@react-spring/web": "^9.7.3",
