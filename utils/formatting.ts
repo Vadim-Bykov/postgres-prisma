@@ -12,7 +12,7 @@ export function leaveOnlyNumbers(s: string) {
  */
 export function formatUsdAmount(
   amount: number,
-  options: Intl.NumberFormatOptions = {}
+  options: Intl.NumberFormatOptions = {},
 ) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -42,10 +42,28 @@ export const timeAgo = (timestamp: Date, timeOnly?: boolean): string => {
     timeOnly ? "" : " ago"
   }`;
 };
+const SITE_ORIGIN = "https://astrology-yin.vercel.app";
+
 export function formatGoogleDriveImageUrl(imageId: string) {
-  // const imageId = url.split("/d/")[1]?.split("/view")[0];
+  if (
+    imageId.startsWith("/") ||
+    imageId.startsWith("http://") ||
+    imageId.startsWith("https://")
+  ) {
+    return imageId;
+  }
 
   return `https://drive.google.com/uc?export=view&id=${imageId}`;
+}
+
+export function formatEmailImageUrl(imageSource: string) {
+  const url = formatGoogleDriveImageUrl(imageSource);
+
+  if (url.startsWith("/")) {
+    return `${SITE_ORIGIN}${url}`;
+  }
+
+  return url;
 }
 
 const APP_CURRENCY_NAME = "балл";

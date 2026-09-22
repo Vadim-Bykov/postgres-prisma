@@ -18,7 +18,7 @@ import * as cookieService from "./cookieService";
 import { ArticleEmailBody } from "@/models/email";
 import { Consultation } from "@prisma/client";
 import * as articleService from "./articleService";
-import { formatGoogleDriveImageUrl } from "@/utils/formatting";
+import { formatEmailImageUrl } from "@/utils/formatting";
 
 const transporter = createTransport({
   host: SMTP_HOST,
@@ -76,8 +76,9 @@ export const sendResetPasswordLinkMail = async ({
           <p style="line-height: 140%;">Вы запросили сброс пароля в к вашему аккаунту ${email}!</p>
            <p style="line-height: 140%;">Чтобы сбросить пароль нажмите на ссылку: ${urlLink}</p>
            <p style="line-height: 140%;">Если вы не запрашивали сброс пароля - не нажимайте на ссылку выше</p>
-           <p style="line-height: 140%;">После сброса, ваш пароль будет ${process
-             .env.VERCEL_DEFAULT_RESET_PASSWORD!}</p>
+           <p style="line-height: 140%;">После сброса, ваш пароль будет ${
+             process.env.VERCEL_DEFAULT_RESET_PASSWORD!
+           }</p>
            <h2>Вы сможете сменить ваш пароль на странице своего профиля</h2>
       `,
         emailPurpose: "PASSWORD_RESET",
@@ -86,7 +87,7 @@ export const sendResetPasswordLinkMail = async ({
   } catch (error) {
     throw ApiError.badRequest(
       "Ошибка при отправке и-мэйла со ссылкой для сброса пароля",
-      error
+      error,
     );
   }
 };
@@ -103,9 +104,8 @@ export const sendCheckingPurchaseMail = async ({
   isProvidedDataUpdate?: boolean;
 }) => {
   try {
-    const consultation = await consultationService.getConsultation(
-      consultationId
-    );
+    const consultation =
+      await consultationService.getConsultation(consultationId);
 
     const text = isProvidedDataUpdate
       ? `Вы обновили данные об оплате за консультацию${
@@ -161,7 +161,7 @@ export const sendArticleMailToAllUsers = async ({
           articleEmails,
         }) => {
           const userGotArticleEmail = articleEmails?.some(
-            (articleEmail) => articleEmail.articleId === articleId
+            (articleEmail) => articleEmail.articleId === articleId,
           );
 
           if (emailNotification && !userGotArticleEmail) {
@@ -181,8 +181,8 @@ export const sendArticleMailToAllUsers = async ({
               });
             }
           }
-        }
-      )
+        },
+      ),
     );
 
     return numberOfEmailedUser;
@@ -204,7 +204,7 @@ export const sendArticleMail = async ({
   articleId: number;
 }) => {
   const { title, summary, imageSourceId } = ARTICLES.find(
-    (article) => article.id === articleId
+    (article) => article.id === articleId,
   ) as Article;
 
   try {
@@ -220,7 +220,7 @@ export const sendArticleMail = async ({
         emailPurpose: "NEWS",
         pageUrlForButton: `/article/${articleId}`,
         imageSourceUrl: imageSourceId
-          ? formatGoogleDriveImageUrl(imageSourceId)
+          ? formatEmailImageUrl(imageSourceId)
           : undefined,
       }),
     });
@@ -258,7 +258,7 @@ export const sendNewConsultationEmailToAllUsers = async ({
         }) => {
           const userGotArticleEmail = consultationEmails?.some(
             (consultationEmail) =>
-              consultationEmail.consultationId === consultationId
+              consultationEmail.consultationId === consultationId,
           );
 
           if (emailNotification && !userGotArticleEmail) {
@@ -283,8 +283,8 @@ export const sendNewConsultationEmailToAllUsers = async ({
               });
             }
           }
-        }
-      )
+        },
+      ),
     );
 
     return numberOfEmailedUser;
@@ -320,7 +320,7 @@ export const sendConsultationEmail = async ({
         emailPurpose: "NEWS",
         pageUrlForButton: `/consultation/${id}`,
         imageSourceUrl: imageSource
-          ? formatGoogleDriveImageUrl(imageSource)
+          ? formatEmailImageUrl(imageSource)
           : undefined,
       }),
     });
