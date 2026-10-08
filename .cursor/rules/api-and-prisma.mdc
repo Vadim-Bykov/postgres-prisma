@@ -124,9 +124,10 @@ catch (error) { throw catchErrorHandler({ error, message: "Ошибка ..." });
 - Never run `prisma db push --force-reset`, `--accept-data-loss`, `prisma migrate reset`,
   `DROP`/`TRUNCATE`, or delete rows in bulk without the developer's explicit go-ahead in the
   same conversation and a fresh backup.
-- `prisma/seed.ts` only inserts consultations whose `title` is not yet present (`findMany`
-  + `createMany` inside `$transaction`); it never updates existing rows. Its `main()` call
-  is currently commented out - known state, do not "fix" it silently.
+- `prisma/seed.ts` only inserts consultations whose `title` is not yet present
+  (`findMany` followed by `createMany` inside `$transaction`); it never updates existing
+  rows. Its `main()` call is currently commented out - known state, do not "fix" it
+  silently.
 
 ## Secrets and logging
 
