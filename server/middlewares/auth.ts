@@ -21,9 +21,15 @@ export const authMiddleware = async (req: NextRequest) => {
 
       return userData;
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    // validateRefreshToken throws the 401 response for an invalid or expired token;
+    // pass it through instead of reporting it as a 500.
+    if (error instanceof NextResponse) {
+      return error;
+    }
+
     return ApiError.internal(
-      "Произошла внутрення ошибка системы на уровне авторизации",
+      "Произошла внутренняя ошибка системы на уровне авторизации",
       error
     );
   }

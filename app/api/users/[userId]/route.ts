@@ -1,30 +1,57 @@
-import prisma from "@/lib/prisma";
+import { getUserDto } from "@/server/dtos/userDto";
 import { ApiError } from "@/server/error/ApiError";
-import { removeTokensFromCookies } from "@/server/services/cookieService";
+import * as cookieService from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
+import { apiCatchErrorHandler } from "@/utils/errorHandler";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 type Params = Promise<{ userId: string }>;
 
+const parseUserId = async (segmentData: { params: Params }) => {
+  const { userId } = await segmentData.params;
+  const id = Number(userId);
+
+  if (!Number.isInteger(id) || id <= 0) {
+    throw ApiError.badRequest("Некорректный идентификатор пользователя.");
+  }
+
+  return id;
+};
+
+// A user may read or delete only their own account; an admin may manage any account.
+const assertCanManageUser = async (targetUserId: number) => {
+  const userData = await cookieService.getUserDataFromCookies();
+  const isSelf = userData.id === targetUserId;
+  const isAdmin = userData.role === "ADMIN";
+
+  if (!isSelf && !isAdmin) {
+    throw ApiError.forbidden(
+      "Доступ только к своему аккаунту или для администратора."
+    );
+  }
+
+  return { isSelf };
+};
+
 export async function GET(request: Request, segmentData: { params: Params }) {
   try {
-    const params = await segmentData.params;
-    const userId = params.userId;
+    const userId = await parseUserId(segmentData);
+    await assertCanManageUser(userId);
 
-    const user = await userService.getUser(+userId);
+    const user = await userService.getUser(userId);
 
-    return NextResponse.json(user);
-  } catch (error) {
-    if (error instanceof NextResponse) {
-      return error;
-    } else {
-      throw ApiError.badRequest(
-        "Ошибка при получении данных пользователя",
-        error
-      );
+    if (!user) {
+      throw ApiError.badRequest("Пользователь не найден.");
     }
+
+    return NextResponse.json(getUserDto(user));
+  } catch (error) {
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при получении данных пользователя",
+    });
   }
 }
 
@@ -33,19 +60,20 @@ export async function DELETE(
   segmentData: { params: Params }
 ) {
   try {
-    const params = await segmentData.params;
-    const userId = params.userId;
+    const userId = await parseUserId(segmentData);
+    const { isSelf } = await assertCanManageUser(userId);
 
-    const userDto = await userService.deleteUser(+userId);
+    const userDto = await userService.deleteUser(userId);
 
-    await removeTokensFromCookies();
+    if (isSelf) {
+      await cookieService.removeTokensFromCookies();
+    }
 
     return NextResponse.json(userDto);
   } catch (error) {
-    if (error instanceof NextResponse) {
-      return error;
-    } else {
-      throw ApiError.badRequest("Ошибка при удалении пользователя", error);
-    }
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при удалении пользователя",
+    });
   }
 }

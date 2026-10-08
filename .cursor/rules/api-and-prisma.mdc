@@ -64,9 +64,11 @@ export async function PATCH(request: Request) {
 - Admin-only actions check `userData.role === "ADMIN"` server-side and return
   `ApiError.forbidden(...)` otherwise. Client gating (`useAdminRoute`) is UX only, not security.
 - Public GETs (consultations, feature flags, banking) stay unauthenticated on purpose.
-  Admin-only handlers follow `GET` in `app/api/users/route.ts`: `getUserDataFromCookies()`
-  first, then `if (userData.role !== "ADMIN") throw ApiError.forbidden("Доступ только для
-  администратора.")`.
+  Admin-only handlers follow `GET` in `app/api/users/route.ts`: call
+  `getUserDataFromCookies()` first, then throw `ApiError.forbidden(...)` with the message
+  «Доступ только для администратора.» when `userData.role !== "ADMIN"`. Keep every inline
+  code span on one line in these rules - the editor's Prettier wraps `.mdc` differently
+  from the CLI when a span breaks across lines.
 
 ## Validation at the boundary
 
