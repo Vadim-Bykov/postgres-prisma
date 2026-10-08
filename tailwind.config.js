@@ -44,6 +44,7 @@ module.exports = {
         },
         primary: {
           DEFAULT: "#141024",
+          dark: "#0b0718",
         },
       },
       animation: {
