@@ -64,9 +64,9 @@ export async function PATCH(request: Request) {
 - Admin-only actions check `userData.role === "ADMIN"` server-side and return
   `ApiError.forbidden(...)` otherwise. Client gating (`useAdminRoute`) is UX only, not security.
 - Public GETs (consultations, feature flags, banking) stay unauthenticated on purpose.
-  `GET /api/users` (the admin user list) is also unauthenticated today - that is a known
-  gap, not a pattern: add `getUserDataFromCookies()` + a `role === "ADMIN"` check when you
-  touch that route.
+  Admin-only handlers follow `GET` in `app/api/users/route.ts`: `getUserDataFromCookies()`
+  first, then `if (userData.role !== "ADMIN") throw ApiError.forbidden("Доступ только для
+  администратора.")`.
 
 ## Validation at the boundary
 

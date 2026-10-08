@@ -126,7 +126,6 @@ admin emails and master password in `userService.ts`, `UseFormRegister<any>` on 
 inputs, `@ts-ignore` in `useAppPathname`, existing hex values, the commented-out seed
 `main()`, the lowercase `users` model, `Promise.all` registration flow,
 `process.env.VERCEL_URL` read in `store/features/api/appApi.ts` (not a secret; resolves
-to `/api/` in the browser), and `GET /api/users` returning all user DTOs without any auth
-check (`middleware.ts` only covers `/api/users/<id>`). Flag only newly introduced
-violations or edits that extend these - but a change that touches `app/api/users/route.ts`
-should add the auth check.
+to `/api/` in the browser). Flag only newly introduced violations or edits that extend
+these. (`GET /api/users` was unauthenticated until the admin check landed - keep it; the
+route is the reference for an admin-only handler.)

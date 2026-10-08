@@ -78,10 +78,9 @@ Preconditions: non-production database or a throwaway account.
 1. As a `USER`, `navigate_page` `/admin` -> redirected to `/` (`useAdminRoute`).
 2. As `ADMIN`, `/admin` -> `UserList` from `GET /api/users` (should be Russian when
    touched); `/admin/account/*` mirrors the account area.
-3. Sweep: `GET /api/users` -> 200. Known gap: this route has **no server-side auth** -
-   `middleware.ts` only guards `/api/users/<id>` and `app/api/users/route.ts` `GET` never
-   reads the cookie, so anonymous callers get every user DTO too. The admin page is gated
-   only on the client. Do not report it as secured; fixing the route is a separate change.
+3. Sweep: `GET /api/users` -> 200 only for an `ADMIN` cookie; anonymous -> 401, a `USER`
+   cookie -> 403 (`{ success: false, message: "Доступ только для администратора." }`).
+   Check it directly: `curl -i http://localhost:3000/api/users` must return 401.
 
 ## J7 - Articles
 

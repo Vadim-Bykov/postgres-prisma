@@ -2,20 +2,27 @@ import { UpdateUserPersonalDataBody, UserCreationBody } from "@/models/users";
 import { ApiError } from "@/server/error/ApiError";
 import * as cookieService from "@/server/services/cookieService";
 import * as userService from "@/server/services/userService";
+import { apiCatchErrorHandler } from "@/utils/errorHandler";
 import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
+    const userData = await cookieService.getUserDataFromCookies();
+
+    if (userData.role !== "ADMIN") {
+      throw ApiError.forbidden("Доступ только для администратора.");
+    }
+
     const users = await userService.getAllUsers();
 
     return NextResponse.json(users);
   } catch (error) {
-    return ApiError.badRequest(
-      "Ошибка при получении данных пользователей",
-      error
-    );
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при получении данных пользователей",
+    });
   }
 }
 
