@@ -52,15 +52,33 @@ What exists today and what we follow. Cite real paths.
 The chosen approach in a few sentences. If there was a real fork, one line per option and
 why you picked this one. Prefer extending existing code over rewriting.
 
+## Contract (what the executor must not invent)
+
+- Prisma: `Review { id Int, userId Int, consultationId Int, text String, rating Int, createdAt }`
+  - relations to `Users`, `Consultation` (new | existing).
+- API: `GET /api/review?consultationId=<id>` -> `ReviewDto[]` (public);
+  `POST /api/review` body `{ consultationId, text, rating }` -> `ReviewDto` (logged-in,
+  purchase `CONFIRMED`).
+- RTK (`store/features/api/subApi/review.ts`): `useGetReviewsQuery`, `useAddReviewMutation`;
+  tag `Review` (add to `appApi.tagTypes`).
+- UI: `ReviewList` (props `consultationId`), `ReviewForm` (props `consultationId`,
+  `onSuccess`); copy: «Оставить отзыв», «Спасибо! Отзыв появится после проверки.»
+
 ## Implementation steps
+
+Every step is written for an executor who has not seen the planning discussion and may be
+a weaker model: no inference needed, nothing "to decide later".
 
 ### Phase 1: <smallest valuable slice> - independently deliverable
 
 1. **<Step>** (`path/to/file`)
-   - Action: precisely what changes.
-   - Why: the reason.
-   - Depends on: none / step N.
-   - Risk: Low | Medium | High - and why if not Low.
+   - Action: precisely what changes (names included).
+   - Copy from: `path/to/existing/file.ts:LINES` - the shape to follow.
+   - Snippet: only if the shape is non-obvious (10-30 lines, adapted from the file above).
+   - Strings: the exact Russian UI / error text, if any.
+   - Why: the reason. Depends on: none / step N. Risk: Low | Medium | High.
+   - Verify: `npm run typecheck` / curl / what to see in the browser.
+   - Done when: <checkable criterion>.
 2. **<Step>** (`path/to/file`)
    ...
 
@@ -162,8 +180,14 @@ Strategy and why this over alternatives. Then ordered steps with file paths:
 - **Context** - always. Cite real paths; this is what makes the plan trustworthy.
 - **Models / API** - whenever data is involved. Read from the schema and routes; missing ->
   a designed step, not a guess.
+- **Contract** - whenever the plan adds or changes a model, route, RTK endpoint or
+  component. Names, fields, types and copy strings the executor must use verbatim.
 - **Root cause** - bug fixes. Must investigate the code first.
-- **Implementation** - always. Ordered, file paths, risk tags, deliverable phases.
+- **Implementation** - always. Ordered, file paths, risk tags, deliverable phases; each
+  step carries "Copy from", "Verify" and "Done when" so a weaker model can execute it
+  without inference. Snippets only for non-obvious shapes, never whole files.
+- **Length** - aim for 150-300 lines. Longer plans lose a weak executor by phase 3;
+  push conventions to the rules and detail to "Copy from" references.
 - **Verify plan** - always. Exact commands, the review loop, and the browser journey on
   the final code.
 - **Risks / Open questions** - when real. Honesty about unknowns beats false confidence.

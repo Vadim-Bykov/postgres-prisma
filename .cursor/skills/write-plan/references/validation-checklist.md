@@ -12,6 +12,20 @@ Only conventions are validated here - not business logic.
 - [ ] Every RTK endpoint `url` maps to an existing or planned `app/api/**/route.ts`.
 - [ ] A nearest existing feature is cited as the pattern to copy.
 
+## Executable without inference (the plan may be built by a weaker model)
+
+- [ ] Every step names its file(s), the exact change and the names to use (service,
+      endpoint, hook, tag, component, `messages.json` key); nothing is left "to decide".
+- [ ] Every step has "Copy from" (`path:lines` of a real file), "Verify" (command or
+      observable) and "Done when" (checkable).
+- [ ] A Contract section lists fields, request/response types, RTK hooks/tags and
+      component props for everything new or changed.
+- [ ] Snippets appear only for non-obvious shapes (`ApiError` protocol, `injectEndpoints`
+      tags, `$transaction`, role check), are 10-30 lines, and name the file they are
+      adapted from; no whole-file implementations.
+- [ ] UI and error strings are written out in Russian («вы»), ready to paste.
+- [ ] The plan is within ~300 lines and references the rules instead of restating them.
+
 ## Imports and structure (`development-standards.mdc`)
 
 - [ ] Imports use `@/...` from the repo root or relative siblings; no `@components`,

@@ -1,19 +1,16 @@
 ---
 name: write-plan
 description: >-
-  Create and maintain a written implementation plan for non-trivial work in this repo,
-  persisted to .cursor/plans/<slug>.plan.md as a living record. Restates the
-  requirement, investigates the real code (Prisma schema, API routes, RTK endpoints,
-  nearest existing feature), weighs the approach, breaks the work into phased steps with
-  exact file paths, a verify plan, risks and success criteria, validates the draft
-  against .cursor/rules, then keeps the same file updated (status, checked-off steps,
-  deviations, changelog). Use when asked to "plan / make a plan / write an implementation
-  or bug-fix plan", to scope a feature, refactor or schema change before coding, when a
-  change spans many files, as Step 0 of develop-feature and fix-bug, or when asked to
-  "validate / check / review a plan" for this repo - including a plan Cursor's Plan mode
-  wrote to ~/.cursor/plans. Use this instead of the global validate-plan / create-plan
-  skills, which apply doctronic conventions and relocate plans into the monotronic
-  workspace.
+  Create, validate and maintain a written implementation plan for non-trivial work in
+  this repo (postgres-prisma), persisted to .cursor/plans/<slug>.plan.md as a living
+  record: restate the requirement, investigate the real code (Prisma schema, API routes,
+  RTK endpoints, nearest feature), phased steps with exact paths, a verify plan, risks,
+  success criteria; check the draft against .cursor/rules; keep the file updated. Use
+  when asked to "plan / write an implementation or bug-fix plan", to scope a feature,
+  refactor or schema change, as Step 0 of develop-feature and fix-bug, to "validate /
+  check a plan" (including one Cursor's Plan mode wrote to ~/.cursor/plans), or to
+  "implement the plan in a new chat / write the prompt for a fresh chat". Use instead of
+  the global create-plan / validate-plan / plan-fresh-chat skills (doctronic-specific).
 metadata:
   author: vadim
   version: "1.0"
@@ -67,6 +64,18 @@ this skill exists to prevent.
 4. **Break it into phased, ordered steps** - each with the file(s) it touches, the action,
    why, dependencies and a risk tag. Phases should be independently deliverable
    (smallest valuable slice first; data layer before UI).
+   **Write every step for an executor who has not seen this chat and may be a weaker
+   model**: it must be doable without inference. Give exact file paths and names
+   (service, endpoint, RTK hook and tag, component, `messages.json` key), the existing
+   file to copy with line numbers (`server/services/bonusService.ts:9-48`), the contract
+   (fields, request/response types), the Russian UI and error strings ready to paste, a
+   verify command or observable result, and a "done when" criterion. Add a short snippet
+   (10-30 lines) only where the shape is non-obvious or error-prone - the `ApiError` /
+   `apiCatchErrorHandler` protocol, `injectEndpoints` with tags, `$transaction`, the
+   admin role check - and name the real file it is adapted from. Do not paste whole
+   implementations: they go stale and a weak model copies them blindly; a skeleton plus
+   "copy this file" ages better. Keep the plan within ~300 lines; conventions stay in the
+   rules, which the executor loads automatically.
 5. **Verify plan**: `npm run typecheck`, `npm run lint`, `npx next build`; the review loop
    (`review-changes` through the `reviewer` subagent, triage, fix valid findings, re-gate,
    until no CRITICAL/HIGH is open); and the `browser-qa` journey on the final code with
@@ -92,6 +101,17 @@ go-ahead before building non-trivial work.
   conventions and moves plans into monotronic paths). Walk
   `references/validation-checklist.md` against the plan, report findings in its format,
   and fix the plan in place with minimal edits.
+
+## Handing a plan to a fresh chat
+
+Prefer implementing a non-trivial plan in a **new Agent chat**: it starts with only
+`AGENTS.md`, the rules and the plan file, so it builds from the spec instead of the memory
+of a long planning discussion, and it will not hit the context limit mid-work. Stay in the
+same chat only for small plans (a few files) with a short discussion. Either way, anything
+decided in chat must be in the plan file first - the new chat cannot see this one.
+
+When asked to hand off ("implement this in a new chat", "write the prompt for the next
+chat"), load `references/fresh-chat-prompt.md` and print its filled template.
 
 ## Updating a plan (the living record)
 
@@ -127,3 +147,5 @@ go-ahead before building non-trivial work.
   section guidance, update conventions, worked example. Load when writing a plan.
 - `references/validation-checklist.md` - what to check the draft against before presenting
   it. Load after the first draft.
+- `references/fresh-chat-prompt.md` - the pasteable prompt (build / update modes) for
+  implementing the plan in a new Agent chat. Load when asked to hand a plan off.
