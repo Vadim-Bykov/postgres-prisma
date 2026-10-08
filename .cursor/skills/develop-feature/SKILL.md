@@ -59,6 +59,10 @@ Present the plan summary and get a go-ahead before building non-trivial work.
 
 ## Step 1 - Preflight and branch
 
+- **Adopt the plan file first.** If the plan lives in `~/.cursor/plans/` (Cursor Plan mode
+  writes there and cannot move files), run
+  `mkdir -p .cursor/plans && mv ~/.cursor/plans/<name>_<hash>.plan.md .cursor/plans/<slug>.plan.md`,
+  set its Status to `Approved`, and work from that path only.
 - `npm run dev` needs the Postgres env vars from `.env` / `.env.development.local`. Confirm
   which database they point at before running anything that writes.
 - Small, safe change -> work on `main` is allowed (AGENTS.md git policy). Feature-sized work

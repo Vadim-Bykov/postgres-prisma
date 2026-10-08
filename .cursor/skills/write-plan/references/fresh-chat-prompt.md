@@ -39,6 +39,11 @@ Mode: {build|update}.
 Plan (source of truth):
 {absolute path to .cursor/plans/<slug>.plan.md}
 
+{only when the plan is still in ~/.cursor/plans (Plan mode cannot move files):
+First action, before anything else:
+  mkdir -p .cursor/plans && mv ~/.cursor/plans/{name}_{hash}.plan.md .cursor/plans/{slug}.plan.md
+Then use .cursor/plans/{slug}.plan.md as the source of truth; set its Status to Approved.}
+
 Entry skill: `develop-feature` (it runs write-plan updates, prisma-schema-change, the
 verify-and-review loop with the `reviewer` subagent, browser-qa and open-pr). Follow
 AGENTS.md and .cursor/rules.
@@ -81,8 +86,11 @@ rejected with reasons), browser-qa evidence, open questions, and the plan path.
 
 ## Gotchas
 
-- Do not point the new chat at a `~/.cursor/plans/` copy - move the plan into
-  `.cursor/plans/` first (see "Adopting or validating an existing plan").
+- If the planning chat is in Plan mode it cannot move the file; keep the "First action"
+  block so the new chat does the `mv` itself and never builds from the `~/.cursor/plans/`
+  copy. When the move already happened, drop the block.
+- Offer this prompt right after the plan is presented (write-plan step 7) - do not wait
+  for the developer to ask for it.
 - The personal `/plan-fresh-chat` skill also works here but adds doctronic lines
   ("never commit to main", platform prefixes, `web-develop`) that must be deleted by hand;
   this template is the repo-native version.

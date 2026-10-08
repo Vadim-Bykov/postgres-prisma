@@ -89,13 +89,23 @@ Write the file using `references/plan-templates.md` (feature/refactor and bug-fi
 shape, Tailwind, copy, API/Prisma rules). Finally present a short summary in chat and get a
 go-ahead before building non-trivial work.
 
+7. **Offer the hand-off.** Right after presenting the plan (in Cursor Plan mode: right
+   after `CreatePlan`), ask with the `AskQuestion` widget how to proceed - `Build in a new
+chat - print the hand-off prompt (Recommended)` for anything non-trivial, `Build in this
+chat`, or `Adjust the plan first`. On "new chat", print the prompt from
+   `references/fresh-chat-prompt.md` immediately (printing is allowed in Plan mode even
+   though file moves are not).
+
 ## Adopting or validating an existing plan
 
 - **Cursor Plan mode** writes its file to `~/.cursor/plans/<name>_<hash>.plan.md`, outside
-  the repo. When you start building from such a plan, move it into the project first:
+  the repo, and Plan mode is read-only - the planning chat cannot move it. The move is the
+  **first action in Agent mode**, done by whoever builds (`develop-feature` Step 1, or the
+  new chat via the hand-off prompt):
   `mv ~/.cursor/plans/<name>_<hash>.plan.md .cursor/plans/<kebab-slug>.plan.md` (drop the
   hash, keep the content), then treat it as the living record described here. Never keep
-  two copies.
+  two copies. While still in Plan mode, write the destination path into the plan's header
+  so the executor knows where it goes.
 - **Validation** is this skill's checklist, not the global `validate-plan` skill (that one
   detects any Next.js repo as the doctronic website, applies v2/Vitest/`eng-XXXX`
   conventions and moves plans into monotronic paths). Walk
