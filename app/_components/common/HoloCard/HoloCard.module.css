@@ -25,15 +25,18 @@
     rotateY(var(--holo-ry, 0deg))
     scale3d(var(--holo-scale, 1), var(--holo-scale, 1), 1);
   --holo-ease: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  --holo-drop-shadow: theme(colors.primary.DEFAULT / 15%);
+  --holo-rim: theme(colors.white / 80%);
+  --holo-glow: theme(colors.white / 40%);
   box-shadow:
     var(--holo-shadow-x, 0px) var(--holo-shadow-y, 15px) 30px -10px
-      theme(colors.primary.DEFAULT / 15%),
-    inset 0 1px 1px theme(colors.white / 80%),
+      var(--holo-drop-shadow),
+    inset 0 1px 1px var(--holo-rim),
     inset 0 -1px 1px theme(colors.primary.DEFAULT / 5%),
-    inset 1px 0 1px theme(colors.white / 80%),
+    inset 1px 0 1px var(--holo-rim),
     inset -1px 0 1px theme(colors.primary.DEFAULT / 5%),
     inset var(--holo-inset-x, 0px) var(--holo-inset-y, 0px) 20px
-      theme(colors.white / 40%);
+      var(--holo-glow);
   transition:
     transform var(--holo-ease),
     box-shadow var(--holo-ease);
@@ -53,6 +56,19 @@
 
   /* Inline SVG fractalNoise filter rendered onto a 100×100 tile (opacity 0.2), ~280 bytes. */
   --holo-noise-svg: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* The light-surface rim, inner glow and noise lift a dark card to a dusty
+   grey, so a dark surface gets a fainter rim and glow, and the noise is
+   blended instead of painted on top. */
+.root[data-surface="dark"] {
+  --holo-drop-shadow: theme(colors.primary.DEFAULT / 25%);
+  --holo-rim: theme(colors.white / 35%);
+  --holo-glow: theme(colors.white / 10%);
+}
+
+.root[data-surface="dark"] > .textureLayer {
+  mix-blend-mode: overlay;
 }
 
 .root::before,

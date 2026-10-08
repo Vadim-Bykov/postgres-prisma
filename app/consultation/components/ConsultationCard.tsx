@@ -36,9 +36,10 @@ export function ConsultationCard({
       className={cn(
         "h-full rounded-2xl border",
         primary
-          ? "bg-primary text-white border-purple-dark"
+          ? "bg-primary-dark text-white border-purple-dark"
           : "bg-white border-gray"
       )}
+      surface={primary ? "dark" : "light"}
     >
       <div className="flex h-full flex-col items-center justify-between gap-6 px-5 py-10 text-center lg:px-10">
         <h3 className="font-head text-[clamp(16px,5vw,30px)] lg:text-3xl font-semibold">

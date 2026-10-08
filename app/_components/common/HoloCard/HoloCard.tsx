@@ -15,6 +15,8 @@ interface Props {
   maxTilt?: number;
   /** Hover scale; `1` disables the lift. Default 1.02. */
   hoverScale?: number;
+  /** Tone of the card background; `dark` softens the white rim, glow and noise. Default `light`. */
+  surface?: "light" | "dark";
 }
 
 /**
@@ -27,6 +29,7 @@ export function HoloCard({
   wrapperClassName,
   maxTilt,
   hoverScale,
+  surface = "light",
 }: Props) {
   const { wrapperRef, handlers } = useHoloTilt({ maxTilt, hoverScale });
 
@@ -37,7 +40,7 @@ export function HoloCard({
       {...handlers}
     >
       <div className={styles.proximityZone} aria-hidden="true" />
-      <div className={cn(styles.root, className)}>
+      <div className={cn(styles.root, className)} data-surface={surface}>
         <div className={styles.holoLayer} aria-hidden="true" />
         <div className={styles.textureLayer} aria-hidden="true" />
         <div className={styles.glareLayer} aria-hidden="true" />
