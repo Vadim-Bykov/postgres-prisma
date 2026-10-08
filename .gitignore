@@ -41,5 +41,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# AI tools
-.cursor
+# AI tools - the kit (.cursor/rules, skills, hooks) is versioned; local state is not
+.cursor/plans/
+.cursor/_archive/
+.cursor/mcp.json
+.cursor/debug-*.log
+.claude/settings.local.json
+.tmp/

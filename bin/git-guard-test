@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# git-guard-test — behaviour tests for bin/git-guard (LIGHT mode).
+#
+# Each case feeds a command string to the guard and asserts the exit code:
+# 0 = allow, 10 = deny. Light mode never inspects the repository (commits and
+# pushes on `main` are allowed), so no git fixtures are needed; `--cwd` is passed
+# only to exercise the adapter contract.
+#
+# Usage:  bin/git-guard-test
+# Exit 0 when every case passes; 1 otherwise.
+
+set -u
+
+GUARD="$(cd "$(dirname "$0")" && pwd)/git-guard"
+[ -x "$GUARD" ] || { echo "FATAL: $GUARD not executable" >&2; exit 1; }
+
+pass=0
+fail=0
+cwd="$(mktemp -d)"
+trap 'rm -rf "$cwd"' EXIT
+
+# expect <allow|deny> <label> <command>
+expect() {
+  local want="$1" label="$2" cmd="$3" out rc
+  out="$("$GUARD" --cwd "$cwd" --cmd "$cmd" 2>&1)"
+  rc=$?
+  local got="allow"
+  [ "$rc" -eq 10 ] && got="deny"
+  if [ "$got" = "$want" ]; then
+    pass=$((pass + 1))
+    printf 'ok   %s\n' "$label"
+  else
+    fail=$((fail + 1))
+    printf 'FAIL %s\n       want=%s got=%s (exit %s)\n' "$label" "$want" "$got" "$rc"
+    [ -n "$out" ] && printf '       reason: %s\n' "$out"
+  fi
+}
+
+# --- light mode: main is NOT protected ---------------------------------------
+expect allow "commit"                              'git commit -m "x"'
+expect allow "bare push"                           'git push'
+expect allow "push origin main"                    'git push origin main'
+expect allow "push -u origin HEAD"                 'git push -u origin HEAD'
+expect allow "push HEAD:main"                      'git push origin HEAD:main'
+expect allow "push with --set-upstream"            'git push --set-upstream origin feature/x'
+expect allow "push --tags"                         'git push --tags'
+
+# --- history rewrite -----------------------------------------------------------
+expect deny  "force push"                          'git push --force origin HEAD'
+expect deny  "force push short flag"               'git push -f'
+expect deny  "force in a flag cluster (-fu)"       'git push -fu origin HEAD'
+expect deny  "force in a flag cluster (-uf)"       'git push -uf origin HEAD'
+expect deny  "force-with-lease"                    'git push --force-with-lease origin feature/x'
+expect deny  "force-if-includes"                   'git push --force-if-includes origin feature/x'
+expect deny  "mirror push"                         'git push --mirror origin'
+expect deny  "plus refspec"                        'git push origin +HEAD:main'
+expect deny  "plus refspec, branch form"           'git push origin +feature/x'
+
+# --- remote deletion -----------------------------------------------------------
+expect deny  "delete remote branch"                'git push origin --delete feature/x'
+expect deny  "delete via -d"                       'git push -d origin feature/x'
+expect deny  "delete in a flag cluster (-nd)"      'git push -nd origin feature/x'
+expect deny  "delete via empty refspec"            'git push origin :feature/x'
+expect deny  "prune"                               'git push --prune origin'
+
+# --- hook bypass ---------------------------------------------------------------
+expect deny  "commit --no-verify"                  'git commit --no-verify -m "x"'
+expect deny  "commit -n"                           'git commit -n -m "x"'
+expect deny  "core.hooksPath override"             'git -c core.hooksPath=.githooks commit -m "x"'
+expect deny  "core.hooksPath, any case"            'git -c core.hookspath=/dev/null commit -m "x"'
+expect deny  "push --no-verify"                    'git push --no-verify -u origin HEAD'
+expect allow "unrelated -c override"               'git -c user.name=bot commit -m "x"'
+# Quote-awareness: a flag named INSIDE a message is prose, not a bypass.
+expect allow "message naming --no-verify"          'git commit -m "deny --no-verify now"'
+expect allow "message naming -n"                   'git commit -m "the -n flag skips hooks"'
+expect allow "message naming core.hooksPath"       'git commit -m "never set -c core.hooksPath=x"'
+expect allow "multi -m body naming the flags"      'git commit -m "fix: guard" -m "- deny --no-verify" -m "- deny -c core.hooksPath="'
+expect deny  "real bypass after a prose message"   'git commit -m "deny --no-verify now" --no-verify'
+expect allow "message that merely contains -n"     'git commit -m "-n"'
+
+# --- ordinary commit shapes must never be denied -------------------------------
+expect allow "commit -q -m"                        'git commit -q -m "x"'
+expect allow "commit -q, several -m bodies"        'git commit -q -m "a" -m "b" -m "c"'
+expect allow "commit -q --amend"                   'git commit -q --amend -m "x"'
+expect allow "commit -qam (bundled short flags)"   'git commit -qam "x"'
+expect allow "message with an apostrophe"          'git commit -q -m "don'"'"'t skip --no-verify"'
+expect allow "escaped quotes inside the message"   'git commit -q -m "he said \"skip --no-verify\" once"'
+expect deny  "real bypass after an escaped quote"  'git commit -q -m "he said \"hi\"" --no-verify'
+
+# Known boundary, asserted honestly: an UNBALANCED quote leaves the scanner inside
+# a quoted span, so later flags read as prose. Such a command is a shell syntax
+# error and can never run — the blind spot only covers commands that cannot execute.
+expect allow "unbalanced quote hides a later flag" "git commit -q -m it's && git push --force origin feature/x"
+
+# --- chains, -C, leading whitespace, wrappers ----------------------------------
+expect deny  "force push after a chain"            "cd $cwd && git commit -m x && git push --force"
+expect deny  "git -C with --no-verify"             "git -C $cwd commit --no-verify -m x"
+expect deny  "leading whitespace"                  '   git push --force'
+expect deny  "second line of a multi-line command" $'npm run lint\ngit push -f'
+expect allow "message containing the word push"    'git commit -m "add push button"'
+expect allow "non-git command mentioning force"    'npm run build --force'
+expect allow "non-git command with git in a path"  'cat .git/config'
+
+printf '\n%s passed, %s failed\n' "$pass" "$fail"
+[ "$fail" -eq 0 ]

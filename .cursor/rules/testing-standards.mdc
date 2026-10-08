@@ -1,0 +1,87 @@
+---
+description: "Testing conventions for postgres-prisma: there is no test runner yet; when tests are added use Vitest + happy-dom + Testing Library, co-located *.test.ts files, behavior-focused describe/it, and these targets and mocking rules."
+globs: "**/*.test.ts,**/*.test.tsx,vitest.config.*,vitest.setup.*"
+alwaysApply: false
+# `paths` is read by Claude Code (via the .claude/rules symlink); Cursor uses `globs`.
+paths: "**/*.test.ts,**/*.test.tsx,vitest.config.*,vitest.setup.*"
+---
+
+# Testing Standards
+
+**Current state:** the repo has no test runner, no test files and no `npm test` script.
+Verification today is `npm run typecheck`, `npm run lint`, `npx next build` and the
+`browser-qa` skill. Do not claim "tests pass" - say what you ran.
+
+When tests are introduced, use this setup so every test file looks the same. For the
+reasoning behind these rules read the `testing-principles` skill.
+
+## Runner and setup (when adding tests)
+
+- `vitest` + `happy-dom` + `@testing-library/react` + `@testing-library/user-event` +
+  `@testing-library/jest-dom` as devDependencies; scripts `test` (`vitest run`) and
+  `test:watch`.
+- `vitest.config.ts` with `environment: "node"` as default and `vite-tsconfig-paths` so
+  `@/*` resolves. DOM tests opt in per file with the first-line pragma
+  `// @vitest-environment happy-dom`. Do not use `jsdom`.
+- Database code is never hit by unit tests: mock `@/lib/prisma` with `vi.mock` or test
+  the pure parts of a service.
+
+## What to test here (highest value first)
+
+- Pure utils: `utils/formatting.ts` (currency, dates in `ru`, bonus pluralisation),
+  `utils/validation.ts`, `utils/conversion.ts`, `utils/apiUtils/bonus.ts` (bonus split).
+- Service business rules with Prisma mocked: bonus amounts (`REGISTRATION_BONUS`,
+  `PERCENTAGE_FROM_FRIEND_PURCHASE`), purchase status transitions, DTOs stripping
+  `password`.
+- Hooks with `renderHook` + `act`: `useWindowDimensions`, `useAuthorizedRoute` (router
+  mocked), `useBonusToPayConsultation`.
+- RTK endpoints: assert the `query` builder output (url, method, body), not the fetch.
+- Component tests only for behavior with real user value (form validation messages in
+  `LoginModal`, empty vs filled `BonusList`). No snapshot tests of markup.
+
+## File placement and naming
+
+- Co-located: `utils/formatting.ts` -> `utils/formatting.test.ts`;
+  `app/_components/Modal/LoginModal.tsx` -> `LoginModal.test.tsx`.
+- No `__tests__` folders, no `.spec` files.
+
+## Structure and style
+
+```ts
+// @vitest-environment happy-dom   <- only when the DOM is needed
+import { describe, expect, it, vi } from "vitest";
+
+describe("formatBonusPlural", () => {
+  describe("when the amount ends in 1", () => {
+    it("returns the singular form", () => {
+      expect(formatBonusPlural(21)).toBe("21 балл");
+    });
+  });
+});
+```
+
+- `describe` = unit or `when <condition>`; `it` starts with a verb (`returns`, `throws`,
+  `shows`, `does not`). No "should".
+- Test behavior and results, not implementation: no asserting on internal state or on
+  mock call counts unless the call _is_ the behavior (e.g. "sends the email once").
+- Use `user-event` over `fireEvent`; query by role/label text (Russian labels, e.g.
+  `getByLabelText("Электронная почта")`); `findBy*` for async instead of
+  `waitFor(() => getBy*)`.
+- Mocks: `vi.mock` before importing the module under test; `vi.clearAllMocks()` in
+  `beforeEach`; never mock `react-hook-form`, the shared inputs, or first-party hooks -
+  mock the boundary (`@/lib/prisma`, `next/navigation`, `fetch`).
+- Timers: `vi.useFakeTimers()` in `beforeEach`, `vi.useRealTimers()` in `afterEach`;
+  compute time-dependent inputs _outside_ `renderHook`; wrap `advanceTimersByTime` in `act`.
+- Attach `expect(promise).rejects` before triggering the rejection.
+
+## Edge cases to cover
+
+Boundary values (exact thresholds such as 20% bonus cap), `null` and `undefined`
+separately, empty strings/arrays/zero, cleanup on unmount, error paths (expected `ApiError`
+vs unexpected), loading -> success/error transitions.
+
+## Never
+
+- `.only` / `.skip` left in committed tests; console noise in passing tests.
+- Deleting or weakening a test to make a check pass.
+- Tests that hit the real Postgres database or send real email.

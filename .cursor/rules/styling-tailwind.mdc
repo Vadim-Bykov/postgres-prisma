@@ -1,0 +1,95 @@
+---
+description: "Styling rules for postgres-prisma: Tailwind-first with theme tokens from tailwind.config.js, cn()/clsx for conditional classes, mobile-first lg: breakpoint, no inline styles or raw hex, CSS/SCSS modules only for what Tailwind cannot express."
+globs: "**/*.tsx,**/*.css,**/*.scss"
+alwaysApply: false
+# `paths` is read by Claude Code (via the .claude/rules symlink); Cursor uses `globs`.
+paths: "**/*.tsx,**/*.css,**/*.scss"
+---
+
+# Styling (Tailwind)
+
+This app is styled with **Tailwind CSS 3 utility classes** (97% of components). There is no
+CSS-Modules design system, no cascade layers, no CSS-variable token file. Do not introduce
+one - extend `tailwind.config.js` instead.
+
+## Tokens come from `tailwind.config.js`
+
+- Colors: `purple` (`DEFAULT`, `hover`, `active`, `light`, `dark`), `gray` (`DEFAULT`,
+  `light`), `pink`, `yellow` (`DEFAULT`, `hover`), `red` (`DEFAULT`, `hover`), `primary`
+  (`#141024`, the page background). Use them as `bg-purple`, `text-purple-dark`,
+  `border-gray-light`, `hover:bg-red-hover`.
+- Fonts: `font-sans` (Onest, body), `font-head` (Geologica, headings), `font-logo`
+  (Kingthings Petrock, brand). Fonts load through `next/font/local` in `app/layout.tsx` -
+  never add `@font-face` or Google Fonts.
+- Animation: Tailwind `transition-*` / `duration-*`, `animate-spin`, custom
+  `animate-pulse-fast`; custom `transition-max-height` / `transition-height` /
+  `transition-width` properties exist.
+- **No raw hex in JSX or CSS.** `border-[#D8D6DC]`, `bg-[#02C57E]`, `baseColor="#CDCDCD"`
+  are existing debt - when you touch one, add a named color to the config (e.g.
+  `gray.border`, `green`) and use the token. Arbitrary values (`h-[68px]`, `max-w-[576px]`)
+  are fine for sizes, not for colors.
+
+## Class composition
+
+- Conditional or merged classes go through `cn()` from `@/utils/css` (clsx + tailwind-merge)
+  or plain `clsx` - both are in use. Never build class strings with template literals or
+  `? "class" : ""`.
+
+```tsx
+<button
+  className={cn(
+    "flex items-center rounded-sm border px-5 py-2 font-semibold transition-all duration-200",
+    disabled && "opacity-50",
+    variant === "primary" && "bg-red text-white border-red hover:bg-red-hover",
+    className
+  )}
+/>
+```
+
+- Components accept `className` and merge it last so callers can override spacing.
+- Keep class lists readable: group by purpose (layout, box, typography, color, state).
+
+## Responsive and interaction
+
+- Mobile-first. Base classes describe the phone layout; enhance with `lg:` (the dominant
+  breakpoint, 1024px). `sm:` is rare, `md:` is unused - do not scatter new breakpoints.
+  JS breakpoints in `useWindowDimensions` are `isMobile < 768`, `isTablet < 1024`; keep
+  CSS and JS breakpoints aligned when both are needed (header swaps `MobileMenu`/`Navbar`).
+- Every new interactive element needs a visible focus style (`focus:outline-none
+focus:ring-1 focus:ring-pink` is the house pattern on `Button`; use `focus-visible:` for
+  new work so mouse clicks do not ring).
+- Animated or transitioning elements get a `motion-reduce:transition-none` (or
+  `motion-reduce:animate-none`) fallback.
+- Touch targets at least 44px tall on mobile; use `gap-*` over margins between siblings.
+
+## No inline styles
+
+- No `style={{ ... }}` in app code. Dynamic values go through a class (`w-5`/`w-0` toggles)
+  or a CSS variable set on a parent as a last resort.
+- `Icon` takes a `ColorVariant` name (`purple`, `pink`, ...) - use those. `Coin` takes a raw
+  CSS color string for its SVG `fill` (default `#EE3A78`), so a token name would render the
+  browser's CSS colour, not the brand one; prefer `color="currentColor"` plus a `text-pink`
+  class on the wrapper, and avoid adding new hex call sites.
+
+## CSS / SCSS modules - the exception
+
+Only three modules exist and they stay exceptional:
+`app/_components/Modal/styles.module.scss` (overlay + scale transition for react-modal),
+`app/_components/main-layout/MobileMenu/styles.module.css` (burger animation),
+`app/_components/common/Icon/icon.module.css` (mask-image).
+
+- Add a module only for what Tailwind cannot express (third-party class hooks, complex
+  keyframes, `mask-image`). Keep class names camelCase (`modalContent`, `autoWidth`).
+- Inside a module write mobile-first `@media (min-width: ...)`; the existing
+  `max-width: 767px` query in the modal module is debt, not a pattern.
+- `app/globals.css` holds the Tailwind directives, the root/body backgrounds and a
+  commented-out `@font-face` (the `body` rule also references an undefined
+  `--foreground-rgb` - existing debt). Do not add component styles there.
+
+## Images
+
+- `next/image` with explicit `width`/`height` or `fill`; remote hosts belong in
+  `next.config.js` `images.remotePatterns`. Static assets live in `public/` and are referenced
+  by string path. Use `ImageWithLoader` for images that need a skeleton.
+- Do not hide at-fold content behind opacity/reveal animations - reveal effects are for
+  below-the-fold sections only.

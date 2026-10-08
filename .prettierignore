@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+backups
+coverage
+package-lock.json
+next-env.d.ts
+*.tsbuildinfo
+prisma/schema.prisma
+public/fonts
+.cursor/_archive
+.cursor/plans
+.tmp

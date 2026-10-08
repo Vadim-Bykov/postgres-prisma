@@ -1,0 +1,1 @@
+../../.cursor/rules/ux-copy-ru.mdc

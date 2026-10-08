@@ -1,0 +1,138 @@
+---
+description: "Backend rules for postgres-prisma: Route Handler shape, ApiError/NextResponse error protocol, cookie+JWT auth checks, validation, DTOs, Prisma usage and schema conventions, database safety (backup before schema changes, no destructive commands), secrets."
+globs: "app/api/**,server/**,prisma/**,lib/**,models/**,middleware.ts"
+alwaysApply: false
+# `paths` is read by Claude Code (via the .claude/rules symlink); Cursor uses `globs`.
+paths: "app/api/**,server/**,prisma/**,lib/**,models/**,middleware.ts"
+---
+
+# API routes, services and Prisma
+
+The backend is Next.js Route Handlers (`app/api/**/route.ts`) calling named-function
+services (`server/services/*`) that use the Prisma singleton (`lib/prisma.ts`). There is no
+ORM layer beyond Prisma, no zod, no external API server. Copy the shape of
+`app/api/bonus/route.ts` + `server/services/bonusService.ts` for new domains.
+
+## Route Handler shape
+
+```ts
+export const dynamic = "force-dynamic"; // routes that read cookies or user data
+
+export async function PATCH(request: Request) {
+  try {
+    const body: ViewedBonusBody = await request.json();
+    const userData = await cookieService.getUserDataFromCookies(); // throws 401 response
+    const bonus = await bonusService.markViewedBonus(
+      +body.bonusId,
+      userData.id
+    );
+    return NextResponse.json(bonus);
+  } catch (error) {
+    return apiCatchErrorHandler({
+      error,
+      message: "Ошибка при отметке бонуса",
+    });
+  }
+}
+```
+
+- One exported function per HTTP method. Dynamic segments: `type Params = Promise<{ id: string }>`
+  and `const { id } = await segmentData.params;` (Next 15).
+- Query params: `new URL(request.url).searchParams.get("...")`; coerce with `+value` or
+  `Number(value)` and validate before use.
+- **Error protocol:** `ApiError.badRequest / unauthorized / forbidden / internal` return a
+  `NextResponse` with `{ success: false, message, error? }`. Services `throw` them; handlers
+  end with `return apiCatchErrorHandler({ error, message })` (`utils/errorHandler.ts`), which
+  returns a thrown `NextResponse` as-is and wraps anything else as a 400. Use this helper in
+  every handler instead of hand-written `instanceof NextResponse` branches.
+- Messages are Russian and user-facing (the client shows `error.data.message`). Never put
+  stack traces, SQL, tokens or emails in `message`.
+- Response shape is the domain object (`NextResponse.json(bonus)`), typed on the client in
+  `models/*` or from `@prisma/client`. Keep the RTK endpoint and the handler in sync.
+
+## Authentication and authorization
+
+- Auth is a `refreshToken` httpOnly cookie (`REFRESH_TOKEN_COOKIE`) holding a `jose` HS256 JWT;
+  the `UserDto` is serialized into the `iss` claim. Read it only through
+  `cookieService.getUserDataFromCookies()` (throws `ApiError.unauthorized()`) or
+  `tokenService.validateRefreshToken()`. Never parse the cookie elsewhere.
+- Cookies are set with `httpOnly: true, sameSite: "none", secure: true` via
+  `cookieService.setTokensToCookies`.
+- `middleware.ts` only guards `GET /api/users/:id`. **Every other protected handler must check
+  auth itself** - any route returning or mutating a user's data calls
+  `getUserDataFromCookies()` first.
+- Admin-only actions check `userData.role === "ADMIN"` server-side and return
+  `ApiError.forbidden(...)` otherwise. Client gating (`useAdminRoute`) is UX only, not security.
+- Public GETs (consultations, feature flags, banking) stay unauthenticated on purpose.
+  `GET /api/users` (the admin user list) is also unauthenticated today - that is a known
+  gap, not a pattern: add `getUserDataFromCookies()` + a `role === "ADMIN"` check when you
+  touch that route.
+
+## Validation at the boundary
+
+- Body types are TS assertions (`const body: PurchaseBody = await request.json()`), so
+  validate what matters by hand before touching Prisma: required fields present, numbers
+  coerced, enums checked against the Prisma enum, emails normalized (`trim().toLowerCase()`).
+  Throw `ApiError.badRequest("...")` with a Russian message.
+- Regexes and limits shared with the client live in `app/constants/validation.ts`.
+
+## Services and DTOs
+
+- Services are **named async functions** in `server/services/<domain>Service.ts`, imported as
+  `import * as bonusService from "@/server/services/bonusService"`. No classes.
+- Service shape: `try { ...prisma...; if (conflict) throw ApiError.badRequest(...); return result; }
+catch (error) { throw catchErrorHandler({ error, message: "Ошибка ..." }); }`.
+- DTOs (`server/dtos/*`) are factory functions (`getUserDto({...})`) that return exactly the
+  fields the client may see. **Never return `password`, token rows, reset links or raw
+  Prisma user records** from a handler - map through a DTO.
+- Email goes through `server/services/mailService.ts` with templates in
+  `server/helpers/email/`; never log recipients or links.
+
+## Prisma usage
+
+- Import the client only from `@/lib/prisma` (the singleton). Never `new PrismaClient()`.
+- The main user model is `Users` (accessor `prisma.users`). The lowercase `model users` in the
+  schema is a leftover from the Vercel example - do not use it or extend it.
+- Prefer `select`/`include` that match what the DTO needs; `orderBy: { createdAt: "desc" }`
+  for lists.
+- Multi-write flows (registration + wallet + bonus, purchase + bonus) must use
+  `prisma.$transaction([...])` or the interactive form so a failure cannot leave half the
+  rows. Existing `Promise.all` chains are debt; fix them when you touch that flow.
+- Environment-dependent filters use `getEnvironment()` (`server/helpers/envKeys.ts`), e.g.
+  consultations are `PUBLISHED` only in production.
+- Catch Prisma errors in the service and translate to a Russian `ApiError` message; never
+  leak `PrismaClientKnownRequestError` text to the client.
+
+## Schema conventions (`prisma/schema.prisma`)
+
+- Models PascalCase singular where possible (new models); fields camelCase; relation
+  fields named after the model; `id Int @id @default(autoincrement())`; `createdAt DateTime
+@default(now())`; `updatedAt DateTime?` set by the service (`@updatedAt` is fine on new
+  models).
+- Enums UPPER_SNAKE_CASE values; display mapping (currency symbols) lives in
+  `prisma/enumAdapter.ts`, never in the schema `@map` for new enums.
+- Run `npx prisma format` after editing; keep the datasource `url`/`directUrl` env names.
+- When a model changes, update in the same change: `models/*` types, DTOs, services, the RTK
+  endpoint types, and `prisma/seed.ts` if seeded.
+
+## Database safety
+
+- The project uses `prisma db push` (no migrations folder) and `npm run build` runs
+  `prisma db push && prisma db seed` on Vercel. **Before any schema change:** confirm which
+  database `POSTGRES_PRISMA_URL` points at, run `npm run db-backup`, then follow the
+  `prisma-schema-change` skill.
+- Never run `prisma db push --force-reset`, `--accept-data-loss`, `prisma migrate reset`,
+  `DROP`/`TRUNCATE`, or delete rows in bulk without the developer's explicit go-ahead in the
+  same conversation and a fresh backup.
+- `prisma/seed.ts` only inserts consultations whose `title` is not yet present (`findMany`
+  + `createMany` inside `$transaction`); it never updates existing rows. Its `main()` call
+  is currently commented out - known state, do not "fix" it silently.
+
+## Secrets and logging
+
+- Read secrets only via `server/helpers/envKeys.ts` / `helpers/token.ts`; never inline a
+  value, never read secrets in client code (only `NEXT_PUBLIC_*` reaches the browser).
+- Privileged accounts come from env, not from hardcoded emails or a master password
+  (the ones in `userService.ts` are known debt - do not extend).
+- No `console.log` of request bodies, tokens, cookies, emails or passwords. If you need
+  server diagnostics, log a short Russian or English message without personal data.

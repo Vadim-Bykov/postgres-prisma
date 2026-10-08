@@ -1,0 +1,76 @@
+---
+description: "UX copy rules for postgres-prisma: Russian user-facing text, «вы» register, where strings live (JSX vs app/constants/messages.json), tone for an astrology consultations brand, no English leftovers, no hardcoded prices."
+globs: "**/*.tsx,app/constants/messages.json,server/**/*.ts"
+alwaysApply: false
+# `paths` is read by Claude Code (via the .claude/rules symlink); Cursor uses `globs`.
+paths: "**/*.tsx,app/constants/messages.json,server/**/*.ts"
+---
+
+# UX copy (Russian)
+
+Applies to any string a user reads: buttons, labels, validation and API error messages,
+toasts, empty states, modal text, emails, page metadata. The brand is **Астрология_Инь** -
+a personal astrologer selling consultations, with a bonus and referral program.
+
+## Language and register
+
+- All user-facing text is **Russian**. English is only for code, logs and developer
+  comments. Fix English leftovers when you touch them (`Loading...`, `Delete`,
+  `Recent Users`, `Phone number`, `"Reset password link"` subject, `timeAgo` output).
+- Default register is **«вы»** (lowercase, as the codebase mostly does: «Вы можете
+  просмотреть...»). Do not mix «ты» and «вы» on one screen - several components do
+  (`BonusList`: «Ты заработал» next to «Вы заработали»); when you touch such a component,
+  align it to «вы». Switch the whole product to «ты» only if the developer asks.
+- Keep `<html lang>` aligned with the content (`ru`) when you touch `app/layout.tsx`.
+- Use «ё» and the typographic quotes «» consistently with the surrounding file; normal
+  Russian typography (including the em dash) is fine inside UI strings.
+
+## Where copy lives
+
+- Validation, payment-status and location messages: `app/constants/messages.json`
+  (`messages.validation.required`, `messages.payments[status]`). New reusable messages
+  go there; new keys are camelCase.
+- Screen copy is inline in JSX (the house pattern). Keep it in the component, not in a
+  new i18n layer - there is no i18n library and none is planned.
+- Brand name comes from `app/constants/brand.tsx` (`BRAND_NAME` / `BRAND_NAME_STRING`),
+  never typed by hand.
+- API error messages are set in services/handlers (`ApiError.badRequest("...")`) and shown
+  verbatim by the client - write them for the user, not for the developer.
+
+## Tone
+
+- **Precise, warm, not mystical-spam.** Describe what the consultation gives and what the
+  user does next; no "судьба изменится навсегда" style promises, no guaranteed outcomes.
+- **No pressure around money or bonuses.** Explain the rule («20% стоимости можно оплатить
+  бонусами»), do not shame or rush («только сегодня», «успейте»).
+- **Clarity first**: the user never wonders what happens next. After payment: what we
+  check, how long, where to look (`messages.payments.CHECKING` is the model).
+- **Buttons name the action**: «Войти», «Зарегистрироваться», «Оплатить», «Скопировать
+  номер» - not «Отправить»/«ОК».
+- **Errors explain how to fix**: «Пожалуйста введите корректный адрес электронной почты»,
+  not «Ошибка». Server failures: say that something went wrong and what to try
+  («Попробуйте ещё раз или напишите мне в Telegram»).
+- **Write it, then cut it in half.**
+
+## Amounts, prices, dates
+
+- Never type a price, bonus amount or percentage into copy. Read it from the data
+  (consultation `price` + `Currency` from `prisma/enumAdapter.ts`) or the constants in
+  `app/constants/constants.ts` (`REGISTRATION_BONUS`, `PERCENTAGE_TO_PAY_BY_BONUS`).
+- Dates through `formatDate` from `utils/formatting.ts` (locale `ru`); bonus plurals through
+  the existing pluralisation helper (`балл / балла / баллов`).
+
+## Before / after
+
+```
+❌ "Ошибка."                      ✅ "Не удалось сохранить изменения. Попробуйте ещё раз."
+❌ "Submit"                       ✅ "Оплатить консультацию"
+❌ "Loading..."                   ✅ "Загружаем..." (or a skeleton, no text)
+❌ "Ты заработал 3000 баллов"     ✅ "Вы заработали 3000 баллов" (amount from data)
+❌ "Воити в аккаунт"              ✅ "Войти в аккаунт"
+```
+
+## Gotcha
+
+A grammatically fine string can still be off-voice (cold, pushy, or vague). Read it aloud as
+if explaining to a friend who is paying for a consultation for the first time.

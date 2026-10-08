@@ -1,0 +1,1 @@
+../../.cursor/rules/development-standards.mdc

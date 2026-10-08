@@ -1,0 +1,1 @@
+../../.cursor/rules/testing-standards.mdc

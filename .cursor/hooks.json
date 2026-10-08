@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": ".cursor/hooks/prettier.sh"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/git-guard.sh",
+        "matcher": "\\bgit\\b",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ]
+  }
+}

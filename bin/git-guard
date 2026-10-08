@@ -1,0 +1,178 @@
+#!/usr/bin/env bash
+# git-guard — tool-neutral git policy check for agent shell commands (LIGHT mode).
+#
+# Adapted from the doctronic-monotronic `bin/git-guard`. This repo is a solo project
+# whose deploy branch is `main`; commits and pushes to `main` are ALLOWED here. The
+# guard only blocks what can destroy or rewrite shared history, or silently skip the
+# repo's git hooks:
+#
+#   1. `git commit` / `git push` with `--no-verify` (or `-n` on commit) — skips hooks,
+#   2. `git -c core.hooksPath=…` — pointing hooksPath at a missing dir disables every
+#      hook SILENTLY,
+#   3. `git push` that is force (`-f` in any flag cluster, `--force`, `--force-with-lease`,
+#      `--force-if-includes`, a `+refspec`) or `--mirror` — rewrites remote history,
+#   4. `git push` that deletes remote branches (`--delete`/`-d`/`--prune`/`:refspec`).
+#
+# Everything else — including `git commit` on `main` and `git push origin main` — is
+# allowed. If you ever want a feature-branch-only flow, restore the protected-branch
+# checks from the monotronic original.
+#
+# It understands command chains (`;`, `&&`, `||`, `|`, `&`) and `git -C <dir>` / global
+# options. The git subcommand is read as the first non-option token, so a commit message
+# that merely contains the word "push" is not mistaken for a push. Flag-looking words
+# inside quoted strings (`-m "deny --no-verify"`) are neutralised before scanning.
+#
+# Usage:
+#   bin/git-guard [--cwd <dir>] --cmd '<shell command>'
+#   printf '%s' '<shell command>' | bin/git-guard [--cwd <dir>]
+#
+# Exit codes (the adapter contract — keep stable):
+#   0   allow (nothing printed)
+#   10  DENY  (single-line human-readable reason on stdout)
+#   2   usage error (message on stderr)
+
+set -u
+IFS_DEFAULT=$IFS
+
+cmd=""
+have_cmd=0
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --cmd)  cmd="${2-}"; have_cmd=1; shift 2 || { echo "git-guard: --cmd needs a value" >&2; exit 2; } ;;
+    --cwd)  shift 2 || { echo "git-guard: --cwd needs a value" >&2; exit 2; } ;;  # accepted for adapter compatibility; unused in light mode
+    -h|--help) sed -n '2,32p' "$0"; exit 0 ;;
+    *)      echo "git-guard: unknown argument '$1'" >&2; exit 2 ;;
+  esac
+done
+
+# No --cmd: read the command from stdin (plain text, not JSON).
+[ "$have_cmd" -eq 1 ] || cmd="$(cat)"
+[ -n "$cmd" ] || exit 0
+
+deny() {
+  printf '%s\n' "$1"
+  exit 10
+}
+
+# Word-splitting below is quote-blind, so a flag-looking word inside a quoted
+# string — `git commit -m "deny --no-verify"` — would read as the flag itself.
+# Neutralise those: inside a quoted span, prefix any word that starts with `-`
+# with `Q` so it cannot match. Everything else is left alone.
+#
+# Boundary: an UNBALANCED quote leaves the scanner inside a span, so later flags
+# read as prose. That is acceptable because such a command is a shell syntax
+# error (`bash -n` rejects it) and can never run. Backslash-escaped quotes end a
+# span early, which errs toward denying — the safe direction.
+neutralize_quoted_flags() {
+  awk '{
+    out = ""; quote = ""; at_word = 1
+    n = length($0)
+    for (i = 1; i <= n; i++) {
+      c = substr($0, i, 1)
+      if (quote == "") {
+        if (c == "\"" || c == "\047") { quote = c; out = out c; at_word = 1; continue }
+        out = out c
+        at_word = (c == " " || c == "\t") ? 1 : 0
+        continue
+      }
+      if (c == quote) { quote = ""; out = out c; at_word = 1; continue }
+      if (at_word && c == "-") { out = out "Q-"; at_word = 0; continue }
+      out = out c
+      at_word = (c == " " || c == "\t") ? 1 : 0
+    }
+    print out
+  }'
+}
+
+# Split the command into segments on shell separators so each git invocation is
+# inspected on its own. ; & | (and their doubled forms) and newlines -> newline.
+segments="$(printf '%s' "$cmd" | neutralize_quoted_flags | tr ';&|\n' '\n\n\n\n')"
+
+set -f                 # no globbing while we word-split segments
+
+while IFS= read -r seg; do
+  IFS=$IFS_DEFAULT
+  # shellcheck disable=SC2086
+  set -- $seg
+  [ "$#" -gt 0 ] || continue
+  [ "$1" = "git" ] || continue
+  shift
+
+  # Walk past global options to reach the subcommand. -C and -c take an argument.
+  # -c is INSPECTED, not just skipped: `-c core.hooksPath=<dir>` silently disables
+  # every hook when <dir> does not exist (no warning from git).
+  while [ "$#" -gt 0 ]; do
+    case "$1" in
+      -C) shift 2 || break ;;
+      -c)
+        case "$(printf '%s' "${2-}" | tr '[:upper:]' '[:lower:]')" in
+          core.hookspath=*)
+            deny "Overriding core.hooksPath bypasses the repo's git hooks — and silently disables them all if the path does not exist. Run the plain git command."
+            ;;
+        esac
+        shift 2 || break ;;
+      --) shift; break ;;
+      -*) shift ;;
+      *)  break ;;
+    esac
+  done
+  sub="${1:-}"
+
+  case "$sub" in
+    push)
+      shift
+      for tok in "$@"; do
+        case "$tok" in
+          --force|--force-with-lease*|--force-if-includes|--mirror)
+            deny "Force / mirror pushes are blocked — never rewrite remote history. If a push is rejected, pull/rebase first or ask the developer."
+            ;;
+          --delete|--prune)
+            deny "Deleting remote branches ($tok) is blocked — leave branch cleanup to the developer."
+            ;;
+          --no-verify)
+            deny "Pushing with --no-verify skips the pre-push hook — blocked. Run the plain git push."
+            ;;
+          --*) continue ;;
+          -*)
+            # Single-dash clusters: `-f`, `-fu`, `-uf`, `-d`, `-nd` … inspect every letter.
+            letters="${tok#-}"
+            case "$letters" in
+              *f*) deny "Force push ('$tok') is blocked — never rewrite remote history." ;;
+              *d*) deny "Deleting remote branches ('$tok') is blocked — leave branch cleanup to the developer." ;;
+            esac
+            continue
+            ;;
+          :*)
+            deny "Push refspec '$tok' deletes a remote branch — blocked."
+            ;;
+          +*)
+            deny "Push refspec '$tok' forces an update (leading '+') — blocked, never rewrite remote history."
+            ;;
+          *) continue ;;
+        esac
+      done
+      ;;
+    commit)
+      shift
+      # --no-verify / -n skips pre-commit + commit-msg hooks. Options that take a
+      # separate value are stepped over so a message like `-m "-n"` is not
+      # mistaken for the flag.
+      skip_next=0
+      for tok in "$@"; do
+        if [ "$skip_next" -eq 1 ]; then skip_next=0; continue; fi
+        case "$tok" in
+          -m|--message|-F|--file|-C|--reuse-message|-c|--reedit-message|--author|--date|--fixup|--squash|--trailer)
+            skip_next=1 ;;
+          -n|--no-verify)
+            deny "Committing with --no-verify skips the repo's git hooks — blocked. Fix what the hook reports and commit again."
+            ;;
+        esac
+      done
+      ;;
+  esac
+done <<EOF
+$segments
+EOF
+
+exit 0

@@ -1,0 +1,146 @@
+---
+description: "Development standards for postgres-prisma: imports, components and pages, RTK Query data layer, Redux state, forms, modals, error handling, TypeScript, naming, file organisation and reuse."
+alwaysApply: true
+---
+
+# Development Standards
+
+Stack context lives in `AGENTS.md`. These are the code-shape rules. **The live code is the
+ground truth** - before writing a feature, open the nearest existing one and copy its shape:
+`app/consultation/*`, `app/account/bonuses/*`, `server/services/bonusService.ts`,
+`store/features/api/subApi/bonus.ts`.
+
+## Imports
+
+- The only path alias is `@/*` (repo root): `@/app/_components/common/Button/Button`,
+  `@/store/features/api/subApi/userApi`, `@/server/services/userService`, `@/utils/formatting`,
+  `@/models/users`. Route-local files import siblings relatively (`./components/Bonuses`).
+- There are **no barrel `index.ts` files** - import from the file. Do not add barrels.
+- ES modules only; destructure named imports. Prisma types come from `@prisma/client`
+  (`import { Bonus } from "@prisma/client"`).
+
+## Components and pages
+
+- Pages and layouts are thin `export default` wrappers that render a route-local component
+  (`app/account/bonuses/page.tsx` -> `<Bonuses />`). Put logic in `app/<route>/components/`.
+- Most components are **named exports** (`export function BonusList()`). Accepted
+  default-export exceptions: pages/layouts, `Button`, `Icon`, `Wrapper`, `prisma`.
+- Shared primitives live in `app/_components/common/` (`Button`, `Link`, `Paragraph`, `Form`,
+  `Icon`, `input/*`). Modals in `app/_components/Modal/`, toasts in `app/_components/Toast/`,
+  app shell in `app/_components/main-layout/`. Reuse them before adding a primitive.
+- `"use client"` goes on the component that uses hooks/state, and on pages that need it.
+  Server pages are fine for static shells; this app does not fetch with Prisma inside pages -
+  data goes through the API layer below. Dynamic `params` in Next 15 is a `Promise`:
+  `const { id } = await props.params;`
+- Heavy or browser-only UI (modals, mobile nav, payment widgets) is loaded with
+  `next/dynamic` and `{ ssr: false }`.
+- Loading states use `react-loading-skeleton` placeholders defined as sibling components
+  (`BonusPlaceholder`, `ConsultationCardPlaceholder`); lists use `range(n)` from `lodash-es`.
+- Protected pages gate on the client: `useAuthorizedRoute()` in the layout, plus
+  `useAdminRoute()` for admin pages (`utils/authorization.ts`). Server-side authorization
+  still happens in the API (see `api-and-prisma.mdc`).
+- Prefer operators over IIFEs: ternaries, `?.`, `??`. Use early returns over nested ifs.
+
+## Data layer (RTK Query)
+
+- All server data goes through RTK Query endpoints injected into `appApi`
+  (`store/features/api/subApi/<domain>.ts`). Components never call `fetch` themselves.
+
+```ts
+export const bonusApi = appApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getUserBonuses: builder.query<Bonus[], void>({
+      query: () => "bonus",
+      providesTags: ["Bonus"],
+    }),
+    markViewedBonus: builder.mutation<void, ViewedBonusBody>({
+      query: (bonusData) => ({ url: "bonus", body: bonusData, method: "PATCH" }),
+    }),
+  }),
+});
+export const { useGetUserBonusesQuery, useMarkViewedBonusMutation } = bonusApi;
+```
+
+- Hook names are the RTK defaults: `use<Endpoint>Query` / `use<Endpoint>Mutation`.
+- Every endpoint `url` must match an existing `app/api/**/route.ts`; request/response types
+  come from `models/*` or `@prisma/client`. Never invent an endpoint.
+- Cache tags are the coarse strings in `appApi.tagTypes` (`Users`, `Auth`, `Consultation`,
+  `Purchase`, `Wallet`, `Bonus`, `FeatureFlag`). Add a tag type when you add a domain;
+  mutations `invalidatesTags` the data they change.
+- Mutations are awaited with `.unwrap()`; the API error shape is `{ success: false, message }`
+  so read `error?.data?.message` and show it to the user (see `LoginModal`).
+- Skip auth-only queries for anonymous users (`{ skip: !isLoggedIn }`, see `wallet.ts`).
+
+## State
+
+- Server state = RTK Query cache. Do not copy it into slices.
+- Auth/user state = `store/userSlice.ts`, filled by endpoint matchers (`matchFulfilled`), not
+  by manual dispatches. Modal visibility = `store/authentication.ts` booleans.
+- Everything else = local `useState`. Do not add React Context or new global libraries.
+- Typed hooks `useAppDispatch` / `useAppSelector` from `@/store/store`.
+
+## Forms
+
+- `react-hook-form` with `useForm<FormValues>({ defaultValues })` and **`register`**
+  (`Controller` only when a third-party input requires it).
+- Use the wrapped inputs (`EmailInput`, `PasswordInput`, `NameInput`, `ToggleInput`); they
+  apply rules from `app/constants/validation.ts` with messages from
+  `app/constants/messages.json`. Extra rules go through `registerOptions`.
+- Submit with `const onSubmit = handleSubmit(async (values) => { await mutation(values).unwrap(); })`
+  inside the shared `Form` component (it has the Enter-key handling), show server errors
+  inline, disable the submit `Button` with `loading` while pending.
+
+## Modals and toasts
+
+- Modals use `app/_components/Modal/Modal.tsx` (react-modal; props `open`, `withCloseIcon`,
+  `blockScrolling`) or `ModalHalfImage`. The app element is set in `Wrapper`.
+- Toasts use `react-toastify` through `app/_components/Toast/*` - `toast(<Content />)`.
+
+## Error handling
+
+- Client: catch, read `error?.data?.message`, show a Russian message near the action. Never
+  swallow silently and never leave `console.log` / `console.error` in committed code.
+- Server: see `api-and-prisma.mdc` (`ApiError.*`, `apiCatchErrorHandler`).
+- `catch (error: unknown)` and narrow; `error: any` only where an existing helper forces it.
+
+## TypeScript
+
+- `strict` is on. No `: any`, no `as any`, no `@ts-ignore`. Use `unknown` + narrowing,
+  generics, or `@ts-expect-error` with a one-line reason for a genuinely wrong library type.
+- Types for API bodies/responses live in `models/*` and extend Prisma types
+  (`interface User extends Users {}`). Enums come from the Prisma schema - do not redeclare
+  them in TS; map display values in `prisma/enumAdapter.ts`.
+- Prefer `interface Props` for component props; export it only when a parent needs it.
+
+## Naming
+
+- Components, types, interfaces: PascalCase. Component files PascalCase (`PaymentInfo.tsx`).
+- Route folders and non-component files: kebab-case (`personal-details`, `reset-password`).
+- Variables, functions, hooks: camelCase; hooks start with `use` and live in `utils/`.
+- Module-level constants: UPPER_SNAKE_CASE (`REGISTRATION_BONUS`, `EMAIL_REGEX`); inside
+  components camelCase.
+- Handlers: `handle<Event>` / `on<Event>` (`handleSignUpClick`, `onSubmit`).
+- No single-letter names except short callbacks and loop indices. Fix typos in identifiers
+  you touch (`ExpansesList`, `walletBallance`, `isLogouting`) when the rename is local.
+
+## File organisation and reuse
+
+- One component per file; split a file when it passes ~300 lines or mixes concerns
+  (layout vs data vs formatting). Follow SRP: a list component renders, a hook computes,
+  a service persists.
+- Check `utils/` first: `cn()` (`css.ts`), `formatDate` / currency / pluralisation
+  (`formatting.ts`), password rules (`validation.ts`), `useAppRouter` (typed `Pathname`
+  union - add new routes to it), `useWindowDimensions` (768 / 1024 breakpoints),
+  `useIsLoggedIn` / `useAuthorizedRoute` / `useAdminRoute` (`authorization.ts`).
+- Never create `* copy.*` files or copy a route tree. `app/admin/account` is a historical
+  copy of `app/account` - accepted debt; new admin features reuse `app/account` components
+  with a prop or flag instead of duplicating.
+- Articles are static constants in `app/article/constants/articles.ts`; consultations,
+  purchases, bonuses, users are database-backed.
+
+## Performance basics
+
+- `next/image` with explicit `width`/`height` or `fill`; the at-fold hero gets `priority` and
+  `fetchPriority="high"`. Remote hosts must be listed in `next.config.js`.
+- Do not add `export const dynamic = "force-dynamic"` to pages that fetch nothing on the
+  server; keep it on API routes that read cookies or user data.
