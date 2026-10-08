@@ -69,9 +69,8 @@ export const createPurchase = async ({
       );
     }
 
-    const consultation = await consultationService.getConsultation(
-      consultationId
-    );
+    const consultation =
+      await consultationService.getConsultation(consultationId);
     const consultationPrice = consultation?.price;
 
     if (paidByBonus) {

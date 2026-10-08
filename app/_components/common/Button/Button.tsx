@@ -12,11 +12,7 @@ export type Props = PropsWithChildren<
   > & {
     size?: "large" | "medium";
     variant?:
-      | "primary"
-      | "secondary"
-      | "primary-white"
-      | "secondary-white"
-      | "warning";
+      "primary" | "secondary" | "primary-white" | "secondary-white" | "warning";
     loading?: boolean;
   }
 >;

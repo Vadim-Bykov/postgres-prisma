@@ -253,7 +253,7 @@ async function main() {
 
     const existingTitles = existingConsultations.map((c) => c.title);
     const newConsultations = consultations.filter(
-      (c) => !existingTitles.includes(c.title),
+      (c) => !existingTitles.includes(c.title)
     );
 
     if (newConsultations.length > 0) {

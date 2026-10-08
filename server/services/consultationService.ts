@@ -89,9 +89,8 @@ export const getConsultationEmail = async (consultationId: number) => {
     if (existedConsultationEmailData) {
       return { consultationEmail: existedConsultationEmailData, consultation };
     } else {
-      const createdConsultationEmailData = await createConsultationEmail(
-        consultation
-      );
+      const createdConsultationEmailData =
+        await createConsultationEmail(consultation);
 
       return { consultationEmail: createdConsultationEmailData, consultation };
     }

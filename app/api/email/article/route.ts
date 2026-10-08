@@ -7,9 +7,8 @@ export async function POST(request: Request) {
   try {
     const articleEmailBody: ArticleEmailBody = await request.json();
 
-    const numberOfEmailedUser = await mailService.sendArticleMailToAllUsers(
-      articleEmailBody
-    );
+    const numberOfEmailedUser =
+      await mailService.sendArticleMailToAllUsers(articleEmailBody);
 
     return NextResponse.json({
       message: `Статья разослана ${numberOfEmailedUser} пользователям.`,

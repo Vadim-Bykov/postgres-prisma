@@ -52,8 +52,8 @@ function BonusItem({
           {type === "REGISTRATION"
             ? "при регистрации"
             : type === "REGISTRATION_WITH_REFERRAL_EMAIL"
-            ? "указав и-мейл друга при регистрации"
-            : ""}
+              ? "указав и-мейл друга при регистрации"
+              : ""}
         </span>
       )}
     </li>

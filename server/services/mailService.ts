@@ -87,7 +87,7 @@ export const sendResetPasswordLinkMail = async ({
   } catch (error) {
     throw ApiError.badRequest(
       "Ошибка при отправке и-мэйла со ссылкой для сброса пароля",
-      error,
+      error
     );
   }
 };
@@ -161,7 +161,7 @@ export const sendArticleMailToAllUsers = async ({
           articleEmails,
         }) => {
           const userGotArticleEmail = articleEmails?.some(
-            (articleEmail) => articleEmail.articleId === articleId,
+            (articleEmail) => articleEmail.articleId === articleId
           );
 
           if (emailNotification && !userGotArticleEmail) {
@@ -181,8 +181,8 @@ export const sendArticleMailToAllUsers = async ({
               });
             }
           }
-        },
-      ),
+        }
+      )
     );
 
     return numberOfEmailedUser;
@@ -204,7 +204,7 @@ export const sendArticleMail = async ({
   articleId: number;
 }) => {
   const { title, summary, imageSourceId } = ARTICLES.find(
-    (article) => article.id === articleId,
+    (article) => article.id === articleId
   ) as Article;
 
   try {
@@ -258,7 +258,7 @@ export const sendNewConsultationEmailToAllUsers = async ({
         }) => {
           const userGotArticleEmail = consultationEmails?.some(
             (consultationEmail) =>
-              consultationEmail.consultationId === consultationId,
+              consultationEmail.consultationId === consultationId
           );
 
           if (emailNotification && !userGotArticleEmail) {
@@ -283,8 +283,8 @@ export const sendNewConsultationEmailToAllUsers = async ({
               });
             }
           }
-        },
-      ),
+        }
+      )
     );
 
     return numberOfEmailedUser;

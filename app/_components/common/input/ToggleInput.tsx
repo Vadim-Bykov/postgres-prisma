@@ -2,11 +2,10 @@ import clsx from "clsx";
 import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes } from "react";
 import { UseFormRegister } from "react-hook-form";
 
-interface Props
-  extends Omit<
-    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
-    "type" | "className"
-  > {
+interface Props extends Omit<
+  DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+  "type" | "className"
+> {
   label?: string;
   labelClassName?: HTMLAttributes<HTMLLabelElement>["className"];
   // TODO: figure out proper type

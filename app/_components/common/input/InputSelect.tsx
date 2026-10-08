@@ -13,11 +13,10 @@ import { InputLabel } from "./InputLabel";
 
 // TODO: refactor
 
-export interface Props
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLSelectElement>,
-    HTMLSelectElement
-  > {
+export interface Props extends DetailedHTMLProps<
+  InputHTMLAttributes<HTMLSelectElement>,
+  HTMLSelectElement
+> {
   options: OptionHTMLAttributes<HTMLOptionElement>[];
   containerClassName?: HTMLAttributes<HTMLDivElement>["className"];
   inputClassName?: HTMLAttributes<HTMLSelectElement>["className"];

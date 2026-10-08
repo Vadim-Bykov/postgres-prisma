@@ -12,7 +12,7 @@ export function leaveOnlyNumbers(s: string) {
  */
 export function formatUsdAmount(
   amount: number,
-  options: Intl.NumberFormatOptions = {},
+  options: Intl.NumberFormatOptions = {}
 ) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",

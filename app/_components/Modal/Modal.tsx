@@ -8,8 +8,10 @@ interface ModalClassNames extends ReactModal.Classes {
   closeIcon?: string;
 }
 
-export interface ModalProps
-  extends Omit<ReactModal.Props, "isOpen" | "className"> {
+export interface ModalProps extends Omit<
+  ReactModal.Props,
+  "isOpen" | "className"
+> {
   open: boolean;
   autoWidth?: boolean; // TODO remove this prop and pass styles instead
   className?: string | Partial<ModalClassNames>;

@@ -42,7 +42,7 @@ export function UserBadge({
       pollingInterval: currentWalletData === null ? 2000 : undefined,
     }
   );
-  const walletBallance = isWalletLoading ? "--" : wallet?.bonusAmount ?? "0";
+  const walletBallance = isWalletLoading ? "--" : (wallet?.bonusAmount ?? "0");
 
   const onAvatarClick = () => {
     if (isUserDataLoading) return;

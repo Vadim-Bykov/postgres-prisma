@@ -10,11 +10,10 @@ import {
 import { ErrorMessage } from "../../ErrorMessage";
 import { InputLabel } from "./InputLabel";
 
-export interface Props
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+export interface Props extends DetailedHTMLProps<
+  InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> {
   containerClassName?: HTMLAttributes<HTMLDivElement>["className"];
   inputClassName?: HTMLAttributes<HTMLInputElement>["className"];
   labelClassName?: HTMLAttributes<HTMLLabelElement>["className"];
