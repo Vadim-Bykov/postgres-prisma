@@ -56,8 +56,10 @@ React Aria, CSS Modules design system, Storybook, Vitest, Linear, a `dev` branch
 Secrets live in `.env` / `.env.development.local` (gitignored, never commit, never print values).
 Names in use: `POSTGRES_PRISMA_URL`, `POSTGRES_URL_NON_POOLING` (+ other `POSTGRES_*`),
 `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `VERCEL_SMTP_HOST/PORT/USER/PASSWORD`,
-`VERCEL_DEFAULT_RESET_PASSWORD`, `VERCEL_ENV`, `VERCEL_URL`. Only `NEXT_PUBLIC_*` names may be
-read in client code. Before touching the database, check which database the env points at.
+`VERCEL_DEFAULT_RESET_PASSWORD`, `VERCEL_ENV`, `VERCEL_URL`, `ADMIN_EMAILS` (comma-separated
+emails that get the `ADMIN` role on registration; read via `isAdminEmail()` in
+`server/helpers/envKeys.ts`). Only `NEXT_PUBLIC_*` names may be read in client code. Before
+touching the database, check which database the env points at.
 
 # Universal rules
 
@@ -69,9 +71,8 @@ read in client code. Before touching the database, check which database the env 
   model/route is a blocker to design, not a guess to make.
 - **No `as any`, no `@ts-ignore` to silence errors.** Fix the type; `@ts-expect-error` with a
   reason only when a third-party type is wrong.
-- **No secrets, privileged emails or passwords in code.** They come from env. The hardcoded
-  admin emails and master password in `server/services/userService.ts` are known debt - do
-  not extend the pattern.
+- **No secrets, privileged emails or passwords in code.** They come from env (admin emails
+  via `ADMIN_EMAILS`). Never add a master password or a login bypass of any kind.
 - **Fix what you touch.** When you edit a file, fix its obvious issues (wrong register in
   copy, `any`, unused imports). Don't start unrelated refactors.
 - **Do not duplicate.** No `* copy.*` files, no copied route trees (`app/admin/account` is a

@@ -1,6 +1,7 @@
 {
   "name": "postgres-prisma",
-  "repository": "https://github.com/vercel/examples.git",
+  "repository": "https://github.com/Vadim-Bykov/postgres-prisma.git",
+  "homepage": "https://astrology-yin.vercel.app/",
   "license": "MIT",
   "version": "0.0.0",
   "private": true,

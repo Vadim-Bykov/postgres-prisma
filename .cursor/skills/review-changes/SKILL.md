@@ -120,9 +120,9 @@ CRITICAL). Do not approve new behavior that nobody has observed working.
 ## Guardrails
 
 - Cite the specific rule or rubric check for every finding.
-- Do not flag pre-existing debt as new (the `admin/account` copy, hardcoded admin emails,
-  `UseFormRegister<any>` on old inputs, existing hex) - flag newly introduced violations
-  and edits that extend the debt.
+- Do not flag pre-existing debt as new (the `admin/account` copy, `UseFormRegister<any>`
+  on old inputs, existing hex) - flag newly introduced violations and edits that extend
+  the debt.
 - A static-scan hit is a lead, not a verdict - confirm it.
 - Personal data (emails, names, payment numbers) in logs or analytics is CRITICAL even
   though this is not a healthcare product.

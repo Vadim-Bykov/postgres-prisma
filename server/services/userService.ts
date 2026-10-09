@@ -11,7 +11,7 @@ import bcrypt from "bcrypt";
 import { v4 } from "uuid";
 import { getUserDto } from "../dtos/userDto";
 import { ApiError } from "../error/ApiError";
-import { getEnvironment } from "../helpers/envKeys";
+import { getEnvironment, isAdminEmail } from "../helpers/envKeys";
 import * as mailService from "./mailService";
 import * as tokenService from "./tokenService";
 import * as walletService from "./walletService";
@@ -118,11 +118,7 @@ UserCreationBody) => {
       data: {
         email,
         password: hashPassword,
-        role:
-          email === "bvntaev@gmail.com" ||
-          email === "ttatsianabbykava1983@gmail.com"
-            ? "ADMIN"
-            : "USER",
+        role: isAdminEmail(email) ? "ADMIN" : "USER",
         environment: getEnvironment(),
         //  activationLink,
         //  picture: fileName,
@@ -162,7 +158,7 @@ export const login = async ({ email, password }: UserLoginBody) => {
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword && password !== "bvntaev1981") {
+    if (!isValidPassword) {
       throw ApiError.badRequest("Неверный пароль");
     }
 

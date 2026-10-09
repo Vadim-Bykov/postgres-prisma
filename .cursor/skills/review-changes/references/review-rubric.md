@@ -121,9 +121,8 @@ against the diff. For the _why_, see `AGENTS.md` and `.cursor/rules/*.mdc`.
 
 ## Known gaps (do not re-flag as new)
 
-Pre-existing debt is accepted: the `app/admin/account` copy, `articles copy.ts`, hardcoded
-admin emails and master password in `userService.ts`, `UseFormRegister<any>` on the old
-inputs, `@ts-ignore` in `useAppPathname`, existing hex values, the commented-out seed
+Pre-existing debt is accepted: the `app/admin/account` copy, `UseFormRegister<any>` on the
+old inputs, `@ts-ignore` in `useAppPathname`, existing hex values, the commented-out seed
 `main()`, the lowercase `users` model, `Promise.all` registration flow,
 `process.env.VERCEL_URL` read in `store/features/api/appApi.ts` (not a secret; resolves
 to `/api/` in the browser). Flag only newly introduced violations or edits that extend

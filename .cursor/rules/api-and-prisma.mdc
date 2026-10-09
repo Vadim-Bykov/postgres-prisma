@@ -135,7 +135,8 @@ catch (error) { throw catchErrorHandler({ error, message: "Ошибка ..." });
 
 - Read secrets only via `server/helpers/envKeys.ts` / `helpers/token.ts`; never inline a
   value, never read secrets in client code (only `NEXT_PUBLIC_*` reaches the browser).
-- Privileged accounts come from env, not from hardcoded emails or a master password
-  (the ones in `userService.ts` are known debt - do not extend).
+- Privileged accounts come from env: admin emails via `ADMIN_EMAILS` and `isAdminEmail()`
+  in `server/helpers/envKeys.ts`. Never hardcode emails and never add a master password or
+  any other login bypass.
 - No `console.log` of request bodies, tokens, cookies, emails or passwords. If you need
   server diagnostics, log a short Russian or English message without personal data.

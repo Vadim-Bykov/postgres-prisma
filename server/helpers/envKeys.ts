@@ -9,3 +9,19 @@ export function getEnvironment(): Environment {
 
   return ENV;
 }
+
+/**
+ * Emails that get the ADMIN role on registration. Comes from the
+ * comma-separated `ADMIN_EMAILS` env var; empty or unset means no admins
+ * are assigned automatically.
+ */
+export function getAdminEmails(): string[] {
+  return (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter((email) => email.length > 0);
+}
+
+export function isAdminEmail(email: string): boolean {
+  return getAdminEmails().includes(email.trim().toLowerCase());
+}
